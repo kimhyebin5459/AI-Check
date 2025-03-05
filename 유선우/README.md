@@ -45,3 +45,84 @@
 - **AssertJ:**  
   - 풍부하고 읽기 쉬운 단언(assertion) 메서드를 제공하여 테스트 가독성을 높임
 
+# 3/5 #
+
+## MSA + EDA 구조에서 ERD (Transactional Outbox 패턴, SAGA 패턴)
+
+MSA(마이크로서비스 아키텍처)와 EDA(이벤트 기반 아키텍처) 환경에서는 각 서비스가 자신만의 데이터베이스를 소유하고 독립적으로 운영되기 때문에, 전통적인 “글로벌 ERD”보다는 각 서비스별 도메인 모델과 이벤트 처리 관련 테이블을 설계합니다. 아래는 Transactional Outbox 패턴과 SAGA 패턴을 함께 사용하는 경우의 개념적 예시입니다.
+
+---
+
+### 1. 주요 구성 요소
+
+#### 도메인 엔티티 테이블 (예: Order)
+
+- **Order 테이블**
+  - `order_id` (PK): 주문의 유일한 식별자
+  - `order_status`: 주문 상태
+  - `order_amount`: 주문 금액
+  - 기타 주문 관련 핵심 정보
+
+#### Transactional Outbox 테이블
+
+- **Outbox 테이블**
+  - 도메인 엔티티의 변경과 함께 이벤트를 동일 트랜잭션 내에서 기록하여 데이터 일관성을 보장합니다.
+- **주요 컬럼:**
+  - `outbox_id`: 기본키
+  - `aggregate_id`: 도메인 엔티티(예: Order)의 식별자 (Foreign Key)
+  - `event_type`: 이벤트 유형 (예: 주문 생성, 주문 변경 등)
+  - `payload`: 이벤트 관련 데이터 (주로 JSON 형태)
+  - `created_at`: 이벤트 생성 시각
+  - `processed_at`: 이벤트 처리 완료 시각 (혹은 상태 플래그)
+
+#### SAGA 관리 테이블
+
+- **Saga 테이블**
+  - 여러 마이크로서비스 간의 분산 트랜잭션(비즈니스 프로세스)을 관리하기 위해 사용됩니다.
+- **주요 컬럼:**
+  - `saga_id`: 기본키
+  - `order_id`: 관련 도메인 식별자 (Foreign Key, 예: Order의 식별자)
+  - `saga_state`: 현재 상태 (예: 진행중, 완료, 보상 처리 중 등)
+  - `current_step`: 현재 진행 단계
+  - `started_at`: Saga 시작 시각
+  - `completed_at`: Saga 완료 시각
+
+---
+
+### 2. 예시 ERD (개념적 다이어그램)
+
+```plaintext
+[Order]
+  ┌─────────────────────┐
+  │ order_id  (PK)      │
+  │ order_status        │
+  │ order_amount        │
+  │ ...                 │
+  └─────────────────────┘
+           │ 1
+           │
+           │ FK (order_id)
+           ▼
+[Outbox]
+  ┌────────────────────────────┐
+  │ outbox_id     (PK)         │
+  │ aggregate_id (FK: Order)   │
+  │ event_type                 │
+  │ payload (JSON)             │
+  │ created_at                 │
+  │ processed_at               │
+  └────────────────────────────┘
+
+           │ 1
+           │
+           │ FK (order_id)
+           ▼
+[Saga]
+  ┌────────────────────────────┐
+  │ saga_id      (PK)          │
+  │ order_id     (FK: Order)   │
+  │ saga_state                 │
+  │ current_step               │
+  │ started_at                 │
+  │ completed_at               │
+  └────────────────────────────┘
