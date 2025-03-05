@@ -139,4 +139,3 @@ class UserE2ETest {
 }
 
 ```
->>>>>>> README.md
