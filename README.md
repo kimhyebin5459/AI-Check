@@ -197,3 +197,9 @@ Closes #45
     - 필요시 : `리뷰` 진행
 - 승인 / 리뷰 제한시간 **24시간**
     - 하루에 한번은 꼭 확인해보기
+
+## 3/6 ##
+
+[기능명세서](https://docs.google.com/spreadsheets/d/18udjgIw0vvDpLsfX2RyGkfYM8D1KLHt-TEaGdw_QsIw/edit?usp=sharing)
+![image.png](./images/3-6/image1.png)
+![image.png](./images/3-6/image2.png)
