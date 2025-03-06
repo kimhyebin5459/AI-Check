@@ -188,6 +188,8 @@ test('로그인 테스트', async ({ page }) => {
 });
 ```
 
+<br><br><br><br><br>
+
 # [3/5 TIL] Mock Service Worker
 
 ### MSW(Mock Service Worker)란?
@@ -279,4 +281,114 @@ root.render(
 fetch('/todos')
   .then((response) => response.json())
   .then((data) => console.log(data));
+```
+
+<br><br><br><br><br>
+
+# [3/6 TIL] 코드 스플리팅(Code Splitting)
+
+> 애플리케이션 JacaScript 번들을 여러 개의 작은 청크로 나눠 로딩 성능을 개선하는 기술
+
+- 초기 로딩 시간 줄임
+- 필요할 때만 필요한 코드를 동적으로 불러옴
+
+# Why?
+
+1. 초기 로딩 속도 개선
+   - 애플리케이션이 커질수록 큰 번들 파일로 모든 코드를 로드하는 것은 페이지 로딩 시간을 길게 만듬
+   - 필요한 코드만 먼저 로딩하고, 나머지 코드는 나중에 로드할 수 있게 되어 첫 화면 렌더링 시간을 단축할 수 있음
+2. 더 나은 사용자 경험
+   - 필요하지 않은 코드를 처음부터 로드하지 않고 사용자가 실제로 요청한 페이지, 기능에 필요한 코드만 로드하여, 불필요한 네트워크 대역폭을 줄이고 애플리케이션 반응성을 높임
+
+## 1. 엔트리 포인트 기반 코드 스플리팅 (Entry Points)
+
+- 애플리케이션의 각 엔트리 포인트에 대해 번들을 나누는 방식
+- 홈 페이지, 프로필 페이지가 각각 다른 엔트리 포인트를 가지면, 각 페이지에 필요한 코드만 로드
+
+```jsx
+// webpack.config.js
+module.exports = {
+  entry: {
+    home: './src/home.js',
+    dashboard: './src/dashboard.js',
+  },
+};
+```
+
+## 2. 동적 임포트 (Dynamic Import)
+
+- Javascript의 import() 함수를 사용하여 필요한 시점에만 모듈을 동적으로 불러오는 방식
+  - SPA에서 주로 사용
+- 페이지나 컴포넌트가 렌더링될 때만 코드 청크를 로딩하도록
+
+```jsx
+import React, { Suspense, lazy } from 'react';
+
+const MyComponent = lazy(() => import('./MyComponent'));
+
+const App = () => (
+  <div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <MyComponent />
+    </Suspense>
+  </div>
+);
+```
+
+## 3. 경로 기반 코드 스플리팅 (Route-based Splitting)
+
+- React Router와 같은 라우팅 라이브러리와 함께 사용
+- 사용자가 특정 경로로 접근할 때만 해당 경로에 필요한 코드가 로드
+
+```jsx
+/* React Router + React Lazy */
+
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+const HomePage = lazy(() => import('./HomePage'));
+const DashboardPage = lazy(() => import('./DashboardPage'));
+
+const App = () => (
+  <Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <Route path='/home' component={HomePage} />
+        <Route path='/dashboard' component={DashboardPage} />
+      </Switch>
+    </Suspense>
+  </Router>
+);
+```
+
+## 4. 라이브러리 코드 분할 (Vendor Code Splitting)
+
+- 종속 라이브러리나 서드파티 패키지를 별도로 분할 → 애플리케이션 코드와 라이브러리 코드를 분할
+- 라이브러리가 변경되지 않으면 브라우저가 캐시된 라이브러리 코드를 재사용하도록 하여 불필요한 리소스 로딩 방지
+
+```jsx
+// webpack.config.js
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+};
+```
+
+## 5. 공유 코드 분할 (Shared Chunk)
+
+- 여러 페이지나 모듈에서 공통으로 사용되는 코드를 별도의 청크로 분할
+- 해당 코드가 여러 번 로드되지 않도록 → 중복된 코드 제거
+
+```jsx
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      name: 'shared',
+    },
+  },
+};
 ```
