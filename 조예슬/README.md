@@ -344,3 +344,128 @@ FinalWeight = \alpha_{DE} + \alpha_{RE}
 
 => 한국어 보이스피싱 음성 데이터셋 확인
 
+---
+
+# 0307 TIL: [모델 경량화] 양자화, 가중치 프루닝 & 저수준 최적화
+
+## 1. 양자화 (Quantization)
+양자화는 모델의 **가중치(Weights)와 연산(Activations)을 낮은 비트수로 변환**하여 크기와 연산량을 줄이는 기법이다.
+
+### 1.1 양자화 종류
+1. **Post-training Quantization (PTQ)**
+   - 학습이 끝난 후 모델을 변환하는 방식.
+   - **적용 가능 유형**
+     - `Dynamic Range Quantization` → 가중치만 8-bit 변환 (CPU 속도 향상)  
+     - `Full Integer Quantization` → 가중치와 활성화 함수(Activations)까지 8-bit 변환 (속도 극대화)  
+     - `Float16 Quantization` → 가중치를 Float16으로 변환 (GPU 가속 지원)
+
+2. **Quantization-aware Training (QAT)**
+   - 학습 과정에서 양자화를 고려하여 훈련.
+   - PTQ보다 정확도 저하가 적음.
+   - 특히 CNN, RNN과 같은 모델에서 효과적.
+
+### 1.2 양자화 적용 방법
+#### TensorFlow Lite (TFLite)
+```python
+import tensorflow as tf
+
+converter = tf.lite.TFLiteConverter.from_saved_model('model_path')
+converter.optimizations = [tf.lite.Optimize.DEFAULT]  # 기본 양자화 적용
+tflite_model = converter.convert()
+
+with open("quantized_model.tflite", "wb") as f:
+    f.write(tflite_model)
+```
+
+#### PyTorch → ONNX → TFLite 변환
+```python
+import torch
+model = torch.load('model.pth')
+model.eval()
+model.qconfig = torch.quantization.get_default_qconfig("fbgemm")  # 양자화 설정
+torch.quantization.prepare(model, inplace=True)
+torch.quantization.convert(model, inplace=True)
+torch.jit.save(torch.jit.script(model), 'quantized_model.pt')
+```
+
+#### ONNX Runtime을 활용한 가속화
+```python
+import onnxruntime as ort
+ort_session = ort.InferenceSession("quantized_model.onnx", providers=["CPUExecutionProvider"])
+```
+
+---
+
+## 2. 가중치 프루닝 & 저수준 최적화 (Weight Pruning & Low-Level Optimization)
+가중치 프루닝과 최적화를 통해 **모델의 크기를 줄이고 속도를 향상**할 수 있다.
+
+### 2.1 가중치 프루닝 (Weight Pruning)
+- 모델의 **중요하지 않은 가중치를 제거**하여 계산량을 줄이는 기법.
+- 주요 기법:
+  - **Unstructured Pruning**: 작은 가중치를 선택적으로 제거 (압축 효과 큼, 가속기 활용 어려움)
+  - **Structured Pruning**: 특정 필터, 채널, 뉴런 단위로 제거 (모바일 친화적)
+  - **Global Pruning**: 전체 네트워크에서 불필요한 가중치 제거
+
+#### PyTorch에서 가중치 프루닝 적용
+```python
+import torch
+import torch.nn.utils.prune as prune
+
+model = torch.load('model.pth')
+for name, module in model.named_modules():
+    if isinstance(module, torch.nn.Conv2d) or isinstance(module, torch.nn.Linear):
+        prune.l1_unstructured(module, name="weight", amount=0.3)  # 30% 가중치 제거
+torch.save(model.state_dict(), 'pruned_model.pth')
+```
+
+---
+
+### 2.2 저수준 최적화 (Low-Level Optimization)
+모델 실행 시 연산을 줄이고 최적화하는 기법.
+
+#### 1. 연산 최적화
+- **Batch Normalization Folding**  
+  - Conv2D + BatchNorm을 하나의 연산으로 합쳐 속도 향상  
+  ```python
+  import tensorflow_model_optimization as tfmot
+
+  model = tf.keras.models.load_model('model.h5')
+  model = tfmot.clustering.keras.strip_clustering(model)
+  ```
+
+- **Operator Fusion**  
+  - 여러 개의 연산을 하나로 묶어 실행 속도를 높이는 기법 (TensorRT, ONNX Runtime 적용 가능)
+
+#### 2. 프레임워크 기반 최적화
+- **TensorRT (NVIDIA GPU 가속)**
+  ```python
+  import tensorrt as trt
+  TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
+  builder = trt.Builder(TRT_LOGGER)
+  ```
+
+- **NNAPI (Android Neural Networks API)**
+  - Android에서 TFLite 모델 실행 시 가속기 활용 가능
+  ```python
+  import tflite_runtime.interpreter as tflite
+  interpreter = tflite.Interpreter(model_path="model.tflite")
+  interpreter.allocate_tensors()
+  ```
+
+## 📌 정리
+| 방법                                  | 설명                             | 장점                      | 단점               |
+| ------------------------------------- | -------------------------------- | ------------------------- | ------------------ |
+| **Post-training Quantization (PTQ)**  | 학습 후 모델을 8-bit 정수로 변환 | 모델 크기 감소, 속도 향상 | 정확도 감소 가능   |
+| **Quantization-aware Training (QAT)** | 학습 중 양자화를 반영            | 정확도 유지               | 구현 난이도 높음   |
+| **Pruning (Unstructured)**            | 작은 가중치 제거                 | 모델 크기 대폭 축소       | 가속기 사용 어려움 |
+| **Pruning (Structured)**              | 채널, 뉴런 단위 제거             | 모바일 친화적             | 정확도 감소 가능   |
+| **BatchNorm Folding**                 | BN + Conv 통합                   | 속도 향상                 | 모델 수정 필요     |
+
+
+## 🎯 시도할 방법
+1. **Post-training Quantization (PTQ) 적용**  
+   → 처음엔 PTQ로 쉽게 크기를 줄여보고, 필요하면 QAT 적용
+2. **Structured Pruning 사용**  
+   → 모바일 친화적인 구조로 가중치 제거
+3. **BatchNorm Folding, Operator Fusion 적용**  
+   → 실행 속도를 최적화
