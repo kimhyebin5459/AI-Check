@@ -306,3 +306,210 @@ stubFor(get(urlEqualTo("/partners/123-45-67890"))
 ### 🛑 5. MSA 테스트 시 실행 속도 최적화
 - 통합 테스트는 실행 시간이 길기 때문에 단위 테스트와 분리하여 실행
 - CI/CD에서 단위 테스트 → 통합 테스트 → 계약 테스트 순서로 실행하도록 설계
+
+----
+### 25.03.07 안드로이드에서 전화 감지
+CallReceiver
+```kotlin
+public class CallReceiver extends BroadcastReceiver {
+    private static final String TAG = "CallReceiver";
+    private static String lastState = "";  // 🔥 static 변수로 변경 (앱이 살아있는 동안 유지)
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) {
+            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+
+            if (state == null || state.equals(lastState)) {
+                // 🔥 상태가 변하지 않았으면 무시
+                return;
+            }
+            lastState = state;  // 🔥 상태 업데이트
+
+            Log.d(TAG, "📞 전화 상태 변경 감지됨: " + state);
+
+            if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
+                handleRingingCall(context);
+            } else if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+                Log.d(TAG, "📲 통화 중!");
+            } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+                Log.d(TAG, "❌ 통화 종료됨!");
+            }
+        }
+    }
+
+    private void handleRingingCall(Context context) {
+        String phoneNumber = getLastIncomingNumber(context);
+        Log.d(TAG, "☎️ 전화가 오고 있음! 번호: " + phoneNumber);
+    }
+
+    private String getLastIncomingNumber(Context context) {
+        Uri callUri = CallLog.Calls.CONTENT_URI;
+        Cursor cursor = context.getContentResolver().query(
+                callUri,
+                null,
+                null,
+                null,
+                CallLog.Calls.DATE + " DESC"
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+            String lastCallNumber = cursor.getString(numberIndex);
+            cursor.close();
+            return lastCallNumber;
+        }
+        return "알 수 없음";
+    }
+}
+```
+Manifest
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 전화 상태 읽기 및 오디오 녹음 권한 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Test"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Test">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".CallReceiver"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- 오디오 캡처 서비스 (통화 감지 시 실행) -->
+<!--        <service android:name=".AudioCaptureService"-->
+<!--            android:foregroundServiceType="phoneCall"-->
+<!--            android:exported="false"-->
+<!--            tools:ignore="ForegroundServicePermission" />-->
+    </application>
+</manifest>
+```
+MainActivity
+```kotlin
+package com.example.test
+
+import android.Manifest
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.telephony.TelephonyManager
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
+import com.example.test.ui.theme.TestTheme
+
+class MainActivity : ComponentActivity() {
+    private var callReceiver: CallReceiver? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            TestTheme {
+                Greeting("Android!!!!!!")
+            }
+        }
+
+        Log.d("MainActivity", "onCreate 호출됨!")
+
+        // 📌 `READ_PHONE_STATE` & `READ_CALL_LOG` 권한 체크 및 요청
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions()
+        } else {
+            registerCallReceiver()
+        }
+    }
+
+    private fun requestPermissions() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            val phoneStateGranted = permissions[Manifest.permission.READ_PHONE_STATE] ?: false
+            val callLogGranted = permissions[Manifest.permission.READ_CALL_LOG] ?: false
+
+            if (phoneStateGranted && callLogGranted) {
+                Log.d("MainActivity", "권한이 허용됨!")
+                registerCallReceiver()
+            } else {
+                Log.d("MainActivity", "권한이 거부됨!")
+            }
+        }
+
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_CALL_LOG
+            )
+        )
+    }
+
+    private fun registerCallReceiver() {
+        callReceiver = CallReceiver()
+        val filter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+        registerReceiver(callReceiver, filter)
+        Log.d("MainActivity", "CallReceiver 등록됨!")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (callReceiver != null) {
+            unregisterReceiver(callReceiver)
+            Log.d("MainActivity", "CallReceiver 해제됨!")
+        }
+    }
+}
+
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    TestTheme {
+        Greeting("Android")
+    }
+}
+```
