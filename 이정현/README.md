@@ -38,7 +38,7 @@
 
   describe('<input />', () => {
     it('render component correctly', () => {
-      const { container } = render(<Input value='default value' />);
+      const { container } = render(<Input value="default value" />);
       // 1
       const input = screen.getByDisplayValue('default value');
       // 2
@@ -353,8 +353,8 @@ const App = () => (
   <Router>
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        <Route path='/home' component={HomePage} />
-        <Route path='/dashboard' component={DashboardPage} />
+        <Route path="/home" component={HomePage} />
+        <Route path="/dashboard" component={DashboardPage} />
       </Switch>
     </Suspense>
   </Router>
@@ -392,3 +392,106 @@ module.exports = {
   },
 };
 ```
+
+<br><br><br><br><br>
+
+# [3/7 TIL] Next.js
+
+## Page Router
+
+> pages 폴더 내 파일명 기반 페이지 라우팅
+
+- 동적 경로 대응
+  - 📂item
+    - index.js
+    - `[id].js` 👉 하나의 아이디에 대응
+    - Catch All Segment: `[…id].js` 👉 여러 개의 아이디에 대응
+    - Optional Catch All Segment: `[[…id]].tsx` 👉 경로가 없을 때도 대응을 하고 싶다
+
+### 페이지 이동 방식
+
+- Link
+  - a 태그와 사용법 동일
+  - CSR 방식으로 이동
+- Programmatic Navigation
+  - 버튼이 클릭되거나 특정 조건이 만족했을 경우
+  ```tsx
+  import { useRouter } from 'next/router';
+
+  export default function App({ Component, pageProps }: AppProps) {
+    const router = useRouter();
+
+    const onClinkButton = () => {
+      router.push('/test');
+    };
+  ```
+  - replace: 뒤로가기를 방지하며 페이지 이동
+  - back: 페이지 뒤로 이동
+
+# 프리페칭
+
+> 현재 페이지에서 이동 가능한 모든 링크의 데이터를 사전에 미리 다 불러와두는 기능
+
+⇒ 페이지 이동을 매우 빠르게!
+
+- 서버에서 JS Bundle을 요청하는 과정에서 현재 페이지에 필요한 JS Bundle만 전달된다
+  - 모든 페이지의 Bundle 파일을 전달할 경우 용량이 너무 커지게 되면 하이드레이션이 늦어짐
+  - TTI(유저가 상호작용할 수 있게 되는 시간)이 늦어짐
+- 그렇게 되면 다른 페이지로 이동 시 또 JS Bundle을 요청하게 되어 시간이 걸리게 된다
+- 위 문제를 개선하고자, 이동 가능한 페이지들의 자바스크립트 코드를 미리 사전에 다 불러와둠
+
+1. 초기 요청 페이지의 JS Bundle을 받아 빠르게 하이드레이션
+2. Pre Fetching으로 다른 페이지 이동까지 빠르게 처리
+
+**주의사항**
+
+- npm run dev 개발모드로 가동 시에는 프리패칭이 동작하지 않음
+- 따라서 빌드에서 실행하는 프로덕션 모드로 실행해야 함
+
+빌드하면 JS Bundle 용량 확인이 가능하다 (Splitting)
+
+- Link만 프리패칭이 된다 (Programmatic❌)
+  - Programmatic Navigation을 프리패칭 하는 법: 컴포넌트 마운트 시 `router.prefetch`
+  ```tsx
+  useEffect(() => {
+    router.prefetch('/test');
+  }, []);
+  ```
+- 자주 사용하지 않을 페이지라 프리패칭하고싶지 않다면? Link의 `prefetch` 옵션을 false로
+  ```tsx
+  <Link href={'/search'} prefetch={false}>
+    search
+  </Link>
+  ```
+
+# API Routes
+
+> api 폴더 안의 api 응답을 정의하는 파일
+
+```tsx
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const date = new Date();
+  res.json({ time: date.toLocaleString() });
+}
+```
+
+# CSS module
+
+> 클래스 이름을 자동으로 유니크한 이름으로 파일마다 변환시켜주는 기능
+
+- Next.js에서 글로벌 CSS 파일은 App컴포넌트가 아닌 곳에서는 불러올 수 없다
+- 브라우저에서 여러개의 css 파일을 불러오게 되어 충돌이 날 수 있기 때문에 컴포넌트에서 css import 불가
+  ⇒ CSS module을 이용하여 해결
+- `index.css` 파일명을 `index.module.css` 로 변경 후 아래와 같이 import
+
+```tsx
+import style from './index.module.css';
+
+export default function Home() {
+  return <h1 className={style.h1}>인덱스</h1>;
+}
+```
+
+유니크한 클래스네임으로 변경된 것이 확인 가능하다.
