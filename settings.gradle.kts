@@ -9,7 +9,6 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-//        maven("https://maven.pkg.github.com/tanersener/ffmpeg-kit")
     }
 }
 dependencyResolutionManagement {
@@ -17,7 +16,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-//        maven("https://maven.pkg.github.com/tanersener/ffmpeg-kit")
     }
 }
 

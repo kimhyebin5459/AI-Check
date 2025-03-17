@@ -1,45 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.test"
+    package="com.aicheck"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="26"
+        android:minSdkVersion="24"
         android:targetSdkVersion="35" />
 
-    <!-- 전화 상태 읽기 및 오디오 녹음 권한 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
-    <!-- Android 11(API 30) 이상에서 특정 파일 접근 허용 -->
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-
-            <data android:mimeType="audio/*" />
-        </intent>
-    </queries>
-
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" /> <!-- suppress DeprecatedClassUsageInspection -->
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-
     <permission
-        android:name="com.example.test.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:name="com.aicheck.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.test.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+    <uses-permission android:name="com.aicheck.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
-        android:name="com.example.test.App"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -51,32 +26,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/Theme.Test" >
+        android:theme="@style/Theme.AICheck" >
         <activity
-            android:name="com.example.test.MainActivity"
+            android:name="com.aicheck.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Test" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AICheck" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver
-            android:name="com.example.test.call.CallReceiver"
-            android:exported="true"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE" >
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- 오디오 캡처 서비스 (통화 감지 시 실행) -->
-        <!-- <service android:name=".AudioCaptureService" -->
-        <!-- android:foregroundServiceType="phoneCall" -->
-        <!-- android:exported="false" -->
-        <!-- tools:ignore="ForegroundServicePermission" /> -->
         <activity
             android:name="androidx.compose.ui.tooling.PreviewActivity"
             android:exported="true" />
@@ -86,7 +47,7 @@
 
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.example.test.androidx-startup"
+            android:authorities="com.aicheck.androidx-startup"
             android:exported="false" >
             <meta-data
                 android:name="androidx.emoji2.text.EmojiCompatInitializer"
