@@ -10,12 +10,18 @@ android {
 
     defaultConfig {
         applicationId = "com.aicheck"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        getByName("main") {
+            manifest.srcFile("src/main/AndroidManifest.xml")
+        }
     }
 
     buildTypes {
@@ -56,4 +62,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.android.material:material:1.3.0")
+
+    // ✅ FFmpeg 의존성 추가 (올바른 방식)
+//    implementation("com.arthenica:mobile-ffmpeg-full:4.3.2.LTS")
+//    implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
+//    implementation ("com.arthenica:ffmpeg-kit-full:4.5.1-1")
+//    implementation ("com.arthenica:ffmpeg-kit-android:4.5")
+    implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
+    implementation("androidx.activity:activity:1.10.1")
 }
