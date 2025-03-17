@@ -1,7 +1,6 @@
 # 🚨 필독 🚨
-- MASTER 브랜치가 아닌 **FE-MASTER** 또는 **BE-MASTER** 브랜치로 MR을 생성해주세요.
-- MR 제목은 `Feature/{이슈 번호} - 이슈 제목` 형식으로 작성해주세요.
-- MR 생성 시 **Squash commits** 설정을 해주세요.
+- MASTER 브랜치가 아닌 **FE-dev** 또는 **BE-dev** 브랜치로 MR을 생성해주세요.
+- MR 제목은 `(#153) [BE] feature-login` 형식으로 작성해주세요.
 
 
 ## 어떤 이유로 MR을 하셨나요?
@@ -15,6 +14,6 @@
 > 변경 사항에 대한 설명을 간략히 작성해주세요. 필요 시 스크린샷을 첨부해주세요.
 
 ## MR 전에 확인해주세요
-- [ ] **FE-MASTER** 또는 **BE-MASTER** 브랜치로 MR을 생성했나요?
+- [ ] **FE-dev** 또는 **BE-dev** 브랜치로 MR을 생성했나요?
 - [ ] Docker 빌드 후 테스트를 완료했나요?
-- [ ] Squash commits 설정을 해주세요.
+- [ ] Delete branch 설정을 해주세요.
