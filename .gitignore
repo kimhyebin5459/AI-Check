@@ -165,3 +165,12 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio
+# OS-generated files
+.DS_Store
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+
+# 로컬 환경 변수나 SDK 경로
+local.properties
