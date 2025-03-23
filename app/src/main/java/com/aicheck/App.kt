@@ -1,19 +1,17 @@
-package com.aicheck;
+package com.aicheck
 
-import android.app.Application;
-import android.content.Context;
+import android.app.Application
+import android.content.Context
 
-public class App extends Application {
-    private static App instance;
+class App : Application() {
+    companion object {
+        private lateinit var instance: App
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
+        fun getContext(): Context = instance.applicationContext
     }
 
-    public static Context getContext() {
-        return instance.getApplicationContext();
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
     }
 }
-
