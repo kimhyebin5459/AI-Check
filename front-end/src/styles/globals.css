@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/PretendardVariable.woff2') format('woff2');
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-pretendard: 'Pretendard';
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-pretendard), sans-serif;
+}
+
+.bg-gradation1 {
+  @apply bg-gradient-to-br from-skyblue-100 to-[#FEF5B5];
+}
+
+.bg-gradation2 {
+  @apply bg-gradient-to-t from-white to-[#FFFEEF];
+}
+
+@theme {
+  --text-2xs: 0.625rem;
+
+  --color-gray-50: #eff0f5;
+
+  --color-skyblue-100: #cdecff;
+  --color-skyblue-200: #8ed8ff;
+
+  --color-yellow-50: #fffadb;
+  --color-yellow-100: #fef3b1;
+  --color-yellow-200: #ffe261;
+  --color-yellow-300: #fec400;
+  --color-yellow-400: #f2ae49;
+
+  --color-red-100: #fdebeb;
+  --color-red-200: #f65255;
+
+  --color-blue-100: #dae6fc;
+  --color-blue-200: #4880ee;
+
+  --color-green-100: #ebf9eb;
+  --color-green-200: #52bf55;
+
+  --color-chart-1: #90b2fc;
+  --color-chart-2: #7ac5d8;
+  --color-chart-3: #3f71e4;
+  --color-chart-4: #052977;
+
+  --color-purple: #b55de8;
+  --color-periwinkle: #7a99ff;
+  --color-orange: #feaa00;
+  --color-red: #ff817a;
+  --color-green: #4bba4b;
+  --color-yellowgreen: #99da7d;
+}
