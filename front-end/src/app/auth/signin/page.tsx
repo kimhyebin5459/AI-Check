@@ -1,4 +1,3 @@
-// app/auth/signin/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -36,7 +35,6 @@ export default function Page() {
             [name]: value,
         }));
 
-        // Clear error when user types
         if (errors[name as keyof FormErrors]) {
             setErrors((prev) => ({
                 ...prev,
@@ -48,7 +46,6 @@ export default function Page() {
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
 
-        // Basic validation
         if (!formData.email) {
             newErrors.email = '이메일을 입력해주세요';
         }
@@ -71,11 +68,8 @@ export default function Page() {
         setIsLoading(true);
 
         try {
-            // In a real app, this would be an API call
-            // For demonstration, we're just simulating a request
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            // After successful login, redirect to account linking page
             router.push('/auth/account-link/choose');
         } catch (error) {
             console.error('Login failed:', error);

@@ -38,7 +38,6 @@ export default function SignupPage() {
       [name]: value,
     }));
 
-    // Clear error when user types
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({
         ...prev,
@@ -50,28 +49,24 @@ export default function SignupPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Email validation
     if (!formData.email) {
       newErrors.email = '이메일을 입력해주세요';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = '유효한 이메일 주소를 입력해주세요';
     }
 
-    // Auth code validation
     if (!formData.authCode) {
       newErrors.authCode = '인증 코드를 입력해주세요';
     } else if (formData.authCode.length !== 6) {
       newErrors.authCode = '인증 코드는 6자리여야 합니다';
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = '비밀번호를 입력해주세요';
     } else if (formData.password.length < 8) {
       newErrors.password = '비밀번호는 8자 이상이어야 합니다';
     }
 
-    // Confirm password validation
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
     }
@@ -90,11 +85,8 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      // In a real app, this would be an API call
-      // For demonstration, we're just simulating a request
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // After successful signup, redirect to signin page
       router.push('/auth/signin');
     } catch (error) {
       console.error('Signup failed:', error);

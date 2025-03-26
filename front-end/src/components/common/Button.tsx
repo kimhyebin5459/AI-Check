@@ -29,7 +29,7 @@ function Button({
   type = 'button',
   className = '',
 }: ButtonProps) {
-  const baseStyles = 'font-bold rounded-2xl transition-colors focus:outline-none'; // text-xl은 약 20px
+  const baseStyles = 'font-bold rounded-2xl transition-colors focus:outline-none';
   
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
@@ -37,8 +37,8 @@ function Button({
   };
   
   const sizeStyles: Record<ButtonSize, string> = {
-    sm: 'h-12 px-4 flex items-center justify-center text-base', // h-12는 48px
-    md: 'h-16 px-6 flex items-center justify-center text-xl', // h-16은 64px
+    sm: 'h-12 px-4 flex items-center justify-center text-base',
+    md: 'h-16 px-6 flex items-center justify-center text-xl',
   };
   
   const widthStyles = fullWidth ? 'w-full' : '';
