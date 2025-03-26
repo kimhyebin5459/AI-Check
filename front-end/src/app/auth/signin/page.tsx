@@ -70,7 +70,7 @@ export default function Page() {
         try {
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            router.push('/auth/account-link/choose');
+            router.push('/auth/account-link');
         } catch (error) {
             console.error('Login failed:', error);
             setErrors({
