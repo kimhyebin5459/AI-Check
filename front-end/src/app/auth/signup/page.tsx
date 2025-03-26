@@ -111,7 +111,7 @@ export default function SignupPage() {
       <Header hasBorder={false} hasBackButton={true}></Header>
 
       <main className="flex flex-col p-5 flex-grow">
-        <h1 className="text-2xl font-bold mb-8">가입을 위해<br />필요한 정보를 입력해주세요</h1>
+        <h1 className="text-mdl font-bold mb-5">가입을 위해<br />필요한 정보를 입력해주세요</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
           <Input
@@ -127,9 +127,9 @@ export default function SignupPage() {
             <Button
               type="button"
               onClick={() => alert('인증코드가 발송되었습니다.')}
-              variant="primary"
-              size="md"
-              className="ml-3 whitespace-nowrap h-12"
+              fullWidth={false}
+              size="sm"
+              className="ml-3 whitespace-nowrap w-[25%]"
             >
               인증
             </Button>
@@ -146,12 +146,12 @@ export default function SignupPage() {
           >
             <Button
               type="button"
-              onClick={() => alert('인증코드가 발송되었습니다.')}
-              variant="primary"
-              size="md"
-              className="ml-3 whitespace-nowrap h-12"
+              onClick={() => alert('인증되었습니다.')}
+              fullWidth={false}
+              size="sm"
+              className="ml-3 whitespace-nowrap w-[25%]"
             >
-              인증
+              인증 확인
             </Button>
           </Input>
           {errors.authCode && <p className="mt-1 text-sm text-red-500">{errors.authCode}</p>}
@@ -178,12 +178,12 @@ export default function SignupPage() {
             required
           />
 
-          <div className="mt-auto">
+          <div className="mt-auto flex">
             <Button
               type="submit"
-              variant="primary"
               fullWidth
-              disabled={isLoading}
+              isDisabled={isLoading}
+              size='md'
             >
               {isLoading ? '처리 중...' : '다음'}
             </Button>

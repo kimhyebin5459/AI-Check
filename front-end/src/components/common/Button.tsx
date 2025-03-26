@@ -1,10 +1,10 @@
 import React from 'react';
 
 type ButtonVariant = 'primary' | 'secondary';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonSize = 'sm' | 'md';
 
-//버튼 사이즈 : 기본으로 꽉 채우도록 하고,
-//비율을 입력 받는 경우 그만큼 차지하도록 함
+// 'sm' : 높이 48, 폰트 16px
+// 'md': 높이 64, 폰트 20px
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
-  disabled?: boolean;
+  isDisabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
 }
@@ -24,32 +24,31 @@ function Button({
   onClick,
   variant = 'primary',
   size = 'md',
-  fullWidth = false,
-  disabled = false,
+  fullWidth = true,
+  isDisabled = false,
   type = 'button',
   className = '',
 }: ButtonProps) {
-  const baseStyles = 'font-medium rounded-2xl transition-colors focus:outline-none';
+  const baseStyles = 'font-bold rounded-2xl transition-colors focus:outline-none'; // text-xl은 약 20px
   
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
-    secondary: 'bg-gray-200 text-black hover:bg-gray-300',
+    secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-300',
   };
   
   const sizeStyles: Record<ButtonSize, string> = {
-    sm: 'py-1.5 px-3 text-sm',
-    md: 'py-2.5 px-4 text-base',
-    lg: 'py-3 px-6 text-lg',
+    sm: 'h-12 px-4 flex items-center justify-center text-base', // h-12는 48px
+    md: 'h-16 px-6 flex items-center justify-center text-xl', // h-16은 64px
   };
   
   const widthStyles = fullWidth ? 'w-full' : '';
-  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : '';
+  const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
   
   return (
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
+      disabled={isDisabled}
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyles} ${disabledStyles} ${className}`}
     >
       {children}
