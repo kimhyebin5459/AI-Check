@@ -13,9 +13,7 @@ interface InputProps {
   children?: React.ReactNode;
 }
 
-export default Input;
-
-function Input({
+export default function Input({
   label,
   type = 'text',
   placeholder,

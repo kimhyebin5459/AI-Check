@@ -17,9 +17,7 @@ interface ButtonProps {
   className?: string;
 }
 
-export default Button;
-
-function Button({
+export default function Button({
   children,
   onClick,
   variant = 'primary',
@@ -35,15 +33,15 @@ function Button({
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
     secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-300',
   };
-  
+
   const sizeStyles: Record<ButtonSize, string> = {
     sm: 'h-12 px-4 flex items-center justify-center text-base',
     md: 'h-16 px-6 flex items-center justify-center text-xl',
   };
-  
+
   const widthStyles = fullWidth ? 'w-full' : '';
   const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
-  
+
   return (
     <button
       type={type}
