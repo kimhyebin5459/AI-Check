@@ -21,7 +21,7 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
 
   return (
     <div
-      className={clsx(`flex h-full w-full flex-col rounded-2xl text-2xl font-bold shadow-md`, {
+      className={clsx(`shadow-base flex h-full w-full flex-col rounded-2xl text-2xl font-bold`, {
         'bg-yellow-100': color === 'yellow-100',
         'bg-yellow-200': color === 'yellow-200',
         'bg-gradation1': color === 'gradation1',

@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function Home() {
   type Role = 'parent' | 'child' | string;
-  const role: Role = 'child';
+  const role: Role = 'parent';
 
   const homeItems = [
     role === 'parent'
@@ -73,11 +73,11 @@ export default function Home() {
       ) : (
         <ChildAccountCard />
       )}
-      <div className="flex h-full w-full space-x-4">
+      <div className="flex h-full w-full space-x-5">
         <NavButton {...homeItems[0]} />
         <NavButton {...homeItems[1]} />
       </div>
-      <div className="flex h-full w-full space-x-4">
+      <div className="flex h-full w-full space-x-5">
         <NavButton {...homeItems[2]} />
         <NavButton {...homeItems[3]} />
       </div>
