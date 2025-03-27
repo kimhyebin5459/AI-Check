@@ -18,6 +18,7 @@ import RightTriangle from './common/right-triangle.svg'
 
 import CalendarButton from './moneycheck/calendarbutton.svg';
 import ChartButton from './moneycheck/chart-button.svg';
+import Chain from './moneycheck/chain.svg'
 
 import Bus from './category/bus.svg';
 import Tableware from './category/tableware.svg';
@@ -46,6 +47,7 @@ export {
   Bank,
   CalendarButton,
   ChartButton,
+  Chain,
   RightTriangle,
   DownTriangle
 };

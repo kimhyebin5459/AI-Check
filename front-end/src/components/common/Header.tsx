@@ -7,6 +7,7 @@ interface Props {
   hasBackButton?: boolean;
   onBackClick?: () => void;
   className?: string;
+  isFixed?: boolean;  // 고정 여부를 결정하는 새 prop 추가
 }
 
 export default function Header({
@@ -15,6 +16,7 @@ export default function Header({
   hasBackButton = false,
   onBackClick,
   className = '',
+  isFixed = true,
 }: Props) {
   const router = useRouter();
 
@@ -31,6 +33,7 @@ export default function Header({
       className={`
         relative h-16 flex items-center justify-center
         ${hasBorder ? 'border-b border-gray-200' : ''}
+        ${isFixed ? 'fixed top-0 left-0 right-0 z-10 bg-white' : ''}
         ${className}
       `}
     >

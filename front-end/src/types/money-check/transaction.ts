@@ -17,3 +17,11 @@ export interface TransactionGroup {
   date: string;
   records: TransactionRecord[];
 }
+
+export interface GroupedTransactionRecord {
+  dutch_pay_id: number;
+  display_name: string;
+  amount: number;
+  time: string;
+  description: string;
+}

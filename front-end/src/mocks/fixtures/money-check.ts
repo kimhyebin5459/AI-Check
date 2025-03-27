@@ -302,3 +302,115 @@ export const transactionData = [
     ],
   },
 ];
+
+// Dutch Pay 타입 정의
+interface DutchPay {
+  dutch_pay_id: number;
+  display_name: string;
+  amount: number;
+  created_at: string;
+}
+
+interface DutchPayResponse {
+  record_id: number;
+  dutch_pays: DutchPay[];
+}
+import { http, HttpResponse } from 'msw';
+
+interface DutchPay {
+  dutch_pay_id: number;
+  display_name: string;
+  amount: number;
+  created_at: string;
+}
+
+interface DutchPayResponse {
+  record_id: number;
+  dutch_pays: DutchPay[];
+}
+
+export const mockDutchPayData: DutchPayResponse[] = [
+  {
+    "record_id": 1002,
+    "dutch_pays": [
+      {
+        "dutch_pay_id": 20021,
+        "display_name": "김민준",
+        "amount": 6250,
+        "created_at": "2025-03-01 19:45:00"
+      }
+    ]
+  },
+  {
+    "record_id": 1003,
+    "dutch_pays": [
+      {
+        "dutch_pay_id": 20031,
+        "display_name": "박서연",
+        "amount": 4900,
+        "created_at": "2025-03-01 12:40:00"
+      }
+    ]
+  },
+  {
+    "record_id": 1008,
+    "dutch_pays": [
+      {
+        "dutch_pay_id": 20081,
+        "display_name": "강도윤",
+        "amount": 14000,
+        "created_at": "2025-03-05 18:45:00"
+      },
+      {
+        "dutch_pay_id": 20082,
+        "display_name": "조하준",
+        "amount": 14000,
+        "created_at": "2025-03-05 19:10:00"
+      }
+    ]
+  },
+  {
+    "record_id": 1021,
+    "dutch_pays": [
+      {
+        "dutch_pay_id": 20211,
+        "display_name": "윤지우",
+        "amount": 28000,
+        "created_at": "2025-03-30 20:15:00"
+      },
+      {
+        "dutch_pay_id": 20212,
+        "display_name": "장예준",
+        "amount": 28500,
+        "created_at": "2025-03-30 20:30:00"
+      }
+    ]
+  }
+];
+
+// MSW 핸들러
+export const dutchPayHandlers = [
+  http.get('/api/v1/dutch-pays', ({ request }) => {
+    const url = new URL(request.url);
+    const recordId = url.searchParams.get('record_id');
+    
+    if (!recordId) {
+      return HttpResponse.json(
+        { message: 'record_id is required' },
+        { status: 400 }
+      );
+    }
+    
+    const recordIdNum = parseInt(recordId);
+    const data = mockDutchPayData.find(item => item.record_id === recordIdNum);
+    
+    if (!data) {
+      return HttpResponse.json(
+        { message: 'Record not found' },
+        { status: 404 }
+      );
+    }
+    
+    return HttpResponse.json(data);
+  })
+];

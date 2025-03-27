@@ -84,7 +84,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <Header title="용돈 기록장" />
 
       <main className="bg-white pb-16 m-5">
