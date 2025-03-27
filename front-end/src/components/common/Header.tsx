@@ -9,6 +9,7 @@ interface Props {
   hasBackButton?: boolean;
   onBackClick?: () => void;
   className?: string;
+  isFixed?: boolean;  // 고정 여부를 결정하는 새 prop 추가
 }
 
 export default function Header({ title, hasBorder = true, hasBackButton = false, onBackClick, className = '' }: Props) {

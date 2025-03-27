@@ -1,22 +1,28 @@
 import clsx from 'clsx';
 
+import Image from 'next/image';
+
 interface Props {
   image: string;
   size: 'sm' | 'md' | 'lg' | 'xl';
 }
 
+const sizeToPixels = {
+  'sm': 40,
+  'md': 52,
+  'lg': 72,
+  'xl': 100
+};
+
 export default function ProfileImage({ image, size }: Props) {
   return (
     <div>
-      <img
+      <Image
         src={image}
         alt="my profile image"
-        className={clsx(`rounded-full border-[0.06rem] border-gray-600 object-cover`, {
-          'size-10': size === 'sm',
-          'size-13': size === 'md',
-          'size-18': size === 'lg',
-          'size-25': size === 'xl',
-        })}
+        width={sizeToPixels[size]}
+        height={sizeToPixels[size]}
+        className={clsx(`rounded-full border-[0.06rem] border-gray-600 object-cover`)}
       />
     </div>
   );
