@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import Button from '@/components/common/Button';
+import YellowCheckSrc from '@/public/icons/common/yellowcheck.svg'
+import ErrorTriangle from '@/public/icons/common/errortriangle.svg'
 
 type IconType = 'success' | 'error';
 
@@ -25,7 +27,7 @@ export default function NoticePage({
         return (
           <div className="h-16 w-16 relative">
             <Image
-              src="/icons/yellow-check.svg"
+              src={YellowCheckSrc}
               alt="성공"
               width={64}
               height={64}
@@ -38,7 +40,7 @@ export default function NoticePage({
         return (
           <div className="h-16 w-16 relative">
             <Image
-              src="/icons/error.svg"
+              src={ErrorTriangle}
               alt="에러"
               width={64}
               height={64}

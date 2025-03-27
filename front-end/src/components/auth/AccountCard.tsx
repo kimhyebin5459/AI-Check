@@ -1,5 +1,6 @@
 import Button from '@/components/common/Button';
 import Image from 'next/image';
+import BankSrc from "/icons/common/bank.svg";
 
 type AccountType = {
   id: string;
@@ -32,7 +33,7 @@ export default function AccountCard({ account, onSelect, hasSelectButton = true 
         <div className="flex items-center mb-1 text-gray-700 text-xl">
           <div className="w-6 h-6 bg-gray-200 rounded-md flex items-center justify-center mr-2">
             <div className="h-6 w-6 items-center justify-center">
-              <Image src="/icons/bank.svg" alt="은행" width={24} height={24} priority />
+              <Image src={BankSrc} alt="은행" width={24} height={24} priority />
             </div>
           </div>
           <span>{account.bankName}</span>

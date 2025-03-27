@@ -5,6 +5,7 @@ import Choose from './_steps/choose';
 import Confirm from './_steps/confirm';
 import CheckPassword from './_steps/check-password';
 import NoticePage from '@/components/common/NoticePage';
+import { useRouter } from 'next/navigation';
 
 type AccountType = {
   id: string;
@@ -18,6 +19,8 @@ export default function Page() {
   const [stepLevel, setStepLevel] = useState(0);
   const [selectedAccount, setSelectedAccount] = useState<AccountType | undefined>();
   const [accountList, setAccountList] = useState<AccountType[]>([]);
+
+  const router = useRouter();
 
   const onNext = (account?: AccountType) => {
     if (account) {
@@ -50,7 +53,7 @@ export default function Page() {
             message="계좌 연동이 완료되었습니다."
             buttonText="확인"
             onButtonClick={() => {
-              alert('홈이동');
+              router.replace("/")
             }}
           />
         )}

@@ -9,6 +9,12 @@ import Arrow from './common/arrow.svg';
 import Close from './common/close.svg';
 import Plus from './common/plus.svg';
 import Sprout from './common/sprout.svg';
+import YellowCheck from './common/yellowcheck.svg';
+import ErrorTriangle from './common/errortriangle.svg';
+import Bank from './common/bank.svg';
+
+import CalendarButton from './moneycheck/calendarbutton.svg';
+import ChartButton from './moneycheck/chart-button.svg';
 
 import Pen from './category/pen.svg';
 import Hospital from './category/hospital.svg';
@@ -32,4 +38,9 @@ export {
   Shopping,
   Tableware,
   Sprout,
+  YellowCheck,
+  ErrorTriangle,
+  Bank,
+  CalendarButton,
+  ChartButton,
 };
