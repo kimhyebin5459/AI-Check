@@ -1,11 +1,11 @@
 import { Arrow, Sprout } from '@/public/icons';
-import ProfileImage from '@/src/components/common/ProfileImage';
-import ParentAccountCard from '@/src/components/main/ParentAccountCard';
-import NavButton from '@/src/components/main/NavButton';
-import UserListSection from '@/src/components/main/UserListSection';
-import { user } from '@/src/mocks/fixtures/user';
+import ProfileImage from '@/components/common/ProfileImage';
+import ParentAccountCard from '@/components/main/ParentAccountCard';
+import NavButton from '@/components/main/NavButton';
+import UserListSection from '@/components/main/UserListSection';
+import { user } from '@/mocks/fixtures/user';
 import Image from 'next/image';
-import ChildAccountCard from '@/src/components/main/ChildAccountCard';
+import ChildAccountCard from '@/components/main/ChildAccountCard';
 
 export default function Home() {
   type Role = 'parent' | 'child' | string;

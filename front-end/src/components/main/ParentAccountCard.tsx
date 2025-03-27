@@ -1,5 +1,5 @@
-import { account } from '@/src/mocks/fixtures/account';
-import { formatMoney } from '@/src/utils/formatMoney';
+import { account } from '@/mocks/fixtures/account';
+import { formatMoney } from '@/utils/formatMoney';
 
 export default function ParentAccountCard() {
   const { accountName, accountNo, balance } = account;

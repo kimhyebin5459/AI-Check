@@ -1,4 +1,4 @@
-import ProfileImage from '../common/ProfileImage';
+import ProfileImage from '@/components/common/ProfileImage';
 
 interface Props {
   image: string;

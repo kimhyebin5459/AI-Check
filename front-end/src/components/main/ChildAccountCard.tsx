@@ -1,7 +1,7 @@
-import { account, memoRate } from '@/src/mocks/fixtures/account';
-import { user } from '@/src/mocks/fixtures/user';
-import UserItem from './UserItem';
-import { formatMoney } from '@/src/utils/formatMoney';
+import { account, memoRate } from '@/mocks/fixtures/account';
+import { user } from '@/mocks/fixtures/user';
+import UserItem from '@/components/main/UserItem';
+import { formatMoney } from '@/utils/formatMoney';
 
 export default function ChildAccountCard() {
   return (

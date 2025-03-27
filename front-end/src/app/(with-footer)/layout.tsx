@@ -1,6 +1,6 @@
 'use client';
 
-import Footer from '@/src/components/common/footer/Footer';
+import Footer from '@/components/common/footer/Footer';
 import { usePathname } from 'next/navigation';
 
 interface Props {

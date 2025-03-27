@@ -1,4 +1,4 @@
-import { userList } from '@/src/mocks/fixtures/user';
+import { userList } from '@/mocks/fixtures/user';
 import UserItem from './UserItem';
 import { Plus } from '@/public/icons';
 import Image from 'next/image';

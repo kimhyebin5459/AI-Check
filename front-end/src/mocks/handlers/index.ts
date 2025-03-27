@@ -1,3 +1,3 @@
-import { TestHandlers } from '@/src/mocks/handlers/test';
+import { TestHandlers } from '@/mocks/handlers/test';
 
 export const handlers = [...TestHandlers];
