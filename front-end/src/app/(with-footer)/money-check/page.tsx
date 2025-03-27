@@ -87,7 +87,7 @@ export default function Page() {
     <div className="flex flex-col">
       <Header title="용돈 기록장" />
 
-      <main className="bg-white pb-16 m-5">
+      <main className="bg-white pb-16 pt-16 m-5">
         <div>
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center text-2xl cursor-pointer">
@@ -105,7 +105,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="my-4 bg-white rounded-xl shadow">
+        <div className="my-4 bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.25)]">
           <div className="p-2.5 bg-yellow-300 rounded-t-lg">
             <div className="flex items-center">
               <ProfileImage image={user.image} size='md' />
@@ -132,7 +132,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.25)]">
           <div className="px-4 py-3 flex justify-end items-center border-b border-gray-400">
             <div className='cursor-pointer' onClick={handleFilterClick}>
               <span className="font-medium">한달 | 전체 ▼</span>

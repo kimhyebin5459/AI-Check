@@ -31,7 +31,7 @@ export default function Header({
   return (
     <header 
       className={`
-        relative h-16 flex items-center justify-center
+        h-16 flex items-center justify-center
         ${hasBorder ? 'border-b border-gray-200' : ''}
         ${isFixed ? 'fixed top-0 left-0 right-0 z-10 bg-white' : ''}
         ${className}
