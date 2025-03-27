@@ -20,6 +20,7 @@ body {
 @theme {
   --text-2xs: 0.625rem;
   --text-3xl: 2rem;
+  --text-mdl: 1.75rem;
 
   --color-gray-50: #eff0f5;
   --color-gray-100: #edf0f2;
