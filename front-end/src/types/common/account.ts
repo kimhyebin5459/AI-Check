@@ -1,6 +1,6 @@
 export type Account = {
-  account_id: number;
-  account_name: string;
-  account_no: string;
+  accountId: number;
+  accountName: string;
+  accountNo: string;
   balance?: number;
 };
