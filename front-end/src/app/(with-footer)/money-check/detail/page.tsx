@@ -1,9 +1,10 @@
-export default function CalendarPage({
-    searchParams
-  }: {
-    searchParams: { id?: number }
-  }) {
-    const record_id = searchParams.id || new Date().getFullYear().toString();
-  
-    return <div>Detail for {record_id}</div>
-  }
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function Page(props: { 
+  searchParams : SearchParams
+}) {
+  const params = await props.searchParams;
+  const id = (params.id as string) || new Date().getFullYear().toString();
+
+  return <div>Detail for {id}</div>
+}

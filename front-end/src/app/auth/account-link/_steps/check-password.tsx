@@ -3,14 +3,10 @@
 import Header from '@/components/common/Header';
 import { useState, useEffect } from 'react';
 
-type AccountType = {
-  id: string;
-  account_no: string;
-  bank_name: string;
-};
+import { Account } from '@/types/common/account';
 
 type Props = {
-  account?: AccountType;
+  account?: Account;
   onNext: () => void;
   onPrev: () => void;
 };
