@@ -28,15 +28,15 @@ export default function Button({
   className = '',
 }: ButtonProps) {
   const baseStyles = 'font-bold rounded-2xl transition-colors focus:outline-none';
-  
+
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
     secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-300',
   };
 
   const sizeStyles: Record<ButtonSize, string> = {
-    sm: 'h-12 px-4 flex items-center justify-center text-base',
-    md: 'h-16 px-6 flex items-center justify-center text-xl',
+    sm: 'h-12 px-4 whitespace-nowrap flex items-center justify-center text-base',
+    md: 'h-16 px-6 whitespace-nowrap flex items-center justify-center text-xl',
   };
 
   const widthStyles = fullWidth ? 'w-full' : '';
