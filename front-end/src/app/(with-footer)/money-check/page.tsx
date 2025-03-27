@@ -1,126 +1,157 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
-import Link from 'next/link';
-import { ChartButton, CalendarButton, Bank } from '@/public/icons';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import TransactionCard from '@/components/money-check/TransactionCard';
+
+import { ChartButton, CalendarButton } from '@/public/icons';
+import ProfileImage from '@/components/common/ProfileImage';
+
+import { user } from '@/mocks/fixtures/user';
+import { transactionData } from '@/mocks/fixtures/money-check';
+import { account as accountData } from '@/mocks/fixtures/account';
+
+import { TransactionGroup } from '@/types/money-check/transaction';
+import { Account } from '@/types/common/account';
 
 export default function Page() {
-  const [currentBalance, setCurrentBalance] = useState(230560);
-  const [recentTransactions, setRecentTransactions] = useState([
-    {
-      id: 1,
-      date: '3.21',
-      time: '15:12',
-      type: '푸르파파역삼언주로',
-      amount: -9800,
-      memo: '여기는 메모입니다.',
-      emoji: '😭'
-    },
-    {
-      id: 2,
-      date: '3.21',
-      time: '15:12',
-      type: '결제처',
-      amount: -3000,
-      memo: '여기는 메모입니다.',
-      emoji: '😊'
-    },
-    {
-      id: 3,
-      date: '3.20',
-      time: '15:12',
-      type: '결제처',
-      amount: -3000,
-      memo: '여기는 메모입니다.',
-      emoji: '😍'
+  const [account, setAccount] = useState<Account>();
+  const [recentTransactions, setRecentTransactions] = useState<TransactionGroup[]>([]);
+
+  useEffect(() => {
+    // 데이터 로드 및 변환
+    const loadTransactionData = () => {
+      try {
+        setRecentTransactions(transactionData as TransactionGroup[]);
+      } catch (error) {
+        console.error('트랜잭션 데이터 로드 실패:', error);
+      }
+    };
+
+    const loadAccountData = () => {
+      try {
+        setAccount(accountData);
+      } catch (error) {
+        console.error('트랜잭션 데이터 로드 실패:', error);
+      }
     }
-  ]);
+
+    loadTransactionData();
+    loadAccountData();
+  }, []);
+
+  const router = useRouter();
+
+  const handleProfileClick = () => {
+    router.push("/profile");
+  };
+
+  const handleChartClick = () => {
+    router.push("/report/chart");
+  };
+
+  const handleCalendarClick = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    router.push(`/money-check/calendar?year=${year}&month=${month}`);
+  };
+
+  const handleFilterClick = () => {
+    alert("필터 모달 오픈");
+  };
+
+  function formatDate(dateStr: string): string {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    
+    const [year, month, day] = dateStr.split('-').map(part => parseInt(part, 10));
+    
+    const dateObj = new Date(year, month - 1, day);
+    
+    const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+    const weekDay = weekDays[dateObj.getDay()];
+    
+    if (year === currentYear) {
+      return `${month}.${day} (${weekDay})`;
+    } else {
+      const shortYear = year % 100;
+      return `${shortYear.toString().padStart(2, '0')}.${month}.${day} (${weekDay})`;
+    }
+  }
 
   return (
     <div className="flex flex-col h-screen">
       <Header title="용돈 기록장" />
 
-      <main className="bg-white pb-16 mx-5">
+      <main className="bg-white pb-16 m-5">
         <div>
           <div className="flex justify-between items-center w-full">
-            <div className="flex items-center">
-              <span className="font-medium">김○○ 님</span>
+            <div className="flex items-center text-2xl cursor-pointer">
+              <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
+                <span className="font-bold">김○○</span>
+                &nbsp;
+                <span className="font-light">님</span>
+              </div>
               <span className="ml-1">&gt;</span>
             </div>
             <div className="flex space-x-2">
-              <ChartButton />
-              <CalendarButton />
+              <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
+              <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
             </div>
           </div>
         </div>
 
-        {/* 계좌 카드 */}
-        <div className="mx-4 my-4 bg-white rounded-lg shadow">
-          <div className="p-4 bg-yellow-400 rounded-t-lg">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                <span>⊗</span>
-              </div>
-              <span className="text-sm">씨피뱅크 입출금 통장</span>
-            </div>
-            <div className="py-2">
-              <div className="text-2xl font-bold">
-                {currentBalance.toLocaleString()}원
+        <div className="my-4 bg-white rounded-xl shadow">
+          <div className="p-2.5 bg-yellow-300 rounded-t-lg">
+            <div className="flex items-center">
+              <ProfileImage image={user.image} size='md' />
+              <div className='font-light ml-5'>
+                <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
+                <p className="text-base text-white">12-34567-89</p>
               </div>
             </div>
           </div>
-          <div className="p-2 bg-white rounded-b-lg">
+          <div className="py-4">
+            <div className="text-4xl font-bold text-center">
+              {account?.balance && account.balance.toLocaleString()}원
+            </div>
+          </div>
+          <div className="pb-3 bg-white rounded-b-lg flex justify-center">
             <Button
               variant="primary"
-              className="w-full py-2 bg-yellow-400 text-black rounded-md"
+              size='md'
+              className="w-[220px]"
+              isFullWidth={false}
             >
               송금
             </Button>
           </div>
         </div>
 
-        {/* 거래 내역 필터 */}
-        <div className="mx-4 bg-white rounded-lg shadow">
-          <div className="px-4 py-3 flex justify-between items-center border-b">
-            <div>
+        <div className="bg-white rounded-lg shadow">
+          <div className="px-4 py-3 flex justify-end items-center border-b border-gray-400">
+            <div className='cursor-pointer' onClick={handleFilterClick}>
               <span className="font-medium">한달 | 전체 ▼</span>
-            </div>
-            <div>
-              <span className="text-sm">최근순 | 전체 ▼</span>
             </div>
           </div>
 
-          {/* 거래 내역 목록 */}
-          <div className="divide-y">
-            {recentTransactions.map((transaction) => (
-              <Link key={transaction.id} href={`/money-check/detail?id=${transaction.id}`}>
-                <div className="px-4 py-3">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="text-sm text-gray-600">{transaction.date}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <div className="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center mr-3">
-                      <span>🚌</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium">{transaction.type}</div>
-                      <div className="text-xs text-gray-500">
-                        {transaction.time} | 소분류
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium text-red-500">
-                        {transaction.amount.toLocaleString()}원
-                      </div>
-                      <div className="text-xs">{transaction.emoji}</div>
-                    </div>
-                  </div>
+          <div className="divide-y divide-gray-400">
+            {recentTransactions.map((group, groupIndex) => (
+              <div key={`group-${groupIndex}`} className="py-2">
+                <div className="px-4 py-2 text-2xl font-medium text-gray-600">
+                  {formatDate(group.date)}
                 </div>
-              </Link>
+                {group.records.map((record) => (
+                  <TransactionCard
+                    key={record.record_id}
+                    {...record}
+                  />
+                ))}
+              </div>
             ))}
           </div>
         </div>

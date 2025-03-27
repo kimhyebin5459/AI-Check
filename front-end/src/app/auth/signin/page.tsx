@@ -134,7 +134,6 @@ export default function Page() {
                         <Button
                             type="submit"
                             variant="primary"
-                            fullWidth
                             isDisabled={isLoading}
                         >
                             {isLoading ? '로그인 중...' : '로그인'}

@@ -119,7 +119,7 @@ export default function SignupPage() {
             <Button
               type="button"
               onClick={() => alert('인증코드가 발송되었습니다.')}
-              fullWidth={false}
+              isFullWidth={false}
               size="sm"
               className="ml-3 whitespace-nowrap w-[25%]"
             >
@@ -139,7 +139,7 @@ export default function SignupPage() {
             <Button
               type="button"
               onClick={() => alert('인증되었습니다.')}
-              fullWidth={false}
+              isFullWidth={false}
               size="sm"
               className="ml-3 whitespace-nowrap w-[25%]"
             >
@@ -173,9 +173,8 @@ export default function SignupPage() {
           <div className="mt-auto flex">
             <Button
               type="submit"
-              fullWidth
               isDisabled={isLoading}
-              size='md'
+              size='lg'
             >
               {isLoading ? '처리 중...' : '다음'}
             </Button>

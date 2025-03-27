@@ -13,14 +13,17 @@ import YellowCheck from './common/yellowcheck.svg';
 import ErrorTriangle from './common/errortriangle.svg';
 import Bank from './common/bank.svg';
 
+import DownTriangle from './common/down-triangle.svg';
+import RightTriangle from './common/right-triangle.svg'
+
 import CalendarButton from './moneycheck/calendarbutton.svg';
 import ChartButton from './moneycheck/chart-button.svg';
 
-import Pen from './category/pen.svg';
-import Hospital from './category/hospital.svg';
 import Bus from './category/bus.svg';
-import Shopping from './category/shopping.svg';
 import Tableware from './category/tableware.svg';
+import Study from './category/study.svg';
+import Enjoy from './category/enjoy.svg';
+import Living from './category/living.svg';
 
 export {
   ActiveBoard,
@@ -32,15 +35,17 @@ export {
   Arrow,
   Close,
   Plus,
-  Pen,
-  Hospital,
   Bus,
-  Shopping,
   Tableware,
+  Study,
+  Enjoy,
+  Living,
   Sprout,
   YellowCheck,
   ErrorTriangle,
   Bank,
   CalendarButton,
   ChartButton,
+  RightTriangle,
+  DownTriangle
 };

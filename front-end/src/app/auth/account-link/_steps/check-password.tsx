@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 
 type AccountType = {
   id: string;
-  accountNumber: string;
-  bankName: string;
+  account_no: string;
+  bank_name: string;
 };
 
 type Props = {
@@ -62,7 +62,7 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
   };
 
   const handleSubmit = () => {
-    alert("account: " + account?.accountNumber + " password: " + password + "로 계좌번호 검증을 시도합니다.")
+    alert("account: " + account?.account_no + " password: " + password + "로 계좌번호 검증을 시도합니다.")
     onNext();
   };
 
