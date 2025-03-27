@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
+import { MSWComponent } from './_components/MSWComponent';
 
 export const metadata: Metadata = {
   title: 'AICheck',
   description: '가족 안심 자녀 금융 서포트 서비스',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="mx-auto my-0 min-h-screen max-w-[480px] bg-white shadow-md">{children}</body>
+      <body className="mx-auto my-0 h-[100dvh] max-w-[480px] min-w-[320px] bg-white shadow-md">
+        <MSWComponent>{children}</MSWComponent>
+      </body>
     </html>
   );
 }
