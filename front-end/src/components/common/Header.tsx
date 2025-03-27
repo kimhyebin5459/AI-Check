@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -10,14 +12,7 @@ interface Props {
   isFixed?: boolean;  // 고정 여부를 결정하는 새 prop 추가
 }
 
-export default function Header({
-  title,
-  hasBorder = true,
-  hasBackButton = false,
-  onBackClick,
-  className = '',
-  isFixed = true,
-}: Props) {
+export default function Header({ title, hasBorder = true, hasBackButton = false, onBackClick, className = '' }: Props) {
   const router = useRouter();
 
   const handleBackClick = () => {
@@ -29,29 +24,24 @@ export default function Header({
   };
 
   return (
-    <header 
-      className={`
-        h-16 flex items-center justify-center
-        ${hasBorder ? 'border-b border-gray-200' : ''}
-        ${isFixed ? 'fixed top-0 left-0 right-0 z-10 bg-white' : ''}
-        ${className}
-      `}
+    <header
+      className={`fixed-container relative top-0 flex h-16 items-center justify-center ${hasBorder ? 'border-b border-gray-200' : ''} ${className} `}
     >
       {hasBackButton && (
         <button
           onClick={handleBackClick}
-          className="absolute left-2.5 w-10 h-10 flex items-center justify-center text-gray-800"
+          className="absolute left-2.5 flex h-10 w-10 items-center justify-center text-gray-800"
           aria-label="뒤로 가기"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="40" 
-            height="40" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
             strokeLinejoin="round"
             className="text-gray-800"
           >
@@ -59,12 +49,8 @@ export default function Header({
           </svg>
         </button>
       )}
-      
-      {title && (
-        <h1 className="text-gray-800 text-lg font-semibold">
-          {title}
-        </h1>
-      )}
+
+      {title && <h1 className="text-lg font-semibold text-gray-800">{title}</h1>}
     </header>
   );
 }

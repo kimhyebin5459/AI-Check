@@ -11,7 +11,7 @@ export default function Layout({ children }: Props) {
   const path = usePathname();
 
   return (
-    <div className={`h-screen pb-[5.5rem] ${path === '/' ? 'bg-gradation2' : 'bg-white'}`}>
+    <div className={`h-full pb-[5.5rem] ${path === '/' ? 'bg-gradation2' : 'bg-white'}`}>
       {children}
       <Footer />
     </div>
