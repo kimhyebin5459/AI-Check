@@ -5,7 +5,7 @@ import { formatMoney } from '@/utils/formatMoney';
 
 export default function ChildAccountCard() {
   return (
-    <div className="grid w-full grid-cols-7 rounded-xl border border-yellow-300">
+    <div className="shadow-base grid w-full grid-cols-7 rounded-xl border border-yellow-300">
       <div className="col-span-2 w-full rounded-tl-xl rounded-bl-xl bg-yellow-200 py-11">
         <UserItem image={user.image} name={user.name} />
       </div>
