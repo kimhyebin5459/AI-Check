@@ -1,17 +1,18 @@
 import React from 'react';
 
 type ButtonVariant = 'primary' | 'secondary';
-type ButtonSize = 'sm' | 'md';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 // 'sm' : 높이 48, 폰트 16px
-// 'md': 높이 64, 폰트 20px
+// 'md' : 높이 56, 폰트 16px
+// 'lg': 높이 64, 폰트 20px
 
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  fullWidth?: boolean;
+  isFullWidth?: boolean;
   isDisabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
@@ -22,12 +23,12 @@ export default function Button({
   onClick,
   variant = 'primary',
   size = 'md',
-  fullWidth = true,
+  isFullWidth = true,
   isDisabled = false,
   type = 'button',
   className = '',
 }: ButtonProps) {
-  const baseStyles = 'font-bold rounded-2xl transition-colors focus:outline-none';
+  const baseStyles = 'rounded-2xl transition-colors focus:outline-none';
 
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
@@ -35,11 +36,12 @@ export default function Button({
   };
 
   const sizeStyles: Record<ButtonSize, string> = {
-    sm: 'h-12 px-4 whitespace-nowrap flex items-center justify-center text-base',
-    md: 'h-16 px-6 whitespace-nowrap flex items-center justify-center text-xl',
+    sm: 'font-bold whitespace-nowrap h-12 px-4 flex items-center justify-center text-base',
+    md: 'font-semibold whitespace-nowrap h-14 px-6 flex items-center justify-center text-xl',
+    lg: 'font-bold whitespace-nowrap h-16 px-6 flex items-center justify-center text-xl',
   };
 
-  const widthStyles = fullWidth ? 'w-full' : '';
+  const widthStyles = isFullWidth ? 'w-full' : '';
   const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
 
   return (

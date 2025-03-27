@@ -2,21 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import AccountCard from '@/components/auth/AccountCard';
-
-type AccountType = {
-  id: string;
-  accountNumber: string;
-  bankName: string;
-};
+import { Account } from '@/types/common/account';
 
 type Props = {
-  onNext: (account: AccountType) => void;
-  setAccounts: (accounts: AccountType[]) => void;
-  cachedAccounts?: AccountType[];
+  onNext: (account: Account) => void;
+  setAccounts: (accounts: Account[]) => void;
+  cachedAccounts?: Account[];
 };
 
 export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Props) {
-  const [accounts, setLocalAccounts] = useState<AccountType[]>([]);
+  const [accounts, setLocalAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,9 +22,9 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
     }
 
     const mockAccounts = [
-      { id: '1', bankName: 'OO은행', accountNumber: '123-456789-12' },
-      { id: '2', bankName: 'OO은행', accountNumber: '123-456789-12' },
-      { id: '3', bankName: 'OO은행', accountNumber: '123-456789-12' },
+      { account_id: 1, account_name: 'OO은행 계좌', account_no: '123-456789-12' },
+      { account_id: 2, account_name: 'OO은행 계좌', account_no: '123-456789-12' },
+      { account_id: 3, account_name: 'OO은행 계좌', account_no: '123-456789-12' },
     ];
 
     setTimeout(() => {
@@ -39,7 +34,7 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
     }, 500);
   }, [cachedAccounts, setAccounts]);
 
-  const handleSelectAccount = (account: AccountType, e?: React.MouseEvent) => {
+  const handleSelectAccount = (account: Account, e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -65,7 +60,7 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
       <div className="space-y-4">
         {accounts.map((account) => (
           <AccountCard
-            key={account.id}
+            key={account.account_id}
             account={account}
             onSelect={handleSelectAccount}
           />
