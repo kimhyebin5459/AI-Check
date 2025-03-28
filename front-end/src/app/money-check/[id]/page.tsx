@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { TransactionType } from '@/types/money-check/transaction';
 import { TransactionDetail } from '@/types/money-check/transaction';
@@ -16,10 +16,9 @@ interface TransactionDetailResponse {
   record: TransactionDetail;
 }
 
-export default function TransactionDetailPage() {
+export default function TransactionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const recordId = searchParams.get('id');
+  const recordId = use(params).id;
 
   const [transaction, setTransaction] = useState<TransactionDetailResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -126,7 +125,7 @@ export default function TransactionDetailPage() {
   };
 
   const dutchPayHandler = () => {
-    alert('정산하기 기능은 아직 구현되지 않았습니다.');
+    router.push('');
   };
 
   const confirmHandler = async () => {

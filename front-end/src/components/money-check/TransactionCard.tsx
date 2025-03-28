@@ -93,7 +93,7 @@ export default function TransactionCard({
 
   return (
     <div>
-      <Link href={`/money-check/detail?id=${recordId}`}>
+      <Link href={`/money-check/${recordId}`}>
         <div className="px-4 py-3 hover:bg-gray-50">
           <div className="flex items-center">
             <div className="flex h-16 flex-col">
