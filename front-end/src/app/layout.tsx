@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import { MSWComponent } from './_components/MSWComponent';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'AICheck',
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="mx-auto my-0 h-dvh max-w-[480px] min-w-[320px] bg-white px-0 shadow-md">
-        <MSWComponent>{children}</MSWComponent>
+        <MSWComponent>
+          <Suspense>{children}</Suspense>
+        </MSWComponent>
       </body>
     </html>
   );

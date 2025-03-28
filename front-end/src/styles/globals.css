@@ -76,7 +76,7 @@ body {
 }
 
 .container {
-  @apply flex h-full flex-col items-center justify-center pt-16;
+  @apply flex h-full flex-col items-center pt-16;
 }
 
 .fixed-container {
