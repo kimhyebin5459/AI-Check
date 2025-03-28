@@ -16,6 +16,7 @@ interface ButtonProps {
   isDisabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
+  fontColor?: string;
 }
 
 export default function Button({
@@ -27,6 +28,7 @@ export default function Button({
   isDisabled = false,
   type = 'button',
   className = '',
+  fontColor,
 }: ButtonProps) {
   const baseStyles = 'rounded-2xl transition-colors focus:outline-none';
 
@@ -37,19 +39,27 @@ export default function Button({
 
   const sizeStyles: Record<ButtonSize, string> = {
     sm: 'font-bold whitespace-nowrap h-12 px-4 flex items-center justify-center text-base',
-    md: 'font-semibold whitespace-nowrap h-14 px-6 flex items-center justify-center text-xl',
+    md: 'font-semibold whitespace-nowrap h-14 px-6 flex items-center justify-center text-lg',
     lg: 'font-bold whitespace-nowrap h-16 px-6 flex items-center justify-center text-xl',
   };
 
   const widthStyles = isFullWidth ? 'w-full' : '';
   const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
 
+  // Custom font color overrides the variant's default text color
+  const fontColorStyle = fontColor ? `text-${fontColor}` : '';
+
+  // Create a combined variant style that might be overridden by custom font color
+  const combinedVariantStyle = fontColor
+    ? variantStyles[variant].replace(/text-[^\s]+/, '') // Remove the text-color class from variant
+    : variantStyles[variant];
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={isDisabled}
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyles} ${disabledStyles} ${className}`}
+      className={`${baseStyles} ${combinedVariantStyle} ${sizeStyles[size]} ${widthStyles} ${disabledStyles} ${fontColorStyle} ${className}`}
     >
       {children}
     </button>
