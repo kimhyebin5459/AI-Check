@@ -17,8 +17,8 @@ export default function AccountCard() {
         </div>
         <div className="flex items-end justify-end">
           <p className="font-thin">메모 작성률</p>
-          <p className="pl-2 text-4xl font-semibold">{memoRate.memo_count}</p>
-          <p className="text-2xl font-semibold">/{memoRate.total_count}</p>
+          <p className="pl-2 text-4xl font-semibold">{memoRate.memoCount}</p>
+          <p className="text-2xl font-semibold">/{memoRate.totalCount}</p>
         </div>
       </div>
     </div>
