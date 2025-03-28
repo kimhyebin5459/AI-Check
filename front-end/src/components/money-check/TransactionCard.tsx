@@ -48,8 +48,6 @@ export default function TransactionCard({
       fetch(`/api/v1/dutch-pays?recordId=${recordId}`)
         .then((response) => response.json())
         .then((data: DutchPayResponse) => {
-          console.log('log:', data);
-
           setDutchPays(data.dutchPays);
         })
         .catch((error) => {
@@ -73,6 +71,7 @@ export default function TransactionCard({
   };
 
   const categoryIcon = getCategoryIcon(firstCategoryName);
+
   const ratingEmoji = (rating: number) => {
     switch (rating) {
       case 1:
