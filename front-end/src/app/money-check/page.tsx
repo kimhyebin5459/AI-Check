@@ -85,68 +85,70 @@ export default function Page() {
   }
 
   return (
-    <div className="container">
-      <Header title="용돈 기록장" />
-      <main className="w-full overflow-y-auto px-5 pb-[5.5rem]">
-        <div>
-          <div className="flex w-full items-center justify-between">
-            <div className="flex cursor-pointer items-center text-2xl">
-              <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                <span className="font-bold">김○○</span>
-                &nbsp;
-                <span className="font-light">님</span>
+    <div className="h-full pb-[5.5rem]">
+      <div className="container">
+        <Header title="용돈 기록장" />
+        <main className="w-full overflow-y-auto p-5">
+          <div>
+            <div className="flex w-full items-center justify-between">
+              <div className="flex cursor-pointer items-center text-2xl">
+                <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
+                  <span className="font-bold">김○○</span>
+                  &nbsp;
+                  <span className="font-light">님</span>
+                </div>
+                <span className="ml-1">&gt;</span>
               </div>
-              <span className="ml-1">&gt;</span>
-            </div>
-            <div className="flex space-x-2">
-              <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
-              <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
-            </div>
-          </div>
-        </div>
-
-        <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-          <div className="rounded-t-lg bg-yellow-300 p-2.5">
-            <div className="flex items-center">
-              <ProfileImage image={user.image} size="md" />
-              <div className="ml-5 font-light">
-                <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
-                <p className="text-base text-white">12-34567-89</p>
+              <div className="flex space-x-2">
+                <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
+                <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
               </div>
             </div>
           </div>
-          <div className="py-4">
-            <div className="text-center text-4xl font-bold">
-              {account?.balance && account.balance.toLocaleString()}원
-            </div>
-          </div>
-          <div className="flex justify-center rounded-b-lg bg-white pb-3">
-            <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
-              송금
-            </Button>
-          </div>
-        </div>
 
-        <div className="rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-          <div className="flex items-center justify-end border-b border-gray-400 px-4 py-3">
-            <div className="cursor-pointer" onClick={handleFilterClick}>
-              <span className="font-medium">한달 | 전체 ▼</span>
-            </div>
-          </div>
-
-          <div className="divide-y divide-gray-400">
-            {recentTransactions.map((group, groupIndex) => (
-              <div key={`group-${groupIndex}`} className="py-2">
-                <div className="px-4 py-2 text-2xl font-medium text-gray-600">{formatDate(group.date)}</div>
-                {group.records.map((record) => (
-                  <TransactionCard key={record.recordId} {...record} />
-                ))}
+          <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+            <div className="rounded-t-lg bg-yellow-300 p-2.5">
+              <div className="flex items-center">
+                <ProfileImage image={user.image} size="md" />
+                <div className="ml-5 font-light">
+                  <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
+                  <p className="text-base text-white">12-34567-89</p>
+                </div>
               </div>
-            ))}
+            </div>
+            <div className="py-4">
+              <div className="text-center text-4xl font-bold">
+                {account?.balance && account.balance.toLocaleString()}원
+              </div>
+            </div>
+            <div className="flex justify-center rounded-b-lg bg-white pb-3">
+              <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
+                송금
+              </Button>
+            </div>
           </div>
-        </div>
-      </main>
-      <Footer />
+
+          <div className="rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+            <div className="flex items-center justify-end border-b border-gray-400 px-4 py-3">
+              <div className="cursor-pointer" onClick={handleFilterClick}>
+                <span className="font-medium">한달 | 전체 ▼</span>
+              </div>
+            </div>
+
+            <div className="divide-y divide-gray-400">
+              {recentTransactions.map((group, groupIndex) => (
+                <div key={`group-${groupIndex}`} className="py-2">
+                  <div className="px-4 py-2 text-2xl font-medium text-gray-600">{formatDate(group.date)}</div>
+                  {group.records.map((record) => (
+                    <TransactionCard key={record.recordId} {...record} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
