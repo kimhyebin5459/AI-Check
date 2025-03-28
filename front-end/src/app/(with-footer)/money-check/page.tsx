@@ -22,7 +22,6 @@ export default function Page() {
   const [recentTransactions, setRecentTransactions] = useState<TransactionGroup[]>([]);
 
   useEffect(() => {
-    // 데이터 로드 및 변환
     const loadTransactionData = () => {
       try {
         setRecentTransactions(transactionData as TransactionGroup[]);
@@ -138,7 +137,7 @@ export default function Page() {
               <div key={`group-${groupIndex}`} className="py-2">
                 <div className="px-4 py-2 text-2xl font-medium text-gray-600">{formatDate(group.date)}</div>
                 {group.records.map((record) => (
-                  <TransactionCard key={record.record_id} {...record} />
+                  <TransactionCard key={record.recordId} {...record} />
                 ))}
               </div>
             ))}
