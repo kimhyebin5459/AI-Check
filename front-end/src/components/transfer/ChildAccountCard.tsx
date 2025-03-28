@@ -9,7 +9,7 @@ interface Props {
   accountName: string;
 }
 
-export default function RegularTransferCard({ image, name, balance, accountNo, accountName }: Props) {
+export default function ChildAccountCard({ image, name, balance, accountNo, accountName }: Props) {
   return (
     <div className="shadow-base grid h-28 w-full grid-cols-4 rounded-xl border border-yellow-200">
       <div className="col-span-1 flex items-center justify-center rounded-tl-xl rounded-bl-xl bg-yellow-200">

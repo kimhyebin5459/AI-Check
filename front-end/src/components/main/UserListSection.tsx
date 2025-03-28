@@ -9,7 +9,7 @@ export default function UserListSection() {
       {userList.map(({ userId, name, image }) => (
         <UserItem key={userId} name={name} image={image} />
       ))}
-      <div className="flex size-13 items-center justify-center rounded-full bg-gray-50">
+      <div className="flex size-15 items-center justify-center rounded-full bg-gray-50">
         <Image src={Plus} alt="plus icon" />
       </div>
     </div>

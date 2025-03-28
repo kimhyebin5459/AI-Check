@@ -28,7 +28,7 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
       })}
       onClick={handleClick}
     >
-      <div className="pt-4 pl-4">
+      <div className="pt-4 pl-4 leading-7">
         {lines.map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -39,7 +39,7 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
         </div>
         {caseCnt !== undefined && (
           <div className="flex flex-col justify-end">
-            <p className="pr-3 pb-5 text-4xl font-black tracking-wide whitespace-nowrap">{caseCnt}건</p>
+            <p className="pr-2 pb-3 text-3xl font-black tracking-wide whitespace-nowrap">{caseCnt}건</p>
           </div>
         )}
       </div>

@@ -1,12 +1,12 @@
 import Button from '@/components/common/Button';
 import Header from '@/components/common/Header';
-import RegularTransferCard from '@/components/regular-transfer/RegularTransferCard';
+import ChildAccountCard from '@/components/transfer/ChildAccountCard';
 import { accountList } from '@/mocks/fixtures/account';
 import Link from 'next/link';
 
 export default function Page() {
   return (
-    <div className="container">
+    <div className="container justify-center">
       <Header hasBackButton hasBorder={false} />
       <div className="w-full space-y-10 overflow-y-auto px-5 pb-[5.5rem]">
         <div className="text-mdl flex w-full flex-col justify-start font-bold">
@@ -15,7 +15,7 @@ export default function Page() {
         </div>
         <div className="w-full space-y-4">
           {accountList.map((account) => (
-            <RegularTransferCard key={account.accountNo} {...account} />
+            <ChildAccountCard key={account.accountNo} {...account} />
           ))}
         </div>
         <div className="grid w-full grid-cols-2">
