@@ -1,11 +1,11 @@
 export type TransactionType = 'PAYMENT' | 'DEPOSIT' | 'OUTBOUND_TRANSFER' | 'INBOUND_TRANSFER';
 
 export interface TransactionRecord {
-  record_id: number;
-  first_category_name: string;
-  second_category_name: string;
-  is_dutch_pay: boolean;
-  display_name: string;
+  recordId: number;
+  firstCategoryName: string;
+  secondCategoryName: string;
+  isDutchPay: boolean;
+  displayName: string;
   type: TransactionType;
   amount: number;
   description: string;
@@ -19,8 +19,8 @@ export interface TransactionGroup {
 }
 
 export interface GroupedTransactionRecord {
-  dutch_pay_id: number;
-  display_name: string;
+  dutchPayId: number;
+  displayName: string;
   amount: number;
   time: string;
   description: string;
