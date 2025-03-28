@@ -1,16 +1,12 @@
-"use client";
+'use client';
 
 import Header from '@/components/common/Header';
 import { useState, useEffect } from 'react';
 
-type AccountType = {
-  id: string;
-  accountNumber: string;
-  bankName: string;
-};
+import { Account } from '@/types/common/account';
 
 type Props = {
-  account?: AccountType;
+  account?: Account;
   onNext: () => void;
   onPrev: () => void;
 };
@@ -62,45 +58,41 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
   };
 
   const handleSubmit = () => {
-    alert("account: " + account?.accountNumber + " password: " + password + "로 계좌번호 검증을 시도합니다.")
+    alert('account: ' + account?.accountNo + ' password: ' + password + '로 계좌번호 검증을 시도합니다.');
     onNext();
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Header hasBackButton hasBorder={false}></Header>
 
-      <div className="flex flex-col items-center justify-center flex-grow mb-12">
-        <h1 className="text-mdl font-bold mb-12">계좌 비밀번호를 입력해주세요</h1>
+      <div className="mb-12 flex flex-grow flex-col items-center justify-center">
+        <h1 className="text-mdl mb-12 font-bold">계좌 비밀번호를 입력해주세요</h1>
 
         <div className="flex space-x-4">
           {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className={`w-3 h-3 rounded-full ${i < password.length ? 'bg-yellow-300' : 'bg-gray-300'
-                }`}
-            />
+            <div key={i} className={`h-3 w-3 rounded-full ${i < password.length ? 'bg-yellow-300' : 'bg-gray-300'}`} />
           ))}
         </div>
       </div>
 
-      <div className="mt-auto mb-10 mx-auto w-full max-w-xs">
-        <div className="grid grid-cols-3 gap-x-12 gap-y-6 w-full">
+      <div className="mx-auto mt-auto mb-10 w-full max-w-xs">
+        <div className="grid w-full grid-cols-3 gap-x-12 gap-y-6">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
             <div key={num} className="flex items-center justify-center">
               <button
                 onClick={() => handleNumberClick(num)}
-                className="text-4xl font-medium h-12 w-12 text-center grid place-items-center"
+                className="grid h-12 w-12 place-items-center text-center text-4xl font-medium"
               >
                 {num}
               </button>
             </div>
           ))}
-          <div className="flex items-center justify-center col-start-1 col-end-2"></div>
+          <div className="col-start-1 col-end-2 flex items-center justify-center"></div>
           <div className="flex items-center justify-center">
             <button
               onClick={() => handleNumberClick(0)}
-              className="text-4xl font-medium h-12 w-12 text-center grid place-items-center"
+              className="grid h-12 w-12 place-items-center text-center text-4xl font-medium"
             >
               0
             </button>
@@ -108,7 +100,7 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
           <div className="flex items-center justify-center">
             <button
               onClick={handleBackspace}
-              className="text-3xl text-gray-400 h-12 w-12 text-center grid place-items-center"
+              className="grid h-12 w-12 place-items-center text-center text-3xl text-gray-400"
             >
               ←
             </button>

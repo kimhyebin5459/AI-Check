@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="mx-auto my-0 h-[100dvh] max-w-[480px] min-w-[320px] bg-white shadow-md">
+      <body className="mx-auto my-0 h-dvh max-w-[480px] min-w-[320px] bg-white px-0 shadow-md">
         <MSWComponent>{children}</MSWComponent>
       </body>
     </html>

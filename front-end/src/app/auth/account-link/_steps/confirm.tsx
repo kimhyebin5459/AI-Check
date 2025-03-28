@@ -5,14 +5,10 @@ import { useEffect } from "react";
 import AccountCard from "@/components/auth/AccountCard";
 import NoticePage from "@/components/common/NoticePage";
 
-type AccountType = {
-  id: string;
-  accountNumber: string;
-  bankName: string;
-};
+import { Account } from "@/types/common/account";
 
 type Props = {
-  account?: AccountType;
+  account?: Account;
   onNext: () => void;
   onPrev: () => void;
 };

@@ -22,7 +22,6 @@ body {
   --text-3xl: 2rem;
   --text-mdl: 1.75rem;
 
-  --color-gray-50: #eff0f5;
   --color-gray-100: #edf0f2;
   --color-gray-200: #dfe2e6;
   --color-gray-300: #cad0d7;
@@ -34,6 +33,7 @@ body {
   --color-gray-900: #51545e;
   --color-gray-950: #303236;
 
+  --color-skyblue-50: #eff6ff;
   --color-skyblue-100: #cdecff;
   --color-skyblue-200: #8ed8ff;
 
@@ -63,6 +63,8 @@ body {
   --color-red: #ff817a;
   --color-green: #4bba4b;
   --color-yellowgreen: #99da7d;
+
+  --shadow-base: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .bg-gradation1 {
@@ -74,7 +76,7 @@ body {
 }
 
 .container {
-  @apply flex h-full flex-col items-center justify-center px-5;
+  @apply flex h-full flex-col items-center justify-center pt-16;
 }
 
 .fixed-container {

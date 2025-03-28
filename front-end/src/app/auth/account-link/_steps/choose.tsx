@@ -1,22 +1,17 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import AccountCard from '@/components/auth/AccountCard';
-
-type AccountType = {
-  id: string;
-  accountNumber: string;
-  bankName: string;
-};
+import { Account } from '@/types/common/account';
 
 type Props = {
-  onNext: (account: AccountType) => void;
-  setAccounts: (accounts: AccountType[]) => void;
-  cachedAccounts?: AccountType[];
+  onNext: (account: Account) => void;
+  setAccounts: (accounts: Account[]) => void;
+  cachedAccounts?: Account[];
 };
 
 export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Props) {
-  const [accounts, setLocalAccounts] = useState<AccountType[]>([]);
+  const [accounts, setLocalAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,9 +22,9 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
     }
 
     const mockAccounts = [
-      { id: '1', bankName: 'OO은행', accountNumber: '123-456789-12' },
-      { id: '2', bankName: 'OO은행', accountNumber: '123-456789-12' },
-      { id: '3', bankName: 'OO은행', accountNumber: '123-456789-12' },
+      { accountId: 1, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
+      { accountId: 2, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
+      { accountId: 3, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
     ];
 
     setTimeout(() => {
@@ -39,7 +34,7 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
     }, 500);
   }, [cachedAccounts, setAccounts]);
 
-  const handleSelectAccount = (account: AccountType, e?: React.MouseEvent) => {
+  const handleSelectAccount = (account: Account, e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -49,26 +44,23 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center flex-grow">
+      <div className="flex flex-grow flex-col items-center justify-center">
         <p>계좌 정보를 불러오는 중...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col flex-grow ml-5 mr-5 justify-center mb-16">
-      <h1 className="text-mdl font-bold mb-5">
-        연동할 계좌를<br />
+    <div className="mr-5 mb-16 ml-5 flex flex-grow flex-col justify-center">
+      <h1 className="text-mdl mb-5 font-bold">
+        연동할 계좌를
+        <br />
         선택해주세요
       </h1>
 
       <div className="space-y-4">
         {accounts.map((account) => (
-          <AccountCard
-            key={account.id}
-            account={account}
-            onSelect={handleSelectAccount}
-          />
+          <AccountCard key={account.accountId} account={account} onSelect={handleSelectAccount} />
         ))}
       </div>
     </div>
