@@ -30,6 +30,6 @@ export const accountList = [
 ];
 
 export const memoRate = {
-  memo_count: 17,
-  total_count: 22,
+  memoCount: 17,
+  totalCount: 22,
 };
