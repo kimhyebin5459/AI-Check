@@ -21,7 +21,7 @@ export default function Page() {
         <div className="grid w-full grid-cols-2">
           <div className="col-span-1">
             <Link href="/regular-transfer">
-              <Button>정기 송금 관리</Button>
+              <Button size="lg">정기 송금 관리</Button>
             </Link>
           </div>
           <div className="col-span-1 flex justify-end">
