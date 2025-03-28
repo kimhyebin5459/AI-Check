@@ -1,10 +1,10 @@
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+'use client';
 
-export default async function Page(props: { 
-  searchParams : SearchParams
-}) {
-  const params = await props.searchParams;
-  const id = (params.id as string) || new Date().getFullYear().toString();
+import { useSearchParams } from 'next/navigation';
 
-  return <div>Detail for {id}</div>
+export default function Page() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') || new Date().getFullYear().toString();
+
+  return <div>Detail for {id}</div>;
 }
