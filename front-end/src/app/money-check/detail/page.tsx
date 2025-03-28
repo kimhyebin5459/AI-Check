@@ -9,6 +9,7 @@ import { TransactionDetail } from '@/types/money-check/transaction';
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/tag';
 import Button from '@/components/common/Button';
+import DutchPayDetail from '@/components/money-check/DutchPayDetail';
 
 interface TransactionDetailResponse {
   date: string;
@@ -24,7 +25,6 @@ export default function TransactionDetailPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 카테고리 선택 상태
   const [selectedFirstCategory, setSelectedFirstCategory] = useState<string>('');
   const [selectedSecondCategory, setSelectedSecondCategory] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
@@ -196,17 +196,17 @@ export default function TransactionDetailPage() {
   }
 
   return (
-    <div className="container">
-      <div className="mx-auto max-w-md">
+    <div className="h-full">
+      <div className="container">
         <Header title="거래 상세" hasBackButton onBackClick={backHandler}></Header>
-        <div className="mx-5">
-          <section className="mt-4">
+        <div className="w-full overflow-y-auto px-5 pt-5">
+          <section>
             <h2 className="text-xl font-semibold">{transaction.record.displayName}</h2>
             <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.record.createdAt}</p>
           </section>
 
           <section className="mt-4">
-            <h3 className="mb-3 text-base">대분류</h3>
+            <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {firstCategories.map((category) => (
                 <Tag
@@ -220,8 +220,8 @@ export default function TransactionDetailPage() {
             </div>
           </section>
 
-          <section className="mt-4">
-            <h3 className="mb-3 text-base">소분류</h3>
+          <section className="mt-2">
+            <h3 className="mb-1 text-base">소분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedFirstCategory &&
                 secondCategoriesMap[selectedFirstCategory] &&
@@ -237,8 +237,8 @@ export default function TransactionDetailPage() {
             </div>
           </section>
 
-          <section className="mt-4">
-            <h3 className="mb-3 text-base">메모</h3>
+          <section className="mt-2">
+            <h3 className="mb-1 text-base">메모</h3>
             <input
               type="text"
               value={memo}
@@ -248,12 +248,18 @@ export default function TransactionDetailPage() {
             />
           </section>
 
-          <section className="mt-6">
+          <section className="mt-3">
             <div className="mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 금액</span>
               <span className="text-base font-medium">{transaction.record.amount.toLocaleString()}원</span>
             </div>
-            <div className="mb-4 flex justify-between">
+
+            {/* 더치페이 내역 표시 영역 */}
+            {transaction.record.isDutchPay && (
+              <DutchPayDetail recordId={transaction.record.recordId} amount={transaction.record.amount} />
+            )}
+
+            <div className="mt-2 mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 유형</span>
               <span className="text-base font-medium">{getTransactionTypeText(transaction.record.type)}</span>
             </div>
@@ -265,11 +271,11 @@ export default function TransactionDetailPage() {
             </div>
           </section>
 
-          <div className="mt-8 mb-8 flex gap-4">
-            <Button size="md" onClick={dutchPayHandler} fontColor="text-gray-900">
+          <div className="mt-4 mb-4 flex gap-4">
+            <Button size="md" onClick={dutchPayHandler}>
               1/N 정산하기
             </Button>
-            <Button size="md" onClick={confirmHandler} fontColor="text-gray-900">
+            <Button size="md" onClick={confirmHandler}>
               확인
             </Button>
           </div>
