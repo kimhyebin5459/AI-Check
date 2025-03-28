@@ -10,14 +10,21 @@ export const accountList = [
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
     name: '아이1',
     accountName: '입출금 계좌',
-    accountNo: '1234-1234-12',
+    accountNo: '1234-1234-1',
     balance: 123000,
   },
   {
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-kid-give-ok-260nw-2395161169.jpg',
     name: '아이2',
     accountName: '입출금 계좌',
-    accountNo: '1234-1234-21',
+    accountNo: '1234-1234-2',
+    balance: 123000,
+  },
+  {
+    image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
+    name: '아이3',
+    accountName: '입출금 계좌',
+    accountNo: '1234-1234-3',
     balance: 123000,
   },
 ];
