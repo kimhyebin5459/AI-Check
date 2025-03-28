@@ -24,6 +24,7 @@ export default function ProfileImage({ image, size }: Props) {
         width={sizeToPixels[size]}
         height={sizeToPixels[size]}
         className="object-cover"
+        unoptimized={true}
       />
     </div>
   );
