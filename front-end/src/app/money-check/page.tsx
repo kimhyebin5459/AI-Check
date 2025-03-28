@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
+import Footer from '@/components/common/footer/Footer';
+
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import TransactionCard from '@/components/money-check/TransactionCard';
@@ -85,7 +87,7 @@ export default function Page() {
   return (
     <div className="container">
       <Header title="용돈 기록장" />
-      <main className="w-full overflow-y-auto p-5">
+      <main className="w-full overflow-y-auto px-5 pb-[5.5rem]">
         <div>
           <div className="flex w-full items-center justify-between">
             <div className="flex cursor-pointer items-center text-2xl">
@@ -144,6 +146,7 @@ export default function Page() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
