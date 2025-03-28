@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
-import { MSWComponent } from './_components/MSWComponent';
+import { MSWComponent } from './_components/msw-component';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
