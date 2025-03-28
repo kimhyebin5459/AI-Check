@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <div className="container">
       <Header title="알림" hasBorder={false} />
-      <div className="w-full overflow-y-auto">
+      <div className="w-full space-y-1 overflow-y-auto">
         {notificationList.map((noti) => (
           <NotificationItem key={noti.alarmId} {...noti} />
         ))}
