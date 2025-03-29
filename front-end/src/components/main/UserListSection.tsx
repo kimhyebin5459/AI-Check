@@ -2,6 +2,7 @@ import { userList } from '@/mocks/fixtures/user';
 import UserItem from './UserItem';
 import { Plus } from '@/public/icons';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function UserListSection() {
   return (
@@ -9,9 +10,11 @@ export default function UserListSection() {
       {userList.map(({ userId, name, image }) => (
         <UserItem key={userId} name={name} image={image} />
       ))}
-      <div className="flex min-h-15 min-w-15 items-center justify-center rounded-full bg-gray-50">
-        <Image src={Plus} alt="plus icon" />
-      </div>
+      <Link href={'/auth/signup'}>
+        <div className="flex min-h-15 min-w-15 items-center justify-center rounded-full border-[0.06rem] border-gray-600 bg-white">
+          <Image src={Plus} alt="plus icon" />
+        </div>
+      </Link>
     </div>
   );
 }

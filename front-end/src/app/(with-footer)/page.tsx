@@ -1,4 +1,4 @@
-import { Arrow, Board, Devil, Duck, Money, Sprout } from '@/public/icons';
+import { Arrow, Sprout } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
 import ParentAccountCard from '@/components/main/ParentAccountCard';
 import NavButton from '@/components/main/NavButton';
@@ -7,45 +7,14 @@ import { user } from '@/mocks/fixtures/user';
 import Image from 'next/image';
 import AccountCard from '@/components/main/AccountCard';
 import Link from 'next/link';
+import { CHILD_ITEM, COMMON_ITEM, PARENT_ITEM } from '@/constants/main';
+
+type Role = 'parent' | 'child' | string;
 
 export default function Home() {
-  type Role = 'parent' | 'child' | string;
   const role: Role = 'parent';
 
-  const homeItems = [
-    role === 'parent'
-      ? {
-          lines: ['자녀 관리'],
-          image: Duck,
-          color: 'yellow-200',
-          to: '/manage-child',
-        }
-      : {
-          lines: ['엄마', '설득하기'],
-          image: Duck,
-          color: 'yellow-200',
-          to: '/mother-ai',
-        },
-    {
-      lines: ['용돈', '요청 내역'],
-      image: Board,
-      color: 'gradation1',
-      to: '/request',
-    },
-    {
-      lines: ['우리 가족', '피싱 위험'],
-      image: Devil,
-      color: 'gradation1',
-      to: '/phishing',
-      caseCnt: 0,
-    },
-    {
-      lines: ['송금하기'],
-      image: Money,
-      color: 'yellow-100',
-      to: '/transfer',
-    },
-  ];
+  const homeItems = [role === 'parent' ? PARENT_ITEM : CHILD_ITEM, ...COMMON_ITEM];
 
   return (
     <div className="container space-y-5 px-5 pb-7">
