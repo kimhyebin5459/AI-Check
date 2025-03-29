@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-import { TransactionType } from '@/types/money-check/transaction';
-import { TransactionDetail } from '@/types/money-check/transaction';
+import { TransactionType } from '@/types/transaction';
+import { TransactionDetail } from '@/types/transaction';
 
 import Header from '@/components/common/Header';
-import Tag from '@/components/common/tag';
+import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
 import DutchPayDetail from '@/components/money-check/DutchPayDetail';
 

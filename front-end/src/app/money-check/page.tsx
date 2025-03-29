@@ -13,11 +13,11 @@ import { ChartButton, CalendarButton } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
 
 import { user } from '@/mocks/fixtures/user';
-import { transactionData } from '@/mocks/fixtures/money-check';
 import { account as accountData } from '@/mocks/fixtures/account';
 
-import { TransactionGroup } from '@/types/money-check/transaction';
-import { Account } from '@/types/common/account';
+import { TransactionGroup } from '@/types/transaction';
+import { Account } from '@/types/account';
+import { transactionData } from '@/mocks/fixtures/transaction';
 
 export default function Page() {
   const [account, setAccount] = useState<Account>();
