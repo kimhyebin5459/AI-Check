@@ -5,7 +5,7 @@ import { regularTransferList } from '@/mocks/fixtures/transfer';
 export default function Page() {
   return (
     <div className="container">
-      <Header hasBackButton title="자녀 정기 송금" />
+      <Header hasBackButton title="자녀 정기 용돈" />
       <div className="w-full overflow-y-auto px-5">
         {regularTransferList.map((rt, index) => (
           <div key={rt.childId}>
