@@ -12,18 +12,18 @@ export interface Props {
 }
 
 const Modal = ({ children, onClose, isOpen, position = 'center', title }: Props) => {
-  if (!isOpen) return <></>;
-
   return (
     isOpen && (
-      <div className="fixed-container inset-0 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center">
+      <div
+        className={`fixed-container inset-0 left-1/2 z-50 flex -translate-x-1/2 ${position === 'center' ? 'items-center' : 'items-end'} justify-center`}
+      >
         <div className="fixed-container inset-0 bg-black opacity-60" onClick={onClose}></div>
         <div
-          className={`fixed flex flex-col items-center p-6 ${position === 'center' ? 'top-1/2 left-1/2 w-80 -translate-x-1/2 -translate-y-1/2 transform' : 'bottom-0 left-1/2 mx-4 w-4/5 -translate-x-1/2 transform'} rounded-modal bg-white shadow-lg`}
+          className={`z-60 flex w-full flex-col items-center space-y-6 p-6 ${position === 'center' ? 'mx-9' : 'mx-5 mb-10'} rounded-modal bg-white shadow-lg`}
         >
           {title && (
-            <div>
-              <p>{title}</p>
+            <div className="flex w-full justify-between">
+              <p className="font-semibold">{title}</p>
               <Image src={Close} alt="close icon" onClick={onClose} />
             </div>
           )}
