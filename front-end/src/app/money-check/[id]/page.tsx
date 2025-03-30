@@ -3,13 +3,15 @@
 import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { TransactionType } from '@/types/transaction';
 import { TransactionDetail } from '@/types/transaction';
 
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
 // import DutchPayDetail from '@/components/money-check/DutchPayDetail';
+
+import { FIRST_CATEGORIES, SECOND_CATEGORIES_MAP } from '@/constants/categories';
+import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
 
 interface TransactionDetailResponse {
   date: string;
@@ -27,59 +29,6 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
   const [selectedFirstCategory, setSelectedFirstCategory] = useState<string>('');
   const [selectedSecondCategory, setSelectedSecondCategory] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
-
-  const firstCategories = ['교육비', '교통비', '생활비', '식비', '여가비'];
-
-  const secondCategoriesMap: Record<string, string[]> = {
-    교통비: ['버스', '지하철', '택시', '자전거', '기타'],
-    식비: ['식사', '간식', '음료', '기타'],
-    교육비: ['교재비', '학용품비', '준비물', '기타'],
-    여가비: ['오락비', '여행비', '문화생활', '기타'],
-    생활비: ['의류', '선물', '생활용품', '기타'],
-  };
-
-  const getRatingText = (rating: number): string => {
-    switch (rating) {
-      case 1:
-        return '아쉬워요';
-      case 2:
-        return '좋아요';
-      case 3:
-        return '최고예요';
-      default:
-        return '';
-    }
-  };
-
-  const getRatingEmoji = (rating: number): string => {
-    switch (rating) {
-      case 1:
-        return '😢';
-      case 2:
-        return '😊';
-      case 3:
-        return '😍';
-      default:
-        return '';
-    }
-  };
-
-  const getTransactionTypeText = (type: TransactionType): string => {
-    switch (type) {
-      case 'PAYMENT':
-        return '결제';
-      case 'DEPOSIT':
-        return '입금';
-      case 'WITHDRAW':
-        return '출금';
-      case 'INBOUND_TRANSFER':
-        return '입금 이체';
-      case 'OUTBOUND_TRANSFER':
-        return '출금 이체';
-      default:
-        return '';
-    }
-  };
 
   useEffect(() => {
     const fetchTransactionDetail = async () => {
@@ -178,10 +127,6 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
     }
   };
 
-  const backHandler = () => {
-    router.back();
-  };
-
   if (loading) {
     return <div className="mx-auto max-w-md px-4">로딩 중...</div>;
   }
@@ -197,7 +142,7 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
   return (
     <div className="h-full">
       <div className="container">
-        <Header title="거래 상세" hasBackButton onBackClick={backHandler}></Header>
+        <Header title="거래 상세" hasBackButton></Header>
         <div className="w-full overflow-y-auto px-5 pt-5">
           <section>
             <h2 className="text-xl font-semibold">{transaction.record.displayName}</h2>
@@ -207,7 +152,7 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
           <section className="mt-4">
             <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
-              {firstCategories.map((category) => (
+              {FIRST_CATEGORIES.map((category) => (
                 <Tag
                   key={category}
                   isSelected={selectedFirstCategory === category}
@@ -223,8 +168,8 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
             <h3 className="mb-1 text-base">소분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedFirstCategory &&
-                secondCategoriesMap[selectedFirstCategory] &&
-                secondCategoriesMap[selectedFirstCategory].map((category) => (
+                SECOND_CATEGORIES_MAP[selectedFirstCategory] &&
+                SECOND_CATEGORIES_MAP[selectedFirstCategory].map((category) => (
                   <Tag
                     key={category}
                     isSelected={selectedSecondCategory === category}
