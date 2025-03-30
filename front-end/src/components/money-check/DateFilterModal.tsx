@@ -81,52 +81,47 @@ export default function DateFilterModal({
         <div className="flex flex-col space-y-4">
           <h3 className="text-base font-semibold">기간</h3>
           <div className="flex space-x-2">
-            <Tag isSelected={dateRangeType === 'TODAY'} key={'TODAY'} size="md" onClick={setToday}>
+            <Tag isSelected={dateRangeType === 'TODAY'} key={'TODAY'} size="xs" onClick={setToday}>
               오늘
             </Tag>
-            <Tag isSelected={dateRangeType === 'WEEK'} key={'WEEK'} size="md" onClick={setWeekday}>
+            <Tag isSelected={dateRangeType === 'WEEK'} key={'WEEK'} size="xs" onClick={setWeekday}>
               일주일
             </Tag>
-            <Tag isSelected={dateRangeType === 'MONTH'} key={'MONTH'} size="md" onClick={setMonth}>
+            <Tag isSelected={dateRangeType === 'MONTH'} key={'MONTH'} size="xs" onClick={setMonth}>
               한달
             </Tag>
-            <Tag isSelected={dateRangeType === 'CUSTOM'} key={'CUSTOM'} size="md" onClick={setCustom}>
+            <Tag isSelected={dateRangeType === 'CUSTOM'} key={'CUSTOM'} size="xs" onClick={setCustom}>
               직접 선택
             </Tag>
           </div>
 
-          <div className="flex items-center rounded-xl border border-gray-200 px-4 py-3">
-            <div className="flex items-center">
-              <input
-                type="date"
-                className="border-none p-0 text-sm font-medium outline-none"
-                value={formatDateToParam(startDate)}
-                onChange={handleStartDateChange}
-              />
-              <span className="mx-2 text-sm font-medium">부터</span>
-            </div>
-            <div className="ml-2 flex items-center">
-              <input
-                type="date"
-                className="border-none p-0 text-sm font-medium outline-none"
-                value={formatDateToParam(endDate)}
-                onChange={handleEndDateChange}
-              />
-              <span className="mx-2 text-sm font-medium">까지</span>
-            </div>
+          <div className="flex h-9 items-center justify-between rounded-xl border border-gray-200 px-3 tracking-tighter">
+            <input
+              type="date"
+              className="border-none p-0 text-sm font-light outline-none"
+              value={formatDateToParam(startDate)}
+              onChange={handleStartDateChange}
+            />
+            <p className="text-gray-600">~</p>
+            <input
+              type="date"
+              className="border-none p-0 text-sm font-light outline-none"
+              value={formatDateToParam(endDate)}
+              onChange={handleEndDateChange}
+            />
           </div>
         </div>
 
         <div className="flex flex-col space-y-4">
-          <h3 className="text-base font-semibold">종류</h3>
+          <h3 className="font-semibold">종류</h3>
           <div className="flex space-x-2">
-            <Tag isSelected={type === 'ALL'} key={'ALL'} size="md" onClick={() => setType('ALL')}>
+            <Tag isSelected={type === 'ALL'} key={'ALL'} size="xs" onClick={() => setType('ALL')}>
               전체
             </Tag>
-            <Tag isSelected={type === 'INCOME'} key={'INCOME'} size="md" onClick={() => setType('INCOME')}>
+            <Tag isSelected={type === 'INCOME'} key={'INCOME'} size="xs" onClick={() => setType('INCOME')}>
               수입
             </Tag>
-            <Tag isSelected={type === 'EXPENSE'} key={'EXPENSE'} size="md" onClick={() => setType('EXPENSE')}>
+            <Tag isSelected={type === 'EXPENSE'} key={'EXPENSE'} size="xs" onClick={() => setType('EXPENSE')}>
               지출
             </Tag>
           </div>
