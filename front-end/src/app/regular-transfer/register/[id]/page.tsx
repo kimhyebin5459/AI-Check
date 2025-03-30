@@ -38,7 +38,7 @@ export default function Page({ params }: Props) {
       setSelectedDay('');
     }
     prevSelectedInterval.current = selectedInterval;
-  }, [selectedInterval]);
+  }, [selectedInterval, setSelectedDay]);
 
   const formatNumber = (num: string) => {
     if (!num) return '';
@@ -100,7 +100,9 @@ export default function Page({ params }: Props) {
         </div>
         {selectedDay && selectedAmount !== 0 && (
           <div className="w-full pb-10">
-            <Button onClick={openModal}>등록하기</Button>
+            <Button size="lg" onClick={openModal}>
+              등록하기
+            </Button>
           </div>
         )}
       </div>
