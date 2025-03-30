@@ -40,8 +40,6 @@ export default function DutchPayDetail({ recordId, amount }: Props) {
 
       // 총 금액 계산
       const total = items.reduce((sum: number, item: DutchPayItem) => sum + item.amount, 0) || 0;
-      console.log('total:', total);
-      console.log('amount:', amount);
 
       setTotalAmount(total + amount);
     } catch (err) {

@@ -1,48 +1,35 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
 import Footer from '@/components/common/footer/Footer';
-
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import TransactionCard from '@/components/money-check/TransactionCard';
-
 import { ChartButton, CalendarButton } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
+import TransactionHistory from '@/components/money-check/TransactionHistory';
+import DateFilterModal from '@/components/money-check/DateFilterModal';
+import useModal from '@/hooks/useModal';
+
+import { getFilterText } from '@/utils/formatTransaction';
 
 import { user } from '@/mocks/fixtures/user';
 import { account as accountData } from '@/mocks/fixtures/account';
-
-import { TransactionGroup } from '@/types/transaction';
 import { Account } from '@/types/account';
-import { transactionData } from '@/mocks/fixtures/transaction';
 
 export default function Page() {
-  const [account, setAccount] = useState<Account>();
-  const [recentTransactions, setRecentTransactions] = useState<TransactionGroup[]>([]);
+  const [account, setAccount] = useState<Account>(accountData);
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date>(() => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    return date;
+  });
+  const [transactionType, setTransactionType] = useState<string>('ALL');
+  const [dateRangeType, setDateRangeType] = useState<string>('MONTH'); // 날짜 범위 타입 추가
 
-  useEffect(() => {
-    const loadTransactionData = () => {
-      try {
-        setRecentTransactions(transactionData as TransactionGroup[]);
-      } catch (error) {
-        console.error('트랜잭션 데이터 로드 실패:', error);
-      }
-    };
-
-    const loadAccountData = () => {
-      try {
-        setAccount(accountData);
-      } catch (error) {
-        console.error('트랜잭션 데이터 로드 실패:', error);
-      }
-    };
-
-    loadTransactionData();
-    loadAccountData();
-  }, []);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const router = useRouter();
 
@@ -61,94 +48,81 @@ export default function Page() {
     router.push(`/money-check/calendar?year=${year}&month=${month}`);
   };
 
-  const handleFilterClick = () => {
-    alert('필터 모달 오픈');
+  const handleFilterApply = (newStartDate: Date, newEndDate: Date, newType: string, newDateRangeType: string) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    setTransactionType(newType);
+    setDateRangeType(newDateRangeType);
   };
 
-  function formatDate(dateStr: string): string {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-
-    const [year, month, day] = dateStr.split('-').map((part) => parseInt(part, 10));
-
-    const dateObj = new Date(year, month - 1, day);
-
-    const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
-    const weekDay = weekDays[dateObj.getDay()];
-
-    if (year === currentYear) {
-      return `${month}.${day} (${weekDay})`;
-    } else {
-      const shortYear = year % 100;
-      return `${shortYear.toString().padStart(2, '0')}.${month}.${day} (${weekDay})`;
-    }
-  }
-
   return (
-    <div className="h-full pb-[5.5rem]">
-      <div className="container">
-        <Header title="용돈 기록장" />
-        <main className="w-full overflow-y-auto p-5">
-          <div>
-            <div className="flex w-full items-center justify-between">
-              <div className="flex cursor-pointer items-center text-2xl">
-                <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                  <span className="font-bold">김○○</span>
-                  &nbsp;
-                  <span className="font-light">님</span>
+    <>
+      <div className="h-full pb-[5.5rem]">
+        <div className="container">
+          <Header title="용돈 기록장" />
+          <main className="scrollbar-hide w-full overflow-y-auto p-5">
+            <div>
+              <div className="flex w-full items-center justify-between">
+                <div className="flex cursor-pointer items-center text-2xl">
+                  <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
+                    <span className="font-bold">김○○</span>
+                    &nbsp;
+                    <span className="font-light">님</span>
+                  </div>
+                  <span className="ml-1">&gt;</span>
                 </div>
-                <span className="ml-1">&gt;</span>
-              </div>
-              <div className="flex space-x-2">
-                <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
-                <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
-              </div>
-            </div>
-          </div>
-
-          <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-            <div className="rounded-t-lg bg-yellow-300 p-2.5">
-              <div className="flex items-center">
-                <ProfileImage image={user.image} size="md" />
-                <div className="ml-5 font-light">
-                  <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
-                  <p className="text-base text-white">12-34567-89</p>
+                <div className="flex space-x-2">
+                  <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
+                  <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
                 </div>
               </div>
             </div>
-            <div className="py-4">
-              <div className="text-center text-4xl font-bold">
-                {account?.balance && account.balance.toLocaleString()}원
-              </div>
-            </div>
-            <div className="flex justify-center rounded-b-lg bg-white pb-3">
-              <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
-                송금
-              </Button>
-            </div>
-          </div>
 
-          <div className="rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-            <div className="flex items-center justify-end border-b border-gray-400 px-4 py-3">
-              <div className="cursor-pointer" onClick={handleFilterClick}>
-                <span className="font-medium">한달 | 전체 ▼</span>
-              </div>
-            </div>
-
-            <div className="divide-y divide-gray-400">
-              {recentTransactions.map((group, groupIndex) => (
-                <div key={`group-${groupIndex}`} className="py-2">
-                  <div className="px-4 py-2 text-2xl font-medium text-gray-600">{formatDate(group.date)}</div>
-                  {group.records.map((record) => (
-                    <TransactionCard key={record.recordId} {...record} />
-                  ))}
+            {/* 유저상태 관리 방법 정해지면 컴포넌트 분리 수정 */}
+            <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+              <div className="rounded-t-lg bg-yellow-300 p-2.5">
+                <div className="flex items-center">
+                  <ProfileImage image={user.image} size="md" />
+                  <div className="ml-5 font-light">
+                    <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
+                    <p className="text-base text-white">12-34567-89</p>
+                  </div>
                 </div>
-              ))}
+              </div>
+              <div className="py-4">
+                <div className="text-center text-4xl font-bold">
+                  {account?.balance && account.balance.toLocaleString()}원
+                </div>
+              </div>
+              <div className="flex justify-center rounded-b-lg bg-white pb-3">
+                <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
+                  송금
+                </Button>
+              </div>
             </div>
-          </div>
-        </main>
-        <Footer />
+
+            <TransactionHistory
+              startDate={startDate}
+              endDate={endDate}
+              type={transactionType}
+              showFilterHeader={true}
+              onFilterClick={openModal}
+              customFilterText={getFilterText(dateRangeType, transactionType)}
+            />
+          </main>
+          <Footer />
+        </div>
       </div>
-    </div>
+
+      <DateFilterModal
+        isModalOpen={isModalOpen}
+        onClose={closeModal}
+        onApply={handleFilterApply}
+        initialStartDate={startDate}
+        initialEndDate={endDate}
+        initialType={transactionType}
+        initialDateRangeType={dateRangeType}
+      />
+    </>
   );
 }
