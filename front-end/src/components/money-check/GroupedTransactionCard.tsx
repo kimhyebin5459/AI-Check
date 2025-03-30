@@ -28,7 +28,7 @@ export default function GroupedTransactionCard({
   const displayAmount = getAmountDisplay(amount);
 
   return (
-    <Link href={`/money-check/detail?id=${dutchPayId}`}>
+    <Link href={`/money-check/${dutchPayId}`}>
       <div className="px-4 py-3 hover:bg-gray-50">
         <div className="flex items-center">
           <div className="flex-1">
