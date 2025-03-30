@@ -3,7 +3,7 @@ interface Props {
   leftAction?: 'arrow' | null;
   rightAction: 'arrow' | 'submit';
   onBackspace: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 }
 
 export default function NumberKeypad({ onNumberClick, leftAction = null, rightAction, onBackspace, onSubmit }: Props) {
