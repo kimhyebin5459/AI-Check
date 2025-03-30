@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { TransactionType, TransactionRecord } from '@/types/money-check/transaction';
+import { TransactionType, TransactionRecord } from '@/types/transaction';
 import { Bus, Tableware, Study, Enjoy, Living, RightTriangle, DownTriangle } from '@/public/icons';
 import GroupedTransactionCard from './GroupedTransactionCard';
 

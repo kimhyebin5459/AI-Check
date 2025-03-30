@@ -7,7 +7,7 @@ import CheckPassword from './_steps/check-password';
 import NoticePage from '@/components/common/NoticePage';
 import { useRouter } from 'next/navigation';
 
-import { Account } from '@/types/common/account';
+import { Account } from '@/types/account';
 
 const steps = ['choose', 'confirm', 'check-password', 'success'];
 
@@ -49,7 +49,7 @@ export default function Page() {
             message="계좌 연동이 완료되었습니다."
             buttonText="확인"
             onButtonClick={() => {
-              router.replace("/")
+              router.replace('/');
             }}
           />
         )}

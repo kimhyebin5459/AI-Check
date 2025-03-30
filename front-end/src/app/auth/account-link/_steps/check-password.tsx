@@ -3,7 +3,7 @@
 import Header from '@/components/common/Header';
 import { useState, useEffect } from 'react';
 
-import { Account } from '@/types/common/account';
+import { Account } from '@/types/account';
 
 type Props = {
   account?: Account;

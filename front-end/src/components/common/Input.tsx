@@ -26,13 +26,13 @@ export default function Input({
   children,
 }: InputProps) {
   return (
-    <div className="w-full mb-3">
+    <div className="mb-3 w-full">
       {label && (
-        <label className="block text-gray-700 text-base font-medium mb-2">
+        <label className="mb-2 block text-base font-medium text-gray-700">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <div className='flex'>
+      <div className="flex">
         <input
           type={type}
           name={name}
@@ -41,8 +41,9 @@ export default function Input({
           value={value}
           onChange={onChange}
           required={required}
-          className={`w-full px-4 py-3 border ${error ? 'border-red-500' : 'border-gray-300'
-            } rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all`}
+          className={`w-full border px-4 py-3 ${
+            error ? 'border-red-500' : 'border-gray-300'
+          } rounded-2xl transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500`}
         />
         {children}
       </div>

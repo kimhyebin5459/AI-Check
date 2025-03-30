@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AccountCard from '@/components/auth/AccountCard';
-import { Account } from '@/types/common/account';
+import { Account } from '@/types/account';
 
 type Props = {
   onNext: (account: Account) => void;

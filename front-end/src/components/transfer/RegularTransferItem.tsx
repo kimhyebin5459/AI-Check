@@ -1,9 +1,18 @@
+'use client';
+
 import { formatMoney } from '@/utils/formatMoney';
-import ProfileImage from '../common/ProfileImage';
-import Button from '../common/Button';
-import { formatTransferPlan } from '@/utils/formatTransferPlan';
+import ProfileImage from '@/components/common/ProfileImage';
+import Button from '@/components/common/Button';
+import { formatInterval } from '@/utils/formatInterval';
+import useModal from '@/hooks/useModal';
+import RegularTransferModal from '@/components/transfer/RegularTransferModal';
+import Image from 'next/image';
+import { Plus } from '@/public/icons';
+import { useRouter } from 'next/navigation';
+import { formatDay } from '@/utils/formatDay';
 
 interface Props {
+  childId: number;
   childName: string;
   image: string;
   amount: number | null;
@@ -11,35 +20,56 @@ interface Props {
   day: string | null;
 }
 
-export default function RegularTransferItem({ childName, image, amount, interval, day }: Props) {
+export default function RegularTransferItem({ childId, childName, image, amount, interval, day }: Props) {
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/regular-transfer/register/${childId}`);
+  };
+
   return (
-    <div className="flex h-64 w-full flex-col justify-between p-5">
-      <div className="flex w-full items-center justify-start space-x-4">
-        <ProfileImage size="md" image={image} />
-        <p className="text-2xl font-bold">{childName}</p>
-      </div>
-      {typeof interval === 'string' ? (
-        <>
-          <div className="flex flex-col space-y-3 font-semibold">
-            <div className="flex justify-between">
-              <p>송금 일정</p>
-              <p>{formatTransferPlan(interval, day as string)}</p>
-            </div>
-            <div className="flex justify-between">
-              <p>금액</p>
-              <p>{formatMoney(amount as number)}</p>
-            </div>
+    <>
+      <div className="flex h-64 w-full flex-col justify-between p-5">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <ProfileImage size="md" image={image} />
+            <p className="text-2xl font-bold">{childName}</p>
           </div>
-          <div className="flex space-x-4">
-            <Button variant="secondary">취소</Button>
-            <Button>수정</Button>
-          </div>
-        </>
-      ) : (
-        <div className="flex h-full items-center justify-center">
-          <p className="text-xl font-semibold text-gray-600">등록된 정기 송금이 없어요</p>
+          {!interval && (
+            <div className="size-8">
+              <Image src={Plus} alt="plus icon" onClick={handleClick} />
+            </div>
+          )}
         </div>
-      )}
-    </div>
+        {interval && day ? (
+          <>
+            <div className="flex flex-col space-y-3 font-semibold">
+              <div className="flex justify-between">
+                <p>송금 일정</p>
+                <p>
+                  {formatInterval(interval)} {formatDay(day)}
+                </p>
+              </div>
+              <div className="flex justify-between">
+                <p>금액</p>
+                <p>{formatMoney(amount as number)}</p>
+              </div>
+            </div>
+            <div className="flex space-x-4">
+              <Button variant="secondary" onClick={openModal}>
+                취소
+              </Button>
+              <Button onClick={handleClick}>수정</Button>
+            </div>
+          </>
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-xl font-semibold text-gray-600">등록된 정기 송금이 없어요</p>
+          </div>
+        )}
+      </div>
+      <RegularTransferModal name={childName} image={image} isModalOpen={isModalOpen} closeModal={closeModal} />
+    </>
   );
 }
