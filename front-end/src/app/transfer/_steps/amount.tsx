@@ -43,7 +43,7 @@ export default function Amount({ transferInfo, myAccount, onNext, onPrev }: Prop
     if (balance && amount > balance) {
       setAmount(balance);
     }
-  }, [amount]);
+  }, [amount, balance]);
 
   const handleNumberPlus = (num: number) => {
     setAmount(amount + num);

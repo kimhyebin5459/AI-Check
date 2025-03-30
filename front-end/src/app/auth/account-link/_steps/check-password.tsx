@@ -37,10 +37,11 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
   useEffect(() => {
     if (password.length === 6) {
       setTimeout(() => {
-        handleSubmit();
+        alert('account: ' + account?.accountNo + ' password: ' + password + '로 계좌번호 검증을 시도합니다.');
+        onNext();
       }, 300);
     }
-  }, [password]);
+  }, [account, password, onNext]);
 
   const handlePasswordChange = (value: string) => {
     if (/^\d*$/.test(value)) {
@@ -58,11 +59,6 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
     }
   };
 
-  const handleSubmit = () => {
-    alert('account: ' + account?.accountNo + ' password: ' + password + '로 계좌번호 검증을 시도합니다.');
-    onNext();
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header hasBackButton hasBorder={false}></Header>
@@ -77,12 +73,7 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
         </div>
       </div>
 
-      <NumberKeypad
-        onNumberClick={handleNumberClick}
-        rightAction="arrow"
-        onBackspace={handleBackspace}
-        onSubmit={handleSubmit}
-      />
+      <NumberKeypad onNumberClick={handleNumberClick} rightAction="arrow" onBackspace={handleBackspace} />
     </div>
   );
 }

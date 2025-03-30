@@ -38,7 +38,7 @@ export default function Page({ params }: Props) {
       setSelectedDay('');
     }
     prevSelectedInterval.current = selectedInterval;
-  }, [selectedInterval]);
+  }, [selectedInterval, setSelectedDay]);
 
   const formatNumber = (num: string) => {
     if (!num) return '';
