@@ -64,3 +64,41 @@ export const getAmountDisplay = (type: TransactionType, amount: number): number 
     return -Math.abs(amount);
   }
 };
+
+export const getFilterText = (dateRangeType: string, transactionType: string): string => {
+  let periodText = '';
+
+  switch (dateRangeType) {
+    case 'TODAY':
+      periodText = '오늘';
+      break;
+    case 'WEEK':
+      periodText = '일주일';
+      break;
+    case 'MONTH':
+      periodText = '한달';
+      break;
+    case 'CUSTOM':
+      periodText = '직접 선택';
+      break;
+    default:
+      periodText = '한달';
+  }
+
+  let typeText = '';
+  switch (transactionType) {
+    case 'ALL':
+      typeText = '전체';
+      break;
+    case 'INCOME':
+      typeText = '수입';
+      break;
+    case 'EXPENSE':
+      typeText = '지출';
+      break;
+    default:
+      typeText = '전체';
+  }
+
+  return `${periodText} | ${typeText} ▼`;
+};

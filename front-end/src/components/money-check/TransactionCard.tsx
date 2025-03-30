@@ -1,8 +1,8 @@
 'use client';
 
 // import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { TransactionRecord } from '@/types/transaction';
 // import { RightTriangle, DownTriangle } from '@/public/icons';
@@ -59,17 +59,20 @@ export default function TransactionCard({
   //   e.stopPropagation();
   //   setIsOpened(!isOpened);
   // };
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/money-check/${recordId}`);
+  };
 
   return (
-    <div>
-      <Link href={`/money-check/${recordId}`}>
-        <div className="px-4 py-3 hover:bg-gray-50">
-          <div className="flex items-center">
-            <div className="flex h-16 flex-col">
-              <div className="mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
-                {categoryIcon && <Image src={categoryIcon as string} alt={firstCategoryName} width={24} height={24} />}
-              </div>
-              {/* {isDutchPay && (
+    <div className="px-4 py-3 hover:bg-gray-50" onClick={handleCardClick}>
+      <div className="flex items-center">
+        <div className="flex h-16 flex-col">
+          <div className="mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
+            {categoryIcon && <Image src={categoryIcon as string} alt={firstCategoryName} width={24} height={24} />}
+          </div>
+          {/* {isDutchPay && (
                 <div
                   className="mr-3 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md"
                   onClick={handleOpen}
@@ -81,28 +84,26 @@ export default function TransactionCard({
                   )}
                 </div>
               )} */}
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-between text-xl">
-                <div className="font-bold text-gray-700">{displayName}</div>
-                <div className={`font-medium ${displayAmount < 0 ? 'text-red-500' : 'text-blue-500'}`}>
-                  {displayAmount < 0 ? '-' : '+'}
-                  {Math.abs(displayAmount).toLocaleString()}원
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <div>
-                  <div className="text-xs font-medium text-gray-500">
-                    {time} | {secondCategoryName}
-                  </div>
-                  <div className="flex justify-between font-light text-gray-500">{description}</div>
-                </div>
-                <div className="text-3xl">{getRatingEmoji(rating)}</div>
-              </div>
+        </div>
+        <div className="flex-1">
+          <div className="flex justify-between text-xl">
+            <div className="font-bold text-gray-700">{displayName}</div>
+            <div className={`font-medium ${displayAmount < 0 ? 'text-red-500' : 'text-blue-500'}`}>
+              {displayAmount < 0 ? '-' : '+'}
+              {Math.abs(displayAmount).toLocaleString()}원
             </div>
           </div>
+          <div className="flex justify-between">
+            <div>
+              <div className="text-xs font-medium text-gray-500">
+                {time} | {secondCategoryName}
+              </div>
+              <div className="flex justify-between font-light text-gray-500">{description}</div>
+            </div>
+            <div className="text-3xl">{getRatingEmoji(rating)}</div>
+          </div>
         </div>
-      </Link>
+      </div>
 
       {/* {isOpened && (
         <div className="ml-10 border-l-2 border-gray-300 pl-2">
