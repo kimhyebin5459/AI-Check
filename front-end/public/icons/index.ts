@@ -13,6 +13,7 @@ import YellowCheck from './common/yellowcheck.svg';
 import ErrorTriangle from './common/errortriangle.svg';
 import Bank from './common/bank.svg';
 import Aicheck from './common/aicheck.svg';
+import Spin from './common/spin.svg';
 
 import DownTriangle from './common/down-triangle.svg';
 import RightTriangle from './common/right-triangle.svg';
@@ -61,4 +62,5 @@ export {
   Devil,
   Duck,
   Money,
+  Spin,
 };
