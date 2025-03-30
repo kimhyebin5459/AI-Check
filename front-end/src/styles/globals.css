@@ -86,3 +86,7 @@ body {
 .fixed-container {
   @apply fixed w-full max-w-[480px];
 }
+
+.bottom-btn {
+  @apply fixed bottom-10 w-full max-w-[480px] px-5;
+}
