@@ -9,7 +9,7 @@ import { TransactionDetail } from '@/types/transaction';
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
-import DutchPayDetail from '@/components/money-check/DutchPayDetail';
+// import DutchPayDetail from '@/components/money-check/DutchPayDetail';
 
 interface TransactionDetailResponse {
   date: string;
@@ -124,9 +124,9 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
     setMemo(e.target.value);
   };
 
-  const dutchPayHandler = () => {
-    router.push('');
-  };
+  // const dutchPayHandler = () => {
+  //   router.push('');
+  // };
 
   const confirmHandler = async () => {
     if (!transaction || !transaction.record || !transaction.record.recordId) {
@@ -254,9 +254,9 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
             </div>
 
             {/* 더치페이 내역 표시 영역 */}
-            {transaction.record.isDutchPay && (
+            {/* {transaction.record.isDutchPay && (
               <DutchPayDetail recordId={transaction.record.recordId} amount={transaction.record.amount} />
-            )}
+            )} */}
 
             <div className="mt-2 mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 유형</span>
@@ -271,9 +271,9 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
           </section>
 
           <div className="mt-4 mb-4 flex gap-4">
-            <Button size="md" onClick={dutchPayHandler}>
+            {/* <Button size="md" onClick={dutchPayHandler}>
               1/N 정산하기
-            </Button>
+            </Button> */}
             <Button size="md" onClick={confirmHandler}>
               확인
             </Button>
