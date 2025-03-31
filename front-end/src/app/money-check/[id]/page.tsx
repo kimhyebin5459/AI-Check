@@ -214,16 +214,15 @@ export default function TransactionDetailPage({ params }: { params: Promise<{ id
               </span>
             </div>
           </section>
-
-          <div className="mt-4 mb-4 flex gap-4">
-            {/* <Button size="md" onClick={dutchPayHandler}>
+        </div>
+      </div>
+      <div className="bottom-btn">
+        {/* <Button size="md" onClick={dutchPayHandler}>
               1/N 정산하기
             </Button> */}
-            <Button size="md" onClick={confirmHandler}>
-              확인
-            </Button>
-          </div>
-        </div>
+        <Button size="md" onClick={confirmHandler}>
+          확인
+        </Button>
       </div>
     </div>
   );
