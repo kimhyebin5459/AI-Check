@@ -1,5 +1,7 @@
 import RegularTransferRegister from '@/components/transfer/RegularTransferRegister';
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ id: string }>;
 }
