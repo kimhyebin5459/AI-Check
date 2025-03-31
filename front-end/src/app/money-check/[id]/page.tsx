@@ -1,5 +1,7 @@
 import TransactionDetail from '@/components/money-check/TransactionDetail';
 
+export const dynamicParams = true;
+
 interface Props {
   params: Promise<{ id: string }>;
 }
