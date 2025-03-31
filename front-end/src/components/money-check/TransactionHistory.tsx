@@ -27,7 +27,7 @@ export default function TransactionHistory({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadTransactionData = async (): Promise<void> => {
+    const loadTransactionData = async () => {
       setLoading(true);
       setError(null);
 
@@ -113,7 +113,7 @@ export default function TransactionHistory({
             </div>
           ))
         ) : (
-          <div className="py-8 text-center text-gray-500">거래 내역이 없습니다.</div>
+          <div className="py-8 text-center text-gray-500">선택된 날짜의 거래 내역이 없습니다.</div>
         )}
       </div>
     </div>
