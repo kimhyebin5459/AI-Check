@@ -4,6 +4,7 @@ import Header from '@/components/common/Header';
 import { useState, useEffect } from 'react';
 
 import { Account } from '@/types/account';
+import NumberKeypad from '@/components/common/NumberKeypad';
 
 type Props = {
   account?: Account;
@@ -33,6 +34,15 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
     };
   }, [onPrev]);
 
+  useEffect(() => {
+    if (password.length === 6) {
+      setTimeout(() => {
+        alert('account: ' + account?.accountNo + ' password: ' + password + '로 계좌번호 검증을 시도합니다.');
+        onNext();
+      }, 300);
+    }
+  }, [account, password, onNext]);
+
   const handlePasswordChange = (value: string) => {
     if (/^\d*$/.test(value)) {
       setPassword(value);
@@ -40,26 +50,13 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
   };
 
   const handleNumberClick = (num: number) => {
-    if (password.length < 6) {
-      handlePasswordChange(password + num);
-    }
-
-    if (password.length === 5) {
-      setTimeout(() => {
-        handleSubmit();
-      }, 300);
-    }
+    handlePasswordChange(password + num);
   };
 
   const handleBackspace = () => {
     if (password.length > 0) {
       setPassword(password.slice(0, -1));
     }
-  };
-
-  const handleSubmit = () => {
-    alert('account: ' + account?.accountNo + ' password: ' + password + '로 계좌번호 검증을 시도합니다.');
-    onNext();
   };
 
   return (
@@ -76,37 +73,7 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
         </div>
       </div>
 
-      <div className="mx-auto mt-auto mb-10 w-full max-w-xs">
-        <div className="grid w-full grid-cols-3 gap-x-12 gap-y-6">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-            <div key={num} className="flex items-center justify-center">
-              <button
-                onClick={() => handleNumberClick(num)}
-                className="grid h-12 w-12 place-items-center text-center text-4xl font-medium"
-              >
-                {num}
-              </button>
-            </div>
-          ))}
-          <div className="col-start-1 col-end-2 flex items-center justify-center"></div>
-          <div className="flex items-center justify-center">
-            <button
-              onClick={() => handleNumberClick(0)}
-              className="grid h-12 w-12 place-items-center text-center text-4xl font-medium"
-            >
-              0
-            </button>
-          </div>
-          <div className="flex items-center justify-center">
-            <button
-              onClick={handleBackspace}
-              className="grid h-12 w-12 place-items-center text-center text-3xl text-gray-400"
-            >
-              ←
-            </button>
-          </div>
-        </div>
-      </div>
+      <NumberKeypad onNumberClick={handleNumberClick} rightAction="arrow" onBackspace={handleBackspace} />
     </div>
   );
 }

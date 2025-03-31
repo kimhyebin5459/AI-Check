@@ -26,7 +26,7 @@ export interface GroupedTransactionRecord {
   description: string;
 }
 
-export interface TransactionDetail {
+export interface Transaction {
   recordId: number;
   firstCategoryName: string;
   secondCategoryName: string;

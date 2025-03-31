@@ -174,8 +174,8 @@ export default function SignupPage() {
             required
           />
 
-          <div className="mt-auto flex">
-            <Button type="submit" isDisabled={isLoading} size="lg">
+          <div className="mt-auto flex pb-5">
+            <Button type="submit" isDisabled={isLoading}>
               {isLoading ? '처리 중...' : '다음'}
             </Button>
           </div>
