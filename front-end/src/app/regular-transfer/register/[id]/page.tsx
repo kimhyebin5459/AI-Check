@@ -1,5 +1,9 @@
 import RegularTransferRegister from '@/components/transfer/RegularTransferRegister';
 
+export async function generateStaticParams() {
+  return [];
+}
+
 interface Props {
   params: Promise<{ id: string }>;
 }
