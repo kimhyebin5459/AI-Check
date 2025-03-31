@@ -6,10 +6,20 @@
   src: url('../../public/fonts/PretendardVariable.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'April16thPromise';
+  src: url('../../public/fonts/April16th-Promise.woff2') format('woff2');
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --font-pretendard: 'Pretendard';
+
+  --font-april: 'April16thPromise';
+  --april-font-sm: 0.875rem 'April16thPromise';
+  --april-font-md: 1rem 'April16thPromise';
+  --april-font-lg: 1.25rem 'April16thPromise';
 }
 
 body {
@@ -19,6 +29,7 @@ body {
 }
 
 @theme {
+  --text-3xs: 0.5rem;
   --text-2xs: 0.625rem;
   --text-3xl: 2rem;
   --text-mdl: 1.75rem;
@@ -69,6 +80,8 @@ body {
   --shadow-base: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
   --radius-modal: 1.75rem;
+
+  --font-April16thPromise: 'April16thPromise';
 }
 
 .bg-gradation1 {
@@ -85,4 +98,8 @@ body {
 
 .fixed-container {
   @apply fixed w-full max-w-[480px];
+}
+
+.april-font-sm {
+  font: var(--april-font-sm);
 }
