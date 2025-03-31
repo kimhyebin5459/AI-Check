@@ -1,8 +1,8 @@
 services:
   nextjs:
     build:
-      context: ./docker/app
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: docker/app/Dockerfile
     container_name: nextjs
     ports:
       - "3000:3000"
@@ -10,8 +10,8 @@ services:
 
   nginx:
     build:
-      context: ./docker/nginx
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docker/nginx/Dockerfile
     container_name: nginx_proxy
     ports:
       - "443:443"
