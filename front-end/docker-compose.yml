@@ -1,0 +1,22 @@
+services:
+  nextjs:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    container_name: nextjs
+    ports:
+      - "3000:3000"
+    restart: always
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: nginx_proxy
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on:
+      - nextjs
+    volumes:
+      - /etc/ssl/private/nginx_cert:/etc/nginx/ssl:ro
