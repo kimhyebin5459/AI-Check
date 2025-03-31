@@ -1,8 +1,6 @@
 import TransactionDetail from '@/components/money-check/TransactionDetail';
 
-export async function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ id: string }>;

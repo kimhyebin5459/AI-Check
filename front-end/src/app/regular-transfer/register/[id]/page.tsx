@@ -1,8 +1,6 @@
 import RegularTransferRegister from '@/components/transfer/RegularTransferRegister';
 
-export async function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ id: string }>;
