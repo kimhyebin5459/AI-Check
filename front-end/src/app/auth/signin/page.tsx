@@ -88,7 +88,7 @@ export default function Page() {
         <Header hasBackButton={false} hasBorder={false} />
 
         <main className="flex flex-col px-5 pt-28">
-          <div className="flex justify-center">
+          <div className="flex justify-center pb-5">
             <Image src={Aicheck} alt="AI CHECK" width={180} height={150} priority className="object-contain" />
           </div>
 

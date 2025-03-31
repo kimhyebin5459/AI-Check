@@ -1,4 +1,4 @@
-import { TestHandlers } from '@/mocks/handlers/test';
-import { dutchPayHandlers } from '../fixtures/money-check';
+import { dutchPayHandlers } from './dutchPay';
+import { transactionHandlers } from './transaction';
 
-export const handlers = [...TestHandlers, ...dutchPayHandlers];
+export const handlers = [...dutchPayHandlers, ...transactionHandlers];

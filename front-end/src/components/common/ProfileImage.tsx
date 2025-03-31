@@ -2,10 +2,11 @@ import Image from 'next/image';
 
 interface Props {
   image: string;
-  size: 'sm' | 'md' | 'lg' | 'xl';
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const sizeToPixels = {
+  xs: 28,
   sm: 40,
   md: 60,
   lg: 72,

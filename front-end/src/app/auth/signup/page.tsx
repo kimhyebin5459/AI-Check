@@ -99,13 +99,17 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="container">
       <Header hasBorder={false} hasBackButton={true}></Header>
 
-      <main className="flex flex-col p-5 flex-grow">
-        <h1 className="text-mdl font-bold mb-5">가입을 위해<br />필요한 정보를 입력해주세요</h1>
+      <main className="flex flex-grow flex-col p-5">
+        <h1 className="text-mdl mb-5 font-bold">
+          가입을 위해
+          <br />
+          필요한 정보를 입력해주세요
+        </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
+        <form onSubmit={handleSubmit} className="flex flex-grow flex-col">
           <Input
             label="이메일"
             type="email"
@@ -121,14 +125,14 @@ export default function SignupPage() {
               onClick={() => alert('인증코드가 발송되었습니다.')}
               isFullWidth={false}
               size="sm"
-              className="ml-3 whitespace-nowrap w-[25%]"
+              className="ml-3 w-32 whitespace-nowrap"
             >
-              인증
+              코드 전송
             </Button>
           </Input>
 
           <Input
-            label='인증 코드'
+            label="인증 코드"
             type="text"
             name="authCode"
             placeholder="인증 코드"
@@ -141,9 +145,9 @@ export default function SignupPage() {
               onClick={() => alert('인증되었습니다.')}
               isFullWidth={false}
               size="sm"
-              className="ml-3 whitespace-nowrap w-[25%]"
+              className="ml-3 w-32 whitespace-nowrap"
             >
-              인증 확인
+              인증
             </Button>
           </Input>
           {errors.authCode && <p className="mt-1 text-sm text-red-500">{errors.authCode}</p>}
@@ -170,12 +174,8 @@ export default function SignupPage() {
             required
           />
 
-          <div className="mt-auto flex">
-            <Button
-              type="submit"
-              isDisabled={isLoading}
-              size='lg'
-            >
+          <div className="mt-auto flex pb-5">
+            <Button type="submit" isDisabled={isLoading}>
               {isLoading ? '처리 중...' : '다음'}
             </Button>
           </div>

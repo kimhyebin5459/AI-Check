@@ -12,7 +12,7 @@ export const user = {
 export const userList = [
   {
     userId: 1,
-    name: '아이췍',
+    name: '아이1',
     birth: '20000101',
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
     account: {
@@ -23,11 +23,33 @@ export const userList = [
   },
   {
     userId: 2,
-    name: '아이췍',
+    name: '아이2',
     birth: '20000101',
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-kid-give-ok-260nw-2395161169.jpg',
     account: {
       id: '3',
+      name: '입출금 계좌',
+      no: '10001',
+    },
+  },
+  {
+    userId: 3,
+    name: '아이3',
+    birth: '20000101',
+    image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
+    account: {
+      id: '3',
+      name: '입출금 계좌',
+      no: '10001',
+    },
+  },
+  {
+    userId: 4,
+    name: '아이4',
+    birth: '20000101',
+    image: 'https://www.shutterstock.com/image-illustration/3d-cute-kid-give-ok-260nw-2395161169.jpg',
+    account: {
+      id: '4',
       name: '입출금 계좌',
       no: '10001',
     },

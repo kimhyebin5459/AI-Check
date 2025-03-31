@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import AccountCard from '@/components/auth/AccountCard';
-import { Account } from '@/types/common/account';
+import { Account } from '@/types/account';
+import Spinner from '@/components/common/Spinner';
 
 type Props = {
   onNext: (account: Account) => void;
@@ -45,7 +46,7 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
   if (isLoading) {
     return (
       <div className="flex flex-grow flex-col items-center justify-center">
-        <p>계좌 정보를 불러오는 중...</p>
+        <Spinner />
       </div>
     );
   }
