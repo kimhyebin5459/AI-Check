@@ -34,6 +34,9 @@ import Devil from './main/devil.svg';
 import Duck from './main/duck.svg';
 import Money from './main/money.svg';
 
+import Shield from './phishing/shield.svg';
+import TriangleAlert from './phishing/triangle-alert.svg';
+
 export {
   ActiveBoard,
   InactiveBoard,
@@ -64,5 +67,7 @@ export {
   Duck,
   Money,
   Spin,
+  Shield,
+  TriangleAlert,
   SpeechBubble,
 };
