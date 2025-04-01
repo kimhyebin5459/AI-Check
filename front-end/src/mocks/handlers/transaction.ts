@@ -145,13 +145,11 @@ export const transactionHandlers = [
       for (const day of transactionData) {
         const recordIndex = day.records.findIndex((rec: TransactionRecord) => rec.recordId === recordId);
         if (recordIndex !== -1) {
-          // 안전하게 값을 추출하고 기본값 설정
           const firstCategoryName = updates.firstCategoryName || day.records[recordIndex].firstCategoryName;
           const secondCategoryName = updates.secondCategoryName || day.records[recordIndex].secondCategoryName;
           const description =
             updates.description !== undefined ? updates.description : day.records[recordIndex].description;
 
-          // 레코드 업데이트
           day.records[recordIndex] = {
             ...day.records[recordIndex],
             firstCategoryName,
@@ -159,7 +157,6 @@ export const transactionHandlers = [
             description,
           };
 
-          // 업데이트된 레코드 저장
           const currentRecord: TransactionRecord = day.records[recordIndex];
           updatedRecord = {
             date: day.date,
@@ -189,5 +186,4 @@ export const transactionHandlers = [
   }),
 ];
 
-// MSW 설정에서 사용하기 위해 내보내기
 export default transactionHandlers;
