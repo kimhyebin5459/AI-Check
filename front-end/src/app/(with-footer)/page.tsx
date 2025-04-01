@@ -8,18 +8,16 @@ import Image from 'next/image';
 import AccountCard from '@/components/main/AccountCard';
 import Link from 'next/link';
 import { CHILD_ITEM, COMMON_ITEM, PARENT_ITEM } from '@/constants/main';
-
-type Role = 'parent' | 'child' | string;
+import { UserType } from '@/types/user';
 
 export default function Home() {
-  const role: Role = 'parent';
-
-  const homeItems = [role === 'parent' ? PARENT_ITEM : CHILD_ITEM, ...COMMON_ITEM];
+  const role: UserType = 'PARENT';
+  const homeItems = [role === 'PARENT' ? PARENT_ITEM : CHILD_ITEM, ...COMMON_ITEM];
 
   return (
     <div className="container space-y-5 px-5 pb-7">
       <div className="flex w-full items-center justify-start space-x-2">
-        {role === 'parent' ? (
+        {role === 'PARENT' ? (
           <ProfileImage image={user.image} size="sm" />
         ) : (
           <Image src={Sprout} alt="sprout icon" className="size-7"></Image>
@@ -34,7 +32,7 @@ export default function Home() {
           </div>
         </Link>
       </div>
-      {role === 'parent' ? (
+      {role === 'PARENT' ? (
         <>
           <UserListSection />
           <ParentAccountCard />
