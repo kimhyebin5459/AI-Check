@@ -22,8 +22,8 @@ const PhishingRiskGauge = ({ familyPhishingCount, averagePhishingCount }: Props)
   const centerY = viewBoxSize / 2;
   const outerRadius = 130;
   const innerRadius = 110;
-  const startAngle = -90; // 정확히 위쪽 (12시 방향)
-  const endAngle = 90; // 정확히 아래쪽 (6시 방향)
+  const startAngle = -84; // 정확히 위쪽 (12시 방향)
+  const endAngle = 84; // 정확히 아래쪽 (6시 방향)
 
   // 각도 범위 (전체 180도)
   const angleRange = endAngle - startAngle;
@@ -105,7 +105,7 @@ const PhishingRiskGauge = ({ familyPhishingCount, averagePhishingCount }: Props)
 
           {/* 레이어 1: 바깥쪽 게이지 호 */}
           <path
-            d={createArcPath(outerRadius, startAngle + 6, endAngle - 6)}
+            d={createArcPath(outerRadius, startAngle, endAngle)}
             fill="none"
             stroke="url(#gaugeGradient)"
             strokeWidth="8"

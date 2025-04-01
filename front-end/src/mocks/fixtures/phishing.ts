@@ -3,7 +3,7 @@ export const securityStatsData = {
   totalCountAverage: 8.7,
   urlCount: 5,
   voiceCount: 3,
-  familyCount: 8,
+  familyCount: 1,
 };
 // 보안 알림 모의 데이터
 export const securityAlertsData = [

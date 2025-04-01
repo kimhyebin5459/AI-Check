@@ -14,6 +14,7 @@ import ErrorTriangle from './common/errortriangle.svg';
 import Bank from './common/bank.svg';
 import Aicheck from './common/aicheck.svg';
 import Spin from './common/spin.svg';
+import SpeechBubble from './common/speech-bubble.svg';
 
 import DownTriangle from './common/down-triangle.svg';
 import RightTriangle from './common/right-triangle.svg';
@@ -68,4 +69,5 @@ export {
   Spin,
   Shield,
   TriangleAlert,
+  SpeechBubble,
 };
