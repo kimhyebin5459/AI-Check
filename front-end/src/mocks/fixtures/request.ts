@@ -1,9 +1,9 @@
-import { Request } from '@/types/request';
+import { Request, RequestType, StatusType } from '@/types/request';
 
 export const requestList: Request[] = [
   {
     id: 1,
-    type: '용돈 인상',
+    type: 'INCREASE',
     status: 'WAITING',
     childName: '아이1',
     amount: 5000,
@@ -12,7 +12,7 @@ export const requestList: Request[] = [
   },
   {
     id: 2,
-    type: '용돈 요청',
+    type: 'ONE_TIME',
     status: 'WAITING',
     childName: '아이2',
     amount: 3500,
@@ -21,7 +21,7 @@ export const requestList: Request[] = [
   },
   {
     id: 3,
-    type: '용돈 인상',
+    type: 'INCREASE',
     status: 'ACCEPTED',
     childName: '아이1',
     amount: 5000,
@@ -30,7 +30,7 @@ export const requestList: Request[] = [
   },
   {
     id: 4,
-    type: '용돈 요청',
+    type: 'ONE_TIME',
     status: 'ACCEPTED',
     childName: '아이2',
     amount: 10000,
@@ -39,7 +39,7 @@ export const requestList: Request[] = [
   },
   {
     id: 5,
-    type: '용돈 인상',
+    type: 'INCREASE',
     status: 'REJECTED',
     childName: '아이1',
     amount: 5000,
@@ -48,7 +48,7 @@ export const requestList: Request[] = [
   },
   {
     id: 6,
-    type: '용돈 요청',
+    type: 'ONE_TIME',
     status: 'REJECTED',
     childName: '아이2',
     amount: 24000,
@@ -57,7 +57,7 @@ export const requestList: Request[] = [
   },
   {
     id: 7,
-    type: '용돈 인상',
+    type: 'INCREASE',
     status: 'REJECTED',
     childName: '아이1',
     amount: 5000,
@@ -66,7 +66,7 @@ export const requestList: Request[] = [
   },
   {
     id: 8,
-    type: '용돈 요청',
+    type: 'ONE_TIME',
     status: 'REJECTED',
     childName: '아이2',
     amount: 24000,
@@ -74,3 +74,28 @@ export const requestList: Request[] = [
     createdAt: '2025-03-11T14:13:53.588Z',
   },
 ];
+
+export const requestTransfer = {
+  id: 4,
+  type: 'INCREASE' as RequestType,
+  status: 'WAITING' as StatusType,
+  childId: 1,
+  image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
+  childName: '아이1',
+  amount: 5000,
+  description: '떡볶이 먹고싶어요!!!',
+  createdAt: '2025-03-30T03:15:37',
+};
+
+export const requestInCrease = {
+  id: 4,
+  type: 'ONE_TIME' as RequestType,
+  status: 'WAITING' as StatusType,
+  childId: 1,
+  image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
+  childName: '아이1',
+  prevAmount: 90000,
+  afterAmount: 102000,
+  description: '부족해요',
+  createdAt: '2025-03-30T03:15:37',
+};
