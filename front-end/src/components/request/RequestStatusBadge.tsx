@@ -1,14 +1,10 @@
+import { REQUEST_STATUS } from '@/constants/request';
+import { StatusType } from '@/types/request';
 import clsx from 'clsx';
 
 interface Props {
-  status: string;
+  status: StatusType;
 }
-
-const statusType: Record<string, string> = {
-  ACCEPTED: '수락',
-  REJECTED: '거절',
-  WAITING: '대기 중',
-};
 
 export default function RequestStatusBadge({ status }: Props) {
   return (
@@ -19,7 +15,7 @@ export default function RequestStatusBadge({ status }: Props) {
         'bg-yellow-50 text-yellow-400': status === 'WAITING',
       })}
     >
-      <p className="font-semibold">{statusType[status]}</p>
+      <p className="font-semibold">{REQUEST_STATUS[status]}</p>
     </div>
   );
 }

@@ -1,7 +1,11 @@
+export type RequestType = 'INCREASE' | 'ONE_TIME';
+
+export type StatusType = 'ACCEPTED' | 'REJECTED' | 'WAITING';
+
 export interface Request {
   id: number;
-  type: '용돈 인상' | '용돈 요청';
-  status: 'ACCEPTED' | 'REJECTED' | 'WAITING';
+  type: RequestType;
+  status: StatusType;
   childName: string;
   amount: number;
   description: string;
