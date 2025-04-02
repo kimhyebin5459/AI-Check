@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center_horizontal">
+
+        <!-- 딥보이스 및 보이스피싱 결과를 표시할 TextView -->
+        <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="딥보이스/보이스피싱 결과가 여기에 표시됩니다"
+                android:layout_marginBottom="24dp" />
+
+        <!-- 기존 기능 버튼들 -->
+        <Button
+                android:id="@+id/btnPredictDeepVoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="딥보이스 탐지 실행" />
+
+        <Button
+                android:id="@+id/btnPredictVoicePhishing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="보이스피싱 탐지 실행"
+                android:layout_marginTop="16dp" />
+
+        <!-- URL 검사 영역 -->
+        <EditText
+                android:id="@+id/etUrlInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:hint="검사할 URL을 입력하세요"
+                android:layout_marginTop="32dp" />
+
+        <Button
+                android:id="@+id/btnCheckUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="URL 검사"
+                android:layout_marginTop="16dp" />
+
+        <!-- URL 검사 결과를 표시할 TextView -->
+        <TextView
+                android:id="@+id/tvUrlResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="URL 검사 결과가 여기에 표시됩니다"
+                android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

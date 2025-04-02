@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="run_inference">Run Inference</string>
+    <string name="result_placeholder">Result will be displayed here</string>
+    <!-- 필요에 따라 bottom_nav_menu 및 navigation에 사용되는 문자열도 추가 -->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>
