@@ -11,6 +11,7 @@ interface InputProps {
   name?: string;
   id?: string;
   children?: React.ReactNode;
+  maxLength?: number;
 }
 
 export default function Input({
@@ -24,7 +25,17 @@ export default function Input({
   name,
   id,
   children,
+  maxLength,
 }: InputProps) {
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    if (maxLength && type === 'number') {
+      const target = e.currentTarget;
+      if (Number(target.value) > 10 ** maxLength) {
+        target.value = (10 ** maxLength).toString();
+      }
+    }
+  };
+
   return (
     <div className="mb-3 w-full">
       {label && (
@@ -40,7 +51,9 @@ export default function Input({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          onInput={handleInput}
           required={required}
+          maxLength={maxLength}
           className={`w-full border px-4 py-3 ${
             error ? 'border-red-500' : 'border-gray-300'
           } rounded-2xl transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500`}

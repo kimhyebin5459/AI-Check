@@ -3,10 +3,10 @@ import ProfileImage from '@/components/common/ProfileImage';
 import RequestDescription from '@/components/request/RequestDescription';
 import Button from '@/components/common/Button';
 import { useRouter } from 'next/navigation';
-import IncreaseBadge from './IncreaseBadge';
 import { REQUEST_STATUS, REQUEST_TYPE } from '@/constants/request';
 import { RequestType, StatusType } from '@/types/request';
 import { UserType } from '@/types/user';
+import IncreaseContent from '@/components/request/IncreaseContent';
 
 interface Props {
   id: number;
@@ -62,13 +62,7 @@ export default function RequestDetailCard({
             </p>
           </div>
         </div>
-        {prevAmount && (
-          <div className="flex items-end pt-3">
-            <IncreaseBadge type="before" amount={prevAmount} />
-            <p className="size-8 text-center text-gray-400">→</p>
-            <IncreaseBadge type="after" amount={amount} />
-          </div>
-        )}
+        {prevAmount && <IncreaseContent prevAmount={prevAmount} afterAmount={amount} />}
       </div>
       {status === 'WAITING' && role === 'PARENT' && (
         <div className="flex space-x-4">
