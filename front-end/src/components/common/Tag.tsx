@@ -3,14 +3,15 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
-interface TagProps {
+interface Props {
   children: ReactNode;
   isSelected: boolean;
   onClick: () => void;
   size?: 'xs' | 'sm' | 'md';
+  isFullWidth?: boolean;
 }
 
-export default function Tag({ children, isSelected, onClick, size = 'sm' }: TagProps) {
+export default function Tag({ children, isSelected, onClick, size = 'sm', isFullWidth }: Props) {
   return (
     <button
       onClick={onClick}
@@ -22,7 +23,8 @@ export default function Tag({ children, isSelected, onClick, size = 'sm' }: TagP
           'rounded-xl px-4 py-1': size === 'sm',
           'h-12 w-full rounded-2xl text-gray-800': size === 'md',
           'h-9 w-full rounded-xl text-sm text-gray-800': size === 'xs',
-        }
+        },
+        `${isFullWidth ? 'w-full' : ''}`
       )}
     >
       {children}

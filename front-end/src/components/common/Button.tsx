@@ -7,7 +7,7 @@ type ButtonSize = 'sm' | 'md' | 'lg';
 // 'md' : 높이 56, 폰트 16px
 // 'lg': 높이 64, 폰트 20px
 
-interface ButtonProps {
+interface Props {
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   variant?: ButtonVariant;
@@ -29,7 +29,7 @@ export default function Button({
   type = 'button',
   className = '',
   fontColor,
-}: ButtonProps) {
+}: Props) {
   const baseStyles = 'rounded-2xl transition-colors focus:outline-none';
 
   const variantStyles: Record<ButtonVariant, string> = {
@@ -46,13 +46,9 @@ export default function Button({
   const widthStyles = isFullWidth ? 'w-full' : '';
   const disabledStyles = isDisabled ? 'opacity-50 cursor-not-allowed' : '';
 
-  // Custom font color overrides the variant's default text color
   const fontColorStyle = fontColor ? `text-${fontColor}` : '';
 
-  // Create a combined variant style that might be overridden by custom font color
-  const combinedVariantStyle = fontColor
-    ? variantStyles[variant].replace(/text-[^\s]+/, '') // Remove the text-color class from variant
-    : variantStyles[variant];
+  const combinedVariantStyle = fontColor ? variantStyles[variant].replace(/text-[^\s]+/, '') : variantStyles[variant];
 
   return (
     <button

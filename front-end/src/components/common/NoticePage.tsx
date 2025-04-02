@@ -36,7 +36,7 @@ export default function NoticePage({ title, message, iconType = 'success', butto
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="mb-5 flex h-full items-center justify-center">
       <main className="flex flex-grow flex-col items-center justify-center pb-10">
         <div className="flex w-full max-w-md flex-col items-center">
           <div className="mb-8">{renderIcon()}</div>
