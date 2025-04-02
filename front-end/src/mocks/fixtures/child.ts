@@ -8,24 +8,24 @@ export interface ChildProfile {
 // 자녀 프로필 목 데이터
 export const childProfiles: ChildProfile[] = [
   {
-    childId: 1,
+    childId: 2,
     name: '아이1',
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
   },
   {
-    childId: 2,
+    childId: 3,
     name: '아이2',
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-kid-give-ok-260nw-2395161169.jpg',
   },
   {
-    childId: 3,
+    childId: 4,
     name: '아이3',
     image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
   },
   {
-    childId: 4,
+    childId: 5,
     name: '아이4',
-    image: 'https://www.shutterstock.com/image-illustration/3d-cute-kid-give-ok-260nw-2395161169.jpg',
+    image: 'https://www.shutterstock.com/image-illustration/3d-cute-boy-glasses-school-uniform-2395161172.jpg',
   },
 ];
 
