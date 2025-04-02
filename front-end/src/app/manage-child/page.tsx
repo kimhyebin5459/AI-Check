@@ -18,9 +18,11 @@ export default function Page() {
             <ChildAccountCard key={account.accountNo} {...account} />
           ))}
         </div>
-        <div className="flex w-full gap-2">
+        <div className="flex w-full gap-4">
           <Link href="mother-ai/list" className="w-full">
-            <Button size="lg">엄마 AI 설정</Button>
+            <Button variant="secondary" size="lg">
+              엄마 AI 설정
+            </Button>
           </Link>
           <Link href="/regular-transfer" className="w-full">
             <Button size="lg">정기 송금 관리</Button>
