@@ -32,7 +32,8 @@ export default function TransactionCard({
   description,
   rating,
   time,
-}: TransactionRecord) {
+  isParent,
+}: TransactionRecord & { isParent?: boolean }) {
   // const [isOpened, setIsOpened] = useState(false);
   // const [dutchPays, setDutchPays] = useState<DutchPay[]>([]);
 
@@ -61,7 +62,11 @@ export default function TransactionCard({
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/money-check/${recordId}`);
+    if (isParent) {
+      router.push(`/manage-child/money-check/detail/${recordId}`);
+    } else {
+      router.push(`/money-check/${recordId}`);
+    }
   };
 
   return (
@@ -99,7 +104,7 @@ export default function TransactionCard({
               </div>
               <div className="flex justify-between font-light text-gray-500">{description}</div>
             </div>
-            <div className="text-3xl">{getRatingEmoji(rating)}</div>
+            {!!rating && <div className="text-3xl">{getRatingEmoji(rating)}</div>}
           </div>
         </div>
       </div>
