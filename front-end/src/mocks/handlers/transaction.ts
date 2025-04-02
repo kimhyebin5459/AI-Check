@@ -145,13 +145,11 @@ export const transactionHandlers = [
       for (const day of transactionData) {
         const recordIndex = day.records.findIndex((rec: TransactionRecord) => rec.recordId === recordId);
         if (recordIndex !== -1) {
-          // 안전하게 값을 추출하고 기본값 설정
           const firstCategoryName = updates.firstCategoryName || day.records[recordIndex].firstCategoryName;
           const secondCategoryName = updates.secondCategoryName || day.records[recordIndex].secondCategoryName;
           const description =
             updates.description !== undefined ? updates.description : day.records[recordIndex].description;
 
-          // 레코드 업데이트
           day.records[recordIndex] = {
             ...day.records[recordIndex],
             firstCategoryName,
@@ -159,7 +157,6 @@ export const transactionHandlers = [
             description,
           };
 
-          // 업데이트된 레코드 저장
           const currentRecord: TransactionRecord = day.records[recordIndex];
           updatedRecord = {
             date: day.date,
@@ -187,7 +184,90 @@ export const transactionHandlers = [
       return HttpResponse.json({ message: 'Error processing request' }, { status: 400 });
     }
   }),
+
+  // 트랜잭션 평가(rating) API 핸들러
+  http.post('/aicheck/transaction-records/rating', async ({ request }) => {
+    try {
+      // 요청 본문 파싱
+      const payload = (await request.json()) as { recordId: number; rating: number };
+
+      // 필수 필드 체크
+      if (!payload || !('recordId' in payload) || !('rating' in payload)) {
+        return HttpResponse.json(
+          {
+            code: 'COMMON4001',
+            message: '올바르지 않은 요청입니다.',
+          },
+          { status: 400 }
+        );
+      }
+
+      const { recordId, rating } = payload;
+
+      // 유효성 검사: recordId는 숫자여야 함
+      if (typeof recordId !== 'number' || isNaN(recordId)) {
+        return HttpResponse.json(
+          {
+            code: 'COMMON4001',
+            message: '올바르지 않은 요청입니다.',
+          },
+          { status: 400 }
+        );
+      }
+
+      // 유효성 검사: rating은 1, 2, 3 중 하나여야 함
+      if (![1, 2, 3].includes(rating)) {
+        return HttpResponse.json(
+          {
+            code: 'COMMON4001',
+            message: '올바르지 않은 요청입니다.',
+          },
+          { status: 400 }
+        );
+      }
+
+      // 트랜잭션 기록 찾기
+      let found = false;
+
+      for (const day of transactionData) {
+        const recordIndex = day.records.findIndex((rec) => rec.recordId === recordId);
+
+        if (recordIndex !== -1) {
+          day.records[recordIndex] = {
+            ...day.records[recordIndex],
+            rating: rating,
+          };
+
+          found = true;
+          break;
+        }
+      }
+
+      // 트랜잭션 기록이 존재하지 않는 경우
+      if (!found) {
+        return HttpResponse.json(
+          {
+            code: 'TRANSACTION_RECORD4001',
+            message: '존재하지 않는 record_id입니다.',
+          },
+          { status: 404 }
+        );
+      }
+
+      // 성공 응답
+      return new HttpResponse(null, { status: 201 });
+    } catch (error) {
+      console.error('Error processing rating request:', error);
+
+      return HttpResponse.json(
+        {
+          code: 'COMMON4001',
+          message: '올바르지 않은 요청입니다.',
+        },
+        { status: 400 }
+      );
+    }
+  }),
 ];
 
-// MSW 설정에서 사용하기 위해 내보내기
 export default transactionHandlers;

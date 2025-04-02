@@ -38,7 +38,7 @@ export default function Page() {
   };
 
   const handleChartClick = () => {
-    router.push('/report/chart');
+    router.push('/report');
   };
 
   const handleCalendarClick = () => {

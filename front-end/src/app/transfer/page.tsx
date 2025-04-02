@@ -49,7 +49,7 @@ export default function Page() {
           message="송금이 완료되었습니다."
           buttonText="확인"
           onButtonClick={() => {
-            router.replace('/money-check');
+            router.replace('/');
           }}
         />
       )}

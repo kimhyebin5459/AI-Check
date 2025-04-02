@@ -21,7 +21,7 @@ interface Props {
   paramsId: string;
 }
 
-export default function TransactionDetail({ paramsId }: Props) {
+export default function TransactionDetail({ paramsId, isParent }: Props & { isParent?: boolean }) {
   const router = useRouter();
   const recordId = paramsId;
 
@@ -210,12 +210,14 @@ export default function TransactionDetail({ paramsId }: Props) {
               <span className="text-base text-gray-800">거래 유형</span>
               <span className="text-base font-medium">{getTransactionTypeText(transaction.record.type)}</span>
             </div>
-            <div className="mb-4 flex justify-between">
-              <span className="text-base text-gray-800">평가</span>
-              <span className="text-base font-medium">
-                {getRatingText(transaction.record.rating)} {getRatingEmoji(transaction.record.rating)}
-              </span>
-            </div>
+            {!isParent && (
+              <div className="mb-4 flex justify-between">
+                <span className="text-base text-gray-800">평가</span>
+                <span className="text-base font-medium">
+                  {getRatingText(transaction.record.rating)} {getRatingEmoji(transaction.record.rating)}
+                </span>
+              </div>
+            )}
           </section>
         </div>
       </div>

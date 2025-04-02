@@ -6,6 +6,7 @@ import { TransactionGroup } from '@/types/transaction';
 import { formatDateToParam } from '@/utils/fotmatDate';
 
 type Props = {
+  childId?: string;
   startDate: Date;
   endDate: Date;
   type?: string;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export default function TransactionHistory({
+  childId,
   startDate,
   endDate,
   type = 'ALL',
@@ -32,9 +34,17 @@ export default function TransactionHistory({
       setError(null);
 
       try {
+        // 추후 실제 api 연동시 주석 풀고 const 지우기
+        // let response;
+        // if (childId) {
+        //   response = await fetch(
+        //     `/aicheck/transaction-records/child?childId=${childId}&startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
+        //   );
+        // } else {
         const response = await fetch(
           `/aicheck/transaction-records?startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
         );
+        // }
 
         if (!response.ok) {
           throw new Error('API 호출 실패');
@@ -57,7 +67,7 @@ export default function TransactionHistory({
     };
 
     loadTransactionData();
-  }, [startDate, endDate, type]);
+  }, [startDate, endDate, type, childId]);
 
   function formatDate(dateStr: string): string {
     const currentDate = new Date();
@@ -108,7 +118,7 @@ export default function TransactionHistory({
             <div key={`group-${groupIndex}`} className="py-2">
               <div className="px-4 py-2 text-2xl font-medium text-gray-600">{formatDate(group.date)}</div>
               {group.records.map((record) => (
-                <TransactionCard key={record.recordId} {...record} />
+                <TransactionCard isParent={!!childId} key={record.recordId} {...record} />
               ))}
             </div>
           ))

@@ -19,6 +19,22 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
     router.push(to);
   };
 
+  // 단어에 하이라이트 추가 함수
+  const renderLineWithHighlight = (line: string) => {
+    // '위험' 단어만 하이라이트
+    if (line.includes('위험')) {
+      const parts = line.split('위험');
+      return (
+        <>
+          {parts[0]}
+          <span className="text-red-500">위험</span>
+          {parts[1]}
+        </>
+      );
+    }
+    return line;
+  };
+
   return (
     <div
       className={clsx(`shadow-base flex h-full w-full flex-col rounded-2xl text-2xl font-bold`, {
@@ -30,12 +46,12 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
     >
       <div className="pt-4 pl-4 leading-7">
         {lines.map((line) => (
-          <p key={line}>{line}</p>
+          <p key={line}>{renderLineWithHighlight(line)}</p>
         ))}
       </div>
       <div className="flex h-full w-full justify-between pr-2">
-        <div className="relative h-full w-full">
-          <Image src={image} alt="nav image" fill className="object-contain pb-1 pl-3" />
+        <div className="relative flex h-full w-full items-end">
+          <Image src={image} alt="nav image" fill className="object-contain object-bottom pb-1 pl-3" />
         </div>
         {caseCnt !== undefined && (
           <div className="flex flex-col justify-end">

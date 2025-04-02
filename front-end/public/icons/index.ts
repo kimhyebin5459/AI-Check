@@ -14,6 +14,7 @@ import ErrorTriangle from './common/errortriangle.svg';
 import Bank from './common/bank.svg';
 import Aicheck from './common/aicheck.svg';
 import Spin from './common/spin.svg';
+import SpeechBubble from './common/speech-bubble.svg';
 
 import DownTriangle from './common/down-triangle.svg';
 import RightTriangle from './common/right-triangle.svg';
@@ -32,6 +33,9 @@ import Board from './main/board.svg';
 import Devil from './main/devil.svg';
 import Duck from './main/duck.svg';
 import Money from './main/money.svg';
+
+import Shield from './phishing/shield.svg';
+import TriangleAlert from './phishing/triangle-alert.svg';
 
 export {
   ActiveBoard,
@@ -63,4 +67,7 @@ export {
   Duck,
   Money,
   Spin,
+  Shield,
+  TriangleAlert,
+  SpeechBubble,
 };
