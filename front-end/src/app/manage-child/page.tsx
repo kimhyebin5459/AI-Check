@@ -74,11 +74,11 @@ export default function Page() {
     <div className="container justify-center">
       <Header hasBackButton hasBorder={false} />
       <div className="w-full space-y-10 overflow-y-auto px-5 pb-[5.5rem]">
-        <div className="text-mdl flex w-full flex-col justify-start font-bold">
+        <div className="text-mdl flex w-full flex-col justify-start pt-16 font-bold">
           <p>자녀들을</p>
           <p>한 눈에 관리해요</p>
         </div>
-        <div className="w-full space-y-4">
+        <div className="w-full">
           {accounts.length > 0 ? (
             accounts.map((account) => (
               <ChildAccountCard

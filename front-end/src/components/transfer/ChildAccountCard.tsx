@@ -16,7 +16,7 @@ export default function ChildAccountCard({ childId, image, name, balance, accoun
 
   return (
     <Link href={`manage-child/money-check/${childId}`}>
-      <div className="shadow-base grid h-28 w-full grid-cols-7 rounded-xl border border-yellow-200">
+      <div className="shadow-base mb-4 grid h-28 w-full grid-cols-7 rounded-xl border border-yellow-200">
         <div className="col-span-2 flex items-center justify-center rounded-tl-xl rounded-bl-xl bg-yellow-200">
           <ProfileImage image={image} size="lg" />
         </div>
