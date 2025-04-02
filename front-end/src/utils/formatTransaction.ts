@@ -1,6 +1,10 @@
+import Bus from '@/public/icons/category/Bus';
+import Enjoy from '@/public/icons/category/Enjoy';
+import Living from '@/public/icons/category/Living';
+import Study from '@/public/icons/category/Study';
+import Tableware from '@/public/icons/category/Tableware';
 import { TransactionType } from '@/types/transaction';
 import React from 'react';
-import { Bus, Tableware, Study, Enjoy, Living } from '@/public/icons';
 
 export const getRatingText = (rating: number): string => {
   switch (rating) {
@@ -46,7 +50,7 @@ export const getTransactionTypeText = (type: TransactionType): string => {
 };
 
 export const getCategoryIcon = (category: string) => {
-  const iconMap: Record<string, React.ReactNode> = {
+  const iconMap: Record<string, React.FC> = {
     교통비: Bus,
     식비: Tableware,
     교육비: Study,
