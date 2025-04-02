@@ -1,7 +1,6 @@
 'use client';
 
 // import React, { useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { TransactionRecord } from '@/types/transaction';
@@ -53,7 +52,7 @@ export default function TransactionCard({
 
   const displayAmount = getAmountDisplay(type, amount);
 
-  const categoryIcon = getCategoryIcon(firstCategoryName);
+  const CategoryIcon = getCategoryIcon(firstCategoryName);
 
   // const handleOpen = (e: React.MouseEvent) => {
   //   e.preventDefault();
@@ -75,7 +74,7 @@ export default function TransactionCard({
       <div className="flex items-center">
         <div className="flex h-16 flex-col">
           <div className="mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
-            {categoryIcon && <Image src={categoryIcon as string} alt={firstCategoryName} width={24} height={24} />}
+            {CategoryIcon && <CategoryIcon />}
           </div>
           {/* {isDutchPay && (
                 <div

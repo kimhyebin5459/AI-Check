@@ -29,20 +29,16 @@ export default function PhishingCard({ displayName, type, url, phoneNumber, scor
       </h3>
 
       <div className="mt-3 text-sm">
-        {type === 'URL' && url && (
-          <div className="mb-2 gap-1 text-right break-all text-gray-600">
-            <span className="font-medium">악성 URL:</span> {url}
-          </div>
-        )}
+        {type === 'URL' && url && <div className="mb-2 gap-1 text-right break-all text-gray-600">{url}</div>}
 
         {type === 'VOICE' && phoneNumber && (
-          <div className="flex justify-between text-right text-gray-600">
+          <div className="flex justify-between whitespace-nowrap text-gray-600">
             <div className="flex items-center gap-1">
               <span>피싱 확률:</span>
               <div className="text-red-500">{scorePercentage}%</div>
             </div>
             <div>
-              <span className="mr-2 font-medium">피싱 전화번호: {phoneNumber} </span>
+              <span className="mr-2 font-medium">{phoneNumber} </span>
             </div>
           </div>
         )}

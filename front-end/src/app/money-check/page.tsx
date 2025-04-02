@@ -38,7 +38,7 @@ export default function Page() {
   };
 
   const handleChartClick = () => {
-    router.push('/report');
+    router.push(`/report/1`); // 추후 본인 childId로 수정
   };
 
   const handleCalendarClick = () => {
