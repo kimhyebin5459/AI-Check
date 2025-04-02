@@ -30,9 +30,9 @@ export default function CustomizePage({ params }: PageProps) {
 
   return (
     <div className="h-full">
-      <div className="container">
+      <div className="container h-full">
         <Header title="엄마 AI 설정" hasBackButton />
-        <main className="scrollbar-hide w-full overflow-y-auto p-5">
+        <main className="scrollbar-hide h-full w-full overflow-y-auto p-5">
           <DifficultyProvider childId={childId}>
             <MotherAIClient childId={childId}>
               <DifficultySettings />

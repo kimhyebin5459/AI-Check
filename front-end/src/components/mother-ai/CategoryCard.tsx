@@ -19,7 +19,7 @@ interface Category {
   subCategories: SubCategory[];
 }
 
-interface CategoryCardProps {
+interface Props {
   category: Category;
   koreanCategoryName: string;
   currentDifficulty: string;
@@ -35,14 +35,14 @@ export default function CategoryCard({
   isExpanded,
   onToggle,
   onDifficultyChange,
-}: CategoryCardProps) {
+}: Props) {
   const showExpandIcon = currentDifficulty === '커스텀';
 
   return (
     <div className="rounded-lg border border-gray-200">
       <div className="cursor-pointer items-center justify-between p-4" onClick={() => showExpandIcon && onToggle()}>
         <div className="flex items-center justify-between pb-4">
-          <h3 className="text-lg font-medium">{koreanCategoryName}</h3>
+          <h3 className="text-lg font-semibold">{koreanCategoryName}</h3>
           {showExpandIcon && (
             <svg
               className={`h-5 w-5 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -56,7 +56,7 @@ export default function CategoryCard({
           )}
         </div>
         <div className="flex items-center space-x-2">
-          <div className="flex space-x-2">
+          <div className="flex w-full space-x-2">
             {DIFFICULTY_OPTIONS.map((difficulty) => {
               const handleTagClick = () => {
                 setTimeout(() => {
@@ -65,7 +65,13 @@ export default function CategoryCard({
               };
 
               return (
-                <Tag key={difficulty} isSelected={currentDifficulty === difficulty} onClick={handleTagClick} size="sm">
+                <Tag
+                  key={difficulty}
+                  isSelected={currentDifficulty === difficulty}
+                  onClick={handleTagClick}
+                  size="sm"
+                  isFullWidth={true}
+                >
                   {difficulty}
                 </Tag>
               );

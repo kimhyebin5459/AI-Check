@@ -7,45 +7,39 @@ import ChildSelectModal from '@/components/mother-ai/ChildSelectModal';
 import useModal from '@/hooks/useModal';
 import { useRouter } from 'next/navigation';
 import NoticePage from '@/components/common/NoticePage';
-import { useDifficultySettings } from '@/contexts/DifficultyContext';
+import { useDifficultySettings } from '@/hooks/useDifficultySettings';
 
 interface Props {
   childId: string;
   children?: React.ReactNode;
 }
 
-export default function MotherAIClient({ children }: Props) {
+export default function MotherAIClient({ childId, children }: Props) {
   const router = useRouter();
   const { isModalOpen: isSettingsModalOpen, openModal: openSettingsModal, closeModal: closeSettingsModal } = useModal();
   const { isModalOpen: isChildModalOpen, openModal: openChildModal, closeModal: closeChildModal } = useModal();
 
-  const { saveSettings, copySettingsFromChild, error: contextError } = useDifficultySettings();
+  const { saveSettings, copySettingsFromChild, error, clearError } = useDifficultySettings();
 
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // 설정 완료 후 처리
   const handleConfirm = async () => {
     setIsLoading(true);
-    setError(null);
-
-    console.log('good');
+    clearError();
 
     try {
       const success = await saveSettings();
       if (success) {
         setIsSuccess(true);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '설정 저장에 실패했습니다.');
+    } catch {
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleNoticeClose = () => {
-    // 저장 후 목록 페이지로 이동
     router.push('/mother-ai/list');
   };
 
@@ -53,34 +47,31 @@ export default function MotherAIClient({ children }: Props) {
     try {
       await copySettingsFromChild(sourceChildId);
       closeChildModal();
-    } catch (err) {
-      // 에러는 context에서 이미 처리됨
+    } catch {
       closeChildModal();
     }
   };
 
-  // 성공 화면 표시
   if (isSuccess) {
     return (
-      <NoticePage
-        title="설정이 저장되었습니다"
-        message="새로운 설정이 적용되었습니다."
-        iconType="success"
-        buttonText="확인"
-        onButtonClick={handleNoticeClose}
-      />
+      <div className="mb-5 h-full w-full items-center justify-between">
+        <NoticePage
+          title="설정이 저장되었습니다"
+          message="새로운 설정이 적용되었습니다."
+          iconType="success"
+          buttonText="확인"
+          onButtonClick={handleNoticeClose}
+        />
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="h-full overflow-y-auto">
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-xl font-semibold">설득 난이도 설정</h2>
-        <div className="flex space-x-2">
-          <button
-            className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700"
-            onClick={openChildModal}
-          >
+        <div className="flex h-full space-x-2">
+          <button className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium" onClick={openChildModal}>
             불러오기
           </button>
           <button
@@ -92,13 +83,10 @@ export default function MotherAIClient({ children }: Props) {
         </div>
       </div>
 
-      {/* DifficultySettings 컴포넌트가 렌더링되는 위치 */}
       {children}
 
-      {(error || contextError) && (
-        <div className="my-4 rounded-lg border border-red-200 bg-red-50 p-3 text-center text-red-500">
-          {error || contextError}
-        </div>
+      {error && (
+        <div className="my-4 rounded-lg border border-red-200 bg-red-50 p-3 text-center text-red-500">{error}</div>
       )}
 
       <div className="mt-8">
@@ -109,7 +97,12 @@ export default function MotherAIClient({ children }: Props) {
 
       <SettingsModal isOpen={isSettingsModalOpen} onClose={closeSettingsModal} />
 
-      <ChildSelectModal isOpen={isChildModalOpen} onClose={closeChildModal} onSelect={handleCopySettings} />
-    </>
+      <ChildSelectModal
+        isOpen={isChildModalOpen}
+        onClose={closeChildModal}
+        onSelect={handleCopySettings}
+        currentChildId={childId} // 현재 자녀 ID 전달
+      />
+    </div>
   );
 }

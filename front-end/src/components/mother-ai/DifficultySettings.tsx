@@ -3,7 +3,7 @@
 import React from 'react';
 import Spinner from '@/components/common/Spinner';
 import CategoryCard from '@/components/mother-ai/CategoryCard';
-import { useDifficultySettings } from '@/contexts/DifficultyContext';
+import { useDifficultySettings } from '@/hooks/useDifficultySettings';
 import { categoryMapping } from '@/utils/mapDifficulty';
 
 export default function DifficultySettings() {

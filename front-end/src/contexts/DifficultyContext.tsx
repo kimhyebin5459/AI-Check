@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import {
   difficultyMapping,
   difficultyReverseMapping,
@@ -34,6 +34,7 @@ interface DifficultyContextType {
   error: string | null;
 
   // 함수
+  clearError: () => void;
   toggleCategory: (category: string) => void;
   handleDifficultyChange: (category: string, difficulty: string) => void;
   handleSubCategoryDifficultyChange: (subCategoryName: string, difficulty: string) => void;
@@ -42,7 +43,7 @@ interface DifficultyContextType {
 }
 
 // Context 생성
-const DifficultyContext = createContext<DifficultyContextType | undefined>(undefined);
+export const DifficultyContext = createContext<DifficultyContextType | undefined>(undefined);
 
 // Provider 컴포넌트
 export function DifficultyProvider({ children, childId }: { children: ReactNode; childId: string }) {
@@ -51,6 +52,8 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const clearError = () => setError(null);
 
   // 모든 서브카테고리가 같은 난이도인지 확인하는 함수
   const areAllSameDifficulty = (subCategories: SubCategory[]): boolean => {
@@ -194,6 +197,8 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
 
   // 설정 저장
   const saveSettings = async (): Promise<boolean> => {
+    console.log('setting log:', difficultyData);
+
     if (!difficultyData) return false;
 
     try {
@@ -217,26 +222,27 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
     }
   };
 
-  // 다른 자녀의 설정 복사
+  // 다른 자녀의 설정 복사 - 복사 API를 사용하지 않고 조회 API만 사용
   const copySettingsFromChild = async (sourceChildId: string): Promise<void> => {
     try {
-      const response = await fetch(`/aicheck/chatbot/prompt/${childId}/copy/${sourceChildId}`, {
-        method: 'POST',
-      });
+      // 복사 API 대신 조회 API를 사용하여 소스 자녀의 설정을 가져옴
+      const response = await fetch(`/aicheck/chatbot/prompt/${sourceChildId}`);
 
       if (!response.ok) {
-        throw new Error('설정을 복사하는데 실패했습니다.');
+        throw new Error('설정을 불러오는데 실패했습니다.');
       }
 
-      const responseData = await response.json();
-      const data = responseData.data;
-      setDifficultyData(data);
+      // 소스 자녀의 설정 데이터 가져오기
+      const sourceData: ChatbotDifficulty = await response.json();
+
+      // 가져온 설정을 현재 화면에 적용
+      setDifficultyData(sourceData);
 
       // 카테고리별 난이도 초기화
       const difficultyMap: Record<string, string> = {};
       const initialExpandedState: Record<string, boolean> = {};
 
-      data.categoryDifficulties.forEach((category: Category) => {
+      sourceData.categoryDifficulties.forEach((category: Category) => {
         const koreanCategoryName = categoryMapping[category.categoryName] || category.categoryName;
 
         if (areAllSameDifficulty(category.subCategories)) {
@@ -245,7 +251,6 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
           difficultyMap[koreanCategoryName] = '커스텀';
         }
 
-        // 설정 복사 후에도 모든 카테고리는 닫힌 상태로 시작
         initialExpandedState[koreanCategoryName] = false;
       });
 
@@ -253,7 +258,7 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
       setExpandedCategories(initialExpandedState);
     } catch (err) {
       console.error('Error copying settings:', err);
-      setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+      setError(err instanceof Error ? err.message : '소스 자녀의 설정을 불러오는데 실패했습니다.');
       throw err;
     }
   };
@@ -265,6 +270,7 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
     expandedCategories,
     loading,
     error,
+    clearError,
     toggleCategory,
     handleDifficultyChange,
     handleSubCategoryDifficultyChange,
@@ -273,13 +279,4 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
   };
 
   return <DifficultyContext.Provider value={value}>{children}</DifficultyContext.Provider>;
-}
-
-// 커스텀 훅
-export function useDifficultySettings() {
-  const context = useContext(DifficultyContext);
-  if (context === undefined) {
-    throw new Error('useDifficultySettings must be used within a DifficultyProvider');
-  }
-  return context;
 }

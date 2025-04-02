@@ -75,7 +75,7 @@ export const chatbotDifficultyHandlers = [
       }
 
       // 요청 본문 검증
-      if (!requestBody.category_difficulties || !Array.isArray(requestBody.category_difficulties)) {
+      if (!requestBody.categoryDifficulties || !Array.isArray(requestBody.categoryDifficulties)) {
         return HttpResponse.json(
           {
             code: 'COMMON4001',
