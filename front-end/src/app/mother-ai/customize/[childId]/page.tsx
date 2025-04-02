@@ -6,15 +6,14 @@ import DifficultySettings from '@/components/mother-ai/DifficultySettings';
 import MotherAIClient from '@/components/mother-ai/MotherAIClient';
 import { DifficultyProvider } from '@/contexts/DifficultyContext';
 
-interface PageProps {
+interface Props {
   params: Promise<{ childId: string }>;
 }
 
-export default function CustomizePage({ params }: PageProps) {
+export default function CustomizePage({ params }: Props) {
   const [childId, setChildId] = useState<string>('');
 
   useEffect(() => {
-    // Resolve the promise in useEffect
     const fetchChildId = async () => {
       const resolvedParams = await params;
       setChildId(resolvedParams.childId);
@@ -23,9 +22,8 @@ export default function CustomizePage({ params }: PageProps) {
     fetchChildId();
   }, [params]);
 
-  // Only render the full component when childId is available
   if (!childId) {
-    return <div>Loading...</div>; // Optional loading state
+    return <div>Loading...</div>;
   }
 
   return (

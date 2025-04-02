@@ -5,7 +5,7 @@ import Header from '@/components/common/Header';
 import Input from '@/components/common/Input';
 import ChildAccountBadge from '@/components/transfer/ChildAccountBadge';
 import useInput from '@/hooks/useInput';
-import { accountList } from '@/mocks/fixtures/account';
+import { accountResponse } from '@/mocks/fixtures/account';
 import { Transfer } from '@/types/transfer';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 
 export default function Account({ onNext }: Props) {
   const { value, onChange, setValue } = useInput<string>('');
-  const childAccountList = accountList;
+  const childAccountList = accountResponse.accounts;
 
   const handleClick = () => {
     // value로 계좌번호 조회 -> 있으면 onNext(계좌 정보로 초기화)
