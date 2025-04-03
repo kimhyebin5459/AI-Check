@@ -15,18 +15,18 @@ export default function PeerReportSection({ date, childId, name }: Props) {
   const { peer, totalAmount } = peerReport;
 
   return (
-    <div className="w-full space-y-8 py-6">
-      <div className="px-2 font-semibold">
+    <div className="flex w-full flex-col items-center space-y-5 py-6">
+      <div className="w-full px-2 font-semibold">
         <p>총 소비 금액</p>
         <p className="text-3xl">{formatMoney(totalAmount)}</p>
       </div>
       <PeerChart reportData={peer} name={name} />
-      <div className="space-y-2">
+      <div className="w-full">
         {peer.map((category, index) => (
-          <>
-            <PeerCategoryItem key={category.name} peerCategory={category} />
+          <div key={category.name}>
+            <PeerCategoryItem peerCategory={category} />
             <div className={`w-full ${index < peer.length - 1 ? 'border-[0.03rem] border-gray-200' : ''} `}></div>
-          </>
+          </div>
         ))}
       </div>
     </div>

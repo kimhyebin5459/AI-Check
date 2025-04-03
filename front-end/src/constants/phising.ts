@@ -6,7 +6,7 @@ export const PHISHING_ITEM = [
     to: '/phishing/alert',
   },
   {
-    lines: ['피싱 예방 수칙', '확인하기'],
+    lines: ['피싱', '예방 수칙', '확인하기'],
     image: 'images/safeWithSecurityShiled.png',
     color: 'gradation1',
     to: '/phishing/protect',

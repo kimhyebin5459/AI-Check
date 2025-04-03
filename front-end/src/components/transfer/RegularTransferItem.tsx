@@ -6,10 +6,9 @@ import Button from '@/components/common/Button';
 import { formatInterval } from '@/utils/formatInterval';
 import useModal from '@/hooks/useModal';
 import RegularTransferModal from '@/components/transfer/RegularTransferModal';
-import Image from 'next/image';
-import { Plus } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { formatDay } from '@/utils/formatDay';
+import Plus from '@/public/icons/common/Plus';
 
 interface Props {
   childId: number;
@@ -37,8 +36,8 @@ export default function RegularTransferItem({ childId, childName, image, amount,
             <p className="text-2xl font-bold">{childName}</p>
           </div>
           {!interval && (
-            <div className="size-8">
-              <Image src={Plus} alt="plus icon" onClick={handleClick} />
+            <div className="flex size-8 items-center justify-center" onClick={handleClick}>
+              <Plus size={20} />
             </div>
           )}
         </div>

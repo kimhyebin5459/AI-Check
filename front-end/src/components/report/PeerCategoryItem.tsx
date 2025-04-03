@@ -11,7 +11,7 @@ export default function PeerCategoryItem({ peerCategory }: Props) {
   const { name, amount, peerAmount } = peerCategory;
 
   return (
-    <div className="flex w-full items-center justify-between px-1 font-semibold">
+    <div className="flex w-full items-center justify-between px-1 py-2 font-semibold">
       <div className="flex items-center space-x-3">
         <div className="flex size-12 items-center justify-center rounded-full bg-gray-100">
           <CategoryIcon icon={name} color="white" strokeWidth={1} />
