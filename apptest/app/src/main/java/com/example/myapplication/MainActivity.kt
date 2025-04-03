@@ -29,9 +29,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         try {
+            val fileName = "mixsiu"
             // 오디오 파일 복사
-            copyAudioFileToInternalStorage("test_audio.wav")
-            copyAudioFileToInternalStorage("test_audio21.wav")
+            // C:\Users\SSAFY\apptest\app\src\main\res\raw\realyu.wav
+            copyAudioFileToInternalStorage("${fileName}.wav")
+//            copyAudioFileToInternalStorage("test_audio21.wav")
 
             // 모델 로드
             val interpreterDeepVoice = Interpreter(loadModelFile("model.tflite"))
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
             btnPredictDeepVoice.setOnClickListener {
                 try {
-                    val audioPath = "${filesDir.absolutePath}/test_audio.wav"
+                    val audioPath = "${filesDir.absolutePath}/${fileName}.wav"
                     val result = deepVoiceDetector.detect(audioPath)
                     val resultText = """
                         딥 보이스 탐지:
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
             btnPredictVoicePhishing.setOnClickListener {
                 try {
-                    val audioPath = "${filesDir.absolutePath}/test_audio21.wav"
+                    val audioPath = "${filesDir.absolutePath}/${fileName}.wav"
                     val (result, transcribedText) = voicePhishingDetector.detect(audioPath)
                     tvResult.text = "보이스피싱 예측 결과: $result\n텍스트: $transcribedText"
                 } catch (e: Exception) {
