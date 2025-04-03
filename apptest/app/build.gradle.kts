@@ -1,13 +1,14 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 android {
     namespace = "com.example.myapplication"
     compileSdk = 35
     androidResources{
-        noCompress += listOf("ort")
+        noCompress += listOf("onnx")
     }
 
     defaultConfig {
@@ -56,7 +57,8 @@ dependencies {
     implementation("com.github.wendykierp:JTransforms:3.1")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.11.0")
-    implementation("com.microsoft.onnxruntime:onnxruntime-mobile:1.18.0")
+//    implementation("com.microsoft.onnxruntime:onnxruntime-mobile:1.18.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-extensions-android:0.13.0")
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
