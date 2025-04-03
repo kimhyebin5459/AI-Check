@@ -7,6 +7,7 @@ import { formatDateToParam } from '@/utils/fotmatDate';
 import ChatChooser from './ChatChooser';
 import ChatBubble from '@/components/chat/ChatBubble';
 import ResultModal from './ResultModal';
+import { X } from 'lucide-react';
 
 interface Props {
   onClickClose: () => void;
@@ -76,10 +77,13 @@ export default function ChatInterface({ onClickClose }: Props) {
     <div>
       <div className="flex h-full flex-col">
         <div className="mt-4 text-center text-gray-500">{formatDateToParam(new Date()).replaceAll('-', '/')}</div>
+        <div className="bg-white p-2 text-center text-sm text-gray-500">
+          <p>5분 동안 활동이 없으면 대화가 자동으로 종료됩니다.</p>
+        </div>
         <ChatChooser />
 
-        <div className="space-y-4">
-          <div className="flex-1 overflow-auto px-4 pb-4">
+        <div>
+          <div className="flex-1 overflow-auto px-4">
             {!!session &&
               session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
             <div ref={messagesEndRef} />
@@ -87,19 +91,26 @@ export default function ChatInterface({ onClickClose }: Props) {
         </div>
       </div>
 
-      <div className="bg-white p-4">
+      <div className="absolute bottom-0 w-full bg-white px-4 pt-2 pb-8">
+        <div className="mt-2 mb-2 flex justify-start">
+          <button onClick={onClickClose} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
+            <div className="flex items-center justify-center">
+              <span>대화 종료하기 </span> <X size={20} />
+            </div>
+          </button>
+        </div>
         <form onSubmit={handleSendMessage} className="flex items-center">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="여기에 내용을 입력하세요"
-            className="flex-1 rounded-full border border-gray-300 bg-gray-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+            className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
             disabled={isLoading || state === 'FINISHED'}
           />
           <button
             type="submit"
-            className="ml-2 rounded-full bg-yellow-300 p-3 text-white disabled:bg-gray-300"
+            className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
             disabled={isLoading || !message.trim()}
           >
             <svg
@@ -113,11 +124,6 @@ export default function ChatInterface({ onClickClose }: Props) {
             </svg>
           </button>
         </form>
-        <div className="mt-4 flex justify-center">
-          <button onClick={onClickClose} className="rounded-full bg-gray-200 px-4 py-2 text-sm text-gray-700">
-            대화 종료하기
-          </button>
-        </div>
       </div>
       <ResultModal
         isModalOpen={isResultModalOpened}

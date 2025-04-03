@@ -15,6 +15,7 @@ export default function ChatPage() {
 
   const closeCheck = () => {
     if (state !== 'PROCEEDING') {
+      resetState();
       router.replace('/');
       return;
     }
@@ -22,7 +23,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="h-full" aria-disabled={state === 'FINISHED'}>
+    <div className="h-full pb-[139px]">
       <div className="container">
         <Header
           title="엄마 설득하기"
@@ -34,9 +35,6 @@ export default function ChatPage() {
         <main className="scrollbar-hide w-full flex-1 overflow-y-auto">
           <ChatInterface onClickClose={closeCheck} />
         </main>
-        <div className="border-t bg-white p-4 text-center text-sm text-gray-500">
-          <p>5분 동안 활동이 없으면 대화가 자동으로 종료됩니다.</p>
-        </div>
       </div>
       <CloseModal
         isModalOpen={isCloseModalOpened}

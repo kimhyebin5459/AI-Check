@@ -9,7 +9,7 @@ interface ChatBubbleProps {
 
 export default function ChatBubble({ role, content, aiImage = '/images/mother-ai.png' }: ChatBubbleProps) {
   return (
-    <div className={`flex ${role === 'USER' ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex py-2 ${role === 'USER' ? 'justify-end' : 'justify-start'}`}>
       {role === 'AI' && (
         <div className="mr-2 flex-shrink-0">
           <ProfileImage image={aiImage} size="sm" />

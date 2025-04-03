@@ -16,8 +16,6 @@ export default function ResultModal({ isModalOpen, onClose, onGoToRequest }: Pro
 
   let title, content;
 
-  console.log('session:', session);
-
   switch (session?.chatType) {
     case 'PERSUADE':
       title = '엄마 AI 설득에 성공했어요!';
@@ -34,7 +32,7 @@ export default function ResultModal({ isModalOpen, onClose, onGoToRequest }: Pro
   return (
     <Modal isOpen={isModalOpen} onClose={onClose} title={title}>
       <p>{content}</p>
-      <div className="flex w-full space-y-6">
+      <div className="flex w-full gap-2 space-y-6">
         <Button onClick={onClose}>닫기</Button>
         <Button onClick={onGoToRequest}>보낸 요청 확인하기</Button>
       </div>

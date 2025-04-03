@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChatType } from '@/types/chat';
 import useChatStore from '@/app/stores/useChatStore';
 import ChatBubble from './ChatBubble';
-import { useUserStore } from '@/app/stores/useUserStore';
+import { useUserStore } from '@/stores/useUserStore';
 
 export default function ChatChooser() {
   const [selectedType, setSelectedType] = useState<ChatType | null>(null);

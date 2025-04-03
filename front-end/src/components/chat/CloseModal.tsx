@@ -3,8 +3,6 @@
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 
-import useChatStore from '@/app/stores/useChatStore';
-
 interface Props {
   isModalOpen: boolean;
   onClose: () => void;
@@ -12,10 +10,6 @@ interface Props {
 }
 
 export default function CloseModal({ isModalOpen, onClose, onContinue }: Props) {
-  const { session } = useChatStore();
-
-  console.log('session:', session);
-
   const title = '대화를 그만둘까요?';
   const content = '여기서 나가면 지금까지의 대화 내용이 사라져요. 정말 나갈까요?';
 
