@@ -5,6 +5,7 @@ import securityHandlers from './phishing';
 import childProfilesHandlers from './childProfile';
 import chatbotDifficultyHandlers from './chatbotDifficulty';
 import accountHandlers from './childAccountHandler';
+import chatHandlers from './chat';
 
 export const handlers = [
   ...dutchPayHandlers,
@@ -14,4 +15,5 @@ export const handlers = [
   ...childProfilesHandlers,
   ...chatbotDifficultyHandlers,
   ...accountHandlers,
+  ...chatHandlers,
 ];

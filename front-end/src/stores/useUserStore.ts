@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 
 interface UserStore {
+  userId: number;
+  userName: string;
+
   accessToken: string;
   isParent: boolean;
   hasAccountConnected: boolean;
@@ -13,6 +16,9 @@ interface UserStore {
 }
 
 export const useUserStore = create<UserStore>((set) => ({
+  userId: 1,
+  userName: 'child',
+
   accessToken: 'VALUE',
   isParent: false,
   hasAccountConnected: false,
