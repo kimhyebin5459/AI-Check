@@ -1,8 +1,7 @@
 import { userList } from '@/mocks/fixtures/user';
 import UserItem from './UserItem';
-import { Plus } from '@/public/icons';
-import Image from 'next/image';
 import Link from 'next/link';
+import Plus from '@/public/icons/common/Plus';
 
 export default function UserListSection() {
   return (
@@ -12,7 +11,7 @@ export default function UserListSection() {
       ))}
       <Link href={'/auth/signup'}>
         <div className="flex min-h-15 min-w-15 items-center justify-center rounded-full border-[0.06rem] border-gray-600 bg-white">
-          <Image src={Plus} alt="plus icon" />
+          <Plus />
         </div>
       </Link>
     </div>

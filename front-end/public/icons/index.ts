@@ -7,7 +7,6 @@ import InactiveNotification from './footer/notification-outline.svg';
 
 import Arrow from './common/arrow.svg';
 import Close from './common/close.svg';
-import Plus from './common/plus.svg';
 import Sprout from './common/sprout.svg';
 import YellowCheck from './common/yellowcheck.svg';
 import ErrorTriangle from './common/errortriangle.svg';
@@ -40,7 +39,6 @@ export {
   InactiveNotification,
   Arrow,
   Close,
-  Plus,
   Sprout,
   YellowCheck,
   ErrorTriangle,
