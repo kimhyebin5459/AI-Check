@@ -9,6 +9,7 @@ import Header from '@/components/common/Header';
 import Image from 'next/image';
 import { Aicheck } from '@/public/icons';
 import { postSignIn } from '@/apis/user';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface FormData {
   email: string;
@@ -23,6 +24,8 @@ interface FormErrors {
 
 export default function Page() {
   const router = useRouter();
+  const { setAccessToken, setIsParent } = useUserStore();
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -70,9 +73,12 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      await postSignIn(formData);
+      const { accessToken, isParent, accountConnected } = await postSignIn(formData);
 
-      router.push('/auth/account-link');
+      setAccessToken(accessToken);
+      setIsParent(isParent);
+
+      router.push(`${!accountConnected ? '/auth/account-link' : '/'}`);
     } catch (error) {
       console.error('Login failed:', error);
       setErrors({
