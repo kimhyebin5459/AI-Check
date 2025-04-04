@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import chatApi from '@/api/chat';
+import { startChat, endChat, sendPersuadeMessage, sendQuestionMessage } from '@/apis/chat';
 import { ChatType, ChatMessage, ChatSession, PersuadeResponse, QuestionResponse, State } from '@/types/chat';
 
 // 채팅 스토어 인터페이스
@@ -47,7 +47,7 @@ const useChatStore = create<ChatStore>()(
             set({ isLoading: true, error: null, state: 'PROCEEDING' });
 
             // 백엔드 API 호출
-            await chatApi.startChat({ type: chatType });
+            await startChat({ chatType: chatType });
 
             const firstMessage =
               chatType === 'PERSUADE'
@@ -112,9 +112,9 @@ const useChatStore = create<ChatStore>()(
             // API 호출 (채팅 타입에 따라 다른 엔드포인트 사용)
             let response;
             if (session.chatType === 'PERSUADE') {
-              response = await chatApi.sendPersuadeMessage({ message });
+              response = await sendPersuadeMessage({ message });
             } else {
-              response = await chatApi.sendQuestionMessage({ message });
+              response = await sendQuestionMessage({ message });
             }
 
             // 응답 메시지 추가
@@ -136,14 +136,14 @@ const useChatStore = create<ChatStore>()(
                     isActive:
                       session.chatType === 'PERSUADE'
                         ? !(response as PersuadeResponse).isPersuaded
-                        : (response as QuestionResponse).result === 'JUDGING',
+                        : (response as QuestionResponse).judge === 'JUDGING',
                   }
                 : null,
               isLoading: false,
               // 설득이 성공했거나 최종 답변이 나왔으면 state를 'FINISHED'로 변경
               state:
                 (session.chatType === 'PERSUADE' && (response as PersuadeResponse).isPersuaded) ||
-                (session.chatType === 'QUESTION' && (response as QuestionResponse).result !== 'JUDGING')
+                (session.chatType === 'QUESTION' && (response as QuestionResponse).judge !== 'JUDGING')
                   ? 'FINISHED'
                   : state.state,
             }));
@@ -176,7 +176,7 @@ const useChatStore = create<ChatStore>()(
             set({ isLoading: true, error: null });
 
             // 백엔드 API 호출
-            await chatApi.endChat({ type: session.chatType });
+            await endChat({ chatType: session.chatType });
 
             // 세션 비활성화
             set((state) => ({

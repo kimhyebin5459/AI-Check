@@ -37,23 +37,23 @@ const persuadeResponses: PersuadeResponse[] = [
 // 질문 대화를 위한 모의 응답
 const questionResponses: QuestionResponse[] = [
   {
-    result: 'JUDGING' as QuestionResult,
+    judge: 'JUDGING' as QuestionResult,
     message: '그 물건에 대해 더 자세히 알려줄 수 있니? 어디서 사용할 계획이고, 다른 대안은 고려해봤어?',
     createdAt: new Date().toISOString(),
   },
   {
-    result: 'JUDGING' as QuestionResult,
+    judge: 'JUDGING' as QuestionResult,
     message: '음... 가격이 꽤 나가는데, 정말 필요한 물건인지 한 번 더 생각해봤니? 지금 당장 필요한 건 아닌 것 같은데.',
     createdAt: new Date().toISOString(),
   },
   {
-    result: 'NO' as QuestionResult,
+    judge: 'NO' as QuestionResult,
     message:
       '아이야, 엄마 생각에는 지금 그 물건을 사는 것은 적절하지 않은 것 같아. 너의 현재 필요와 예산을 고려했을 때, 조금 더 기다리거나 다른 대안을 찾아보는 게 좋겠어.',
     createdAt: new Date().toISOString(),
   },
   {
-    result: 'YES' as QuestionResult,
+    judge: 'YES' as QuestionResult,
     message:
       '아이야, 엄마가 생각해봤는데, 네가 설명한 이유와 상황을 고려하면 그 물건을 사는 게 좋을 것 같구나. 하지만 앞으로도 구매 전에 이렇게 신중하게 생각해보는 습관을 들이길 바라.',
     createdAt: new Date().toISOString(),
@@ -145,7 +145,7 @@ export const chatHandlers = [
         // 첫 메시지가 "어떤 걸 살지 말지 고민돼요"인 경우
         if (message === '어떤 걸 살지 말지 고민돼요') {
           const initialResponse = {
-            result: 'JUDGING' as QuestionResult,
+            judge: 'JUDGING' as QuestionResult,
             message: initialMessages.QUESTION,
             createdAt: new Date().toISOString(),
           };
@@ -174,9 +174,6 @@ export const chatHandlers = [
       // 요청 바디 파싱
       const body = await request.json();
       const { type } = body as { type: ChatType };
-
-      // 타입에 따른 처리는 이 예제에서는 수행하지 않음
-      // 실제 구현에서는 필요한 로직 추가
 
       return new HttpResponse(null, { status: 204 });
     } catch (error) {
