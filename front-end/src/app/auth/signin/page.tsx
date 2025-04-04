@@ -8,6 +8,7 @@ import Input from '@/components/common/Input';
 import Header from '@/components/common/Header';
 import Image from 'next/image';
 import { Aicheck } from '@/public/icons';
+import { postSignIn } from '@/apis/user';
 
 interface FormData {
   email: string;
@@ -69,7 +70,7 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await postSignIn(formData);
 
       router.push('/auth/account-link');
     } catch (error) {
