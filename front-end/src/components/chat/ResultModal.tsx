@@ -3,7 +3,7 @@
 import Modal from '../common/Modal';
 import Button from '../common/Button';
 
-import useChatStore from '@/app/stores/useChatStore';
+import useChatStore from '@/stores/useChatStore';
 
 interface Props {
   isModalOpen: boolean;

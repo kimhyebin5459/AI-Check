@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChatType } from '@/types/chat';
-import useChatStore from '@/app/stores/useChatStore';
+import useChatStore from '@/stores/useChatStore';
 import ChatBubble from './ChatBubble';
 import { useUserStore } from '@/stores/useUserStore';
 
