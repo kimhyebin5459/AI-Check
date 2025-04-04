@@ -3,7 +3,7 @@ import Enjoy from '@/public/icons/category/Enjoy';
 import Living from '@/public/icons/category/Living';
 import Study from '@/public/icons/category/Study';
 import Tableware from '@/public/icons/category/Tableware';
-import { TransactionType } from '@/types/transaction';
+import { TransactionFilterType, TransactionType } from '@/types/transaction';
 import React from 'react';
 
 export const getRatingText = (rating: number): string => {
@@ -69,7 +69,7 @@ export const getAmountDisplay = (type: TransactionType, amount: number): number 
   }
 };
 
-export const getFilterText = (dateRangeType: string, transactionType: string): string => {
+export const getFilterText = (dateRangeType: string, transactionType: TransactionFilterType | undefined): string => {
   let periodText = '';
 
   switch (dateRangeType) {
@@ -91,9 +91,6 @@ export const getFilterText = (dateRangeType: string, transactionType: string): s
 
   let typeText = '';
   switch (transactionType) {
-    case 'ALL':
-      typeText = '전체';
-      break;
     case 'INCOME':
       typeText = '수입';
       break;

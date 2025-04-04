@@ -2,14 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import TransactionCard from '@/components/money-check/TransactionCard';
-import { TransactionGroup } from '@/types/transaction';
+import { TransactionFilterType, TransactionGroup } from '@/types/transaction';
 import { formatDateToParam } from '@/utils/fotmatDate';
+import { getTransactionHistory } from '@/apis/moneycheck';
 
 type Props = {
   childId?: string;
   startDate: Date;
   endDate: Date;
-  type?: string;
+  type?: TransactionFilterType;
   showFilterHeader?: boolean;
   onFilterClick?: () => void;
   customFilterText?: string;
@@ -19,7 +20,7 @@ export default function TransactionHistory({
   childId,
   startDate,
   endDate,
-  type = 'ALL',
+  type,
   showFilterHeader = true,
   onFilterClick,
   customFilterText = '한달 | 전체 ▼',
@@ -34,26 +35,18 @@ export default function TransactionHistory({
       setError(null);
 
       try {
-        // 추후 실제 api 연동시 주석 풀고 const 지우기
-        // let response;
-        // if (childId) {
-        //   response = await fetch(
-        //     `/aicheck/transaction-records/child?childId=${childId}&startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
-        //   );
-        // } else {
-        const response = await fetch(
-          `/aicheck/transaction-records?startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
-        );
-        // }
+        const formattedStartDate = formatDateToParam(startDate);
+        const formattedEndDate = formatDateToParam(endDate);
 
-        if (!response.ok) {
-          throw new Error('API 호출 실패');
-        }
+        const data = await getTransactionHistory({
+          childId: Number(childId),
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
+          type,
+        });
 
-        const result = await response.json();
-
-        if (result.data && Array.isArray(result.data)) {
-          setTransactions(result.data);
+        if (data && Array.isArray(data)) {
+          setTransactions(data);
         } else {
           setTransactions([]);
         }

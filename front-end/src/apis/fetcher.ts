@@ -36,12 +36,23 @@ const request = async (requestProps: Props) => {
   }
 };
 
+// const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
+//   return await fetch(`${BASE_URL}/${url}`, {
+//     method,
+//     body: body ? JSON.stringify(body) : undefined,
+//     headers: {
+//       ...headers,
+//     },
+//   });
+// };
+
 const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
   return await fetch(`${BASE_URL}/${url}`, {
     method,
     body: body ? JSON.stringify(body) : undefined,
     headers: {
       ...headers,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfUEFSRU5UIiwiZXhwIjoxNzQzODM4NTMzfQ.Pnnezi5zcyUjpHKUWk7AUr1SkpYIPReoWG9r17vNSOY`,
     },
   });
 };
