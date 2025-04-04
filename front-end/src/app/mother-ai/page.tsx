@@ -3,7 +3,7 @@
 import ChatInterface from '@/components/chat/ChatInterface';
 import Header from '@/components/common/Header';
 import { useRouter } from 'next/navigation';
-import useChatStore from '../stores/useChatStore';
+import useChatStore from '../../stores/useChatStore';
 import { useState } from 'react';
 import CloseModal from '@/components/chat/CloseModal';
 

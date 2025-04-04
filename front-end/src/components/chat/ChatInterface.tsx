@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useChatStore from '@/app/stores/useChatStore';
+import useChatStore from '@/stores/useChatStore';
 import { formatDateToParam } from '@/utils/fotmatDate';
 import ChatChooser from './ChatChooser';
 import ChatBubble from '@/components/chat/ChatBubble';
