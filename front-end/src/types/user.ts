@@ -17,7 +17,7 @@ export interface User {
   birth: string;
   image: string;
   type: string;
-  account: myAccountInfo;
+  account: MyAccountInfo;
 }
 
 export interface ChildProfile {
@@ -26,7 +26,7 @@ export interface ChildProfile {
   name: string;
 }
 
-export interface myAccountInfo {
+export interface MyAccountInfo {
   id: number;
   name: string;
   no: string;

@@ -2,7 +2,8 @@ import { ChildProfile, SignInPostForm, SignUpPostForm, User } from '@/types/user
 import fetcher from '@/apis/fetcher';
 
 export const postSignIn = async ({ email, password }: SignInPostForm) => {
-  return await fetcher.post({ url: 'aicheck/auth/signin', body: { email, password } });
+  const response = await fetcher.post({ url: 'aicheck/auth/signin', body: { email, password } });
+  return response;
 };
 
 export const postSignUp = async ({ isParent, email, password }: SignUpPostForm) => {
@@ -22,13 +23,9 @@ export const postReissueAccessToken = async () => {
 };
 
 export const getChildProfileList = async (): Promise<ChildProfile[]> => {
-  const response = await fetcher.get({ url: 'aicheck/members/children/profiles' });
-  const data = await response.json();
-  return data;
+  return await fetcher.get({ url: 'aicheck/members/children/profiles' });
 };
 
 export const getUserInfo = async (): Promise<User> => {
-  const response = await fetcher.get({ url: 'aicheck/members/details' });
-  const data = await response.json();
-  return data;
+  return await fetcher.get({ url: 'aicheck/members/details' });
 };
