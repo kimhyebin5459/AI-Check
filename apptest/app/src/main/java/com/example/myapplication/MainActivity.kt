@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import com.example.myapplication.DeepVoiceDetector2
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import org.tensorflow.lite.Interpreter
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -18,7 +21,7 @@ import java.nio.channels.FileChannel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var voicePhishingDetector: VoicePhishingDetector
-    private lateinit var deepVoiceDetector: DeepVoiceDetector
+    private lateinit var deepVoiceDetector: DeepVoiceDetector2
     private lateinit var urlDetector: UrlDetector
     private lateinit var ortEnv: OrtEnvironment
     private lateinit var ortSession: OrtSession
@@ -28,12 +31,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+
         try {
             val fileName = "real 이시우 95님과 통화 3"
+//            val fileName = "mixed_siu"
+//            val fileName = "fake 사탄"
+//            val fileName = "fake generated_K05741143-AMG23-L1N2D1-E-K0KK-00555023"
             // 오디오 파일 복사
-            // C:\Users\SSAFY\apptest\app\src\main\res\raw\realyu.wav
             copyAudioFileToInternalStorage("${fileName}.wav")
-//            copyAudioFileToInternalStorage("test_audio21.wav")
 
             // 모델 로드
             val interpreterDeepVoice = Interpreter(loadModelFile("deepvoice_model.tflite"))
@@ -59,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
             // 탐지기 초기화
             voicePhishingDetector = VoicePhishingDetector(this, interpreterSTT, interpreterVoicePhishing, wordToIndex)
-            deepVoiceDetector = DeepVoiceDetector(this, interpreterDeepVoice)
+            deepVoiceDetector = DeepVoiceDetector2(this, interpreterDeepVoice)
             urlDetector = UrlDetector(
                 ortSession = ortSession,    // OrtSession
                 ortEnv = ortEnv,            // OrtEnvironment
@@ -80,28 +88,29 @@ class MainActivity : AppCompatActivity() {
                 try {
                     val audioPath = "${filesDir.absolutePath}/${fileName}.wav"
                     val result = deepVoiceDetector.detect(audioPath)
-                    val resultText = """"
-                        
-                        
-                        
-                        
-                        
-                        딥 보이스 탐지:
-                        파일 이름: ${result["basename"]}
-                        실제 라벨: ${result["true_label"]}
-                        세그먼트 확률: ${result["segment_probs"]}
-                        평균 세그먼트 확률: ${result["mean_segment_prob"]}
-                        딥페이크 세그먼트 여부: ${result["is_deepfake_segment"]}
-                        전체 딥페이크 확률: ${result["deepfake_prob_full"]}
-                        전체 딥페이크 여부: ${result["is_deepfake_full"]}
-                    """.trimIndent()
+
+                    val resultText = """
+            🎧 딥 보이스 탐지 결과
+            
+            📁 파일 이름: ${result["basename"]}
+            🏷️ 실제 라벨: ${result["true_label"]}
+            
+            📊 세그먼트 확률:
+            ${result["segment_probs"]}
+            
+            📈 평균 세그먼트 확률: ${result["mean_segment_prob"]}
+            🧠 세그먼트 딥페이크 여부: ${result["is_deepfake_segment"]}
+            
+            🌐 전체 딥페이크 확률: ${result["deepfake_prob_full"]}
+            ✅ 전체 딥페이크 여부: ${result["is_deepfake_full"]}
+        """.trimIndent()
+
                     tvResult.text = resultText
                 } catch (e: Exception) {
                     Log.e("MainActivity", "딥 보이스 탐지 오류", e)
-                    tvResult.text = "오류: ${e.message}"
+                    tvResult.text = "❌ 오류 발생: ${e.message}"
                 }
             }
-
             btnPredictVoicePhishing.setOnClickListener {
                 try {
                     val audioPath = "${filesDir.absolutePath}/${fileName}.wav"

@@ -1,15 +1,13 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.chaquo.python")
 }
 
 android {
     namespace = "com.example.myapplication"
     compileSdk = 35
-    androidResources{
-        noCompress += listOf("onnx")
-    }
 
     defaultConfig {
         applicationId = "com.example.myapplication"
@@ -17,31 +15,58 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        ndk {
+            abiFilters += listOf("x86", "x86_64")
+        }
+    }
+
+    androidResources {
+        noCompress += listOf("onnx")
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         viewBinding = true
     }
 }
 
-dependencies {
+chaquopy {
+    defaultConfig {
+        buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
+        // buildPython("C:\\Users\\SSAFY\\anaconda3\\python.exe")
+        // python 블럭은 여기서만 가능
+        pip {
+            install("numpy")
+            install("scipy")
+            install("pillow")
+//            install("librosa==0.8.1")
+//            install("joblib==0.11")
+            install("librosa==0.4.2")
+        }
+    }
+}
 
+dependencies {
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
@@ -51,17 +76,14 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.9")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.9")
     implementation("com.google.ai.edge.litert:litert:1.2.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     implementation("com.github.wendykierp:JTransforms:3.1")
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.11.0")
-//    implementation("com.microsoft.onnxruntime:onnxruntime-mobile:1.18.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-extensions-android:0.13.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation("com.github.wendykierp:JTransforms:3.1")
-
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
