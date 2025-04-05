@@ -16,7 +16,7 @@ export interface User {
   name: string;
   birth: string;
   image: string;
-  type: string;
+  type: UserType;
   account: MyAccountInfo;
 }
 
