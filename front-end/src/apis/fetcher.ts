@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { BASE_URL } from '@/apis/config';
 
 interface Props {
   url: string;
@@ -18,10 +18,12 @@ type FetchProps = Omit<Props, 'method'>;
 const request = async (requestProps: Props) => {
   try {
     const response = await fetchRequest(requestProps);
-    const data = await response.json();
+
+    const contentType = response.headers.get('content-type');
+    const data = contentType?.includes('application/json') ? await response.json() : null;
 
     if (!response.ok) {
-      await handleError(response, data);
+      await handleError(response, data ?? {});
     }
 
     console.log(
