@@ -1,4 +1,4 @@
-import { myAccountInfo } from '@/types/user';
+import { MyAccountInfo } from '@/types/user';
 
 export const user = {
   name: '김나비',
@@ -8,7 +8,7 @@ export const user = {
     id: 1,
     name: '입출금 계좌',
     no: '12345678911',
-  } as myAccountInfo,
+  } as MyAccountInfo,
 };
 
 export const myAccountList = [
@@ -27,7 +27,7 @@ export const myAccountList = [
     name: '저축용 계좌',
     no: '12345678933',
   },
-] as myAccountInfo[];
+] as MyAccountInfo[];
 
 export const userList = [
   {

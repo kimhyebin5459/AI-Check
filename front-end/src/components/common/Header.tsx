@@ -7,17 +7,27 @@ interface Props {
   title?: string;
   hasBorder?: boolean;
   hasBackButton?: boolean;
+  backPath?: string;
   onBackClick?: () => void;
   className?: string;
-  isFixed?: boolean;  // 고정 여부를 결정하는 새 prop 추가
+  isFixed?: boolean; // 고정 여부를 결정하는 새 prop 추가
 }
 
-export default function Header({ title, hasBorder = true, hasBackButton = false, onBackClick, className = '' }: Props) {
+export default function Header({
+  title,
+  hasBorder = true,
+  hasBackButton = false,
+  backPath,
+  onBackClick,
+  className = '',
+}: Props) {
   const router = useRouter();
 
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick();
+    } else if (backPath) {
+      router.push(backPath);
     } else {
       router.back();
     }
