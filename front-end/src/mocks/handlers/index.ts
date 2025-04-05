@@ -4,7 +4,7 @@ import calendarHandlers from './calendar';
 import securityHandlers from './phishing';
 import childProfilesHandlers from './childProfile';
 import chatbotDifficultyHandlers from './chatbotDifficulty';
-import accountHandlers from './childAccountHandler';
+import accountHandlers from './accountHandler';
 import chatHandlers from './chat';
 
 export const handlers = [

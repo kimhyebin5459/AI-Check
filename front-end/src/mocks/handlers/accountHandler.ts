@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { accountResponse } from '../fixtures/account';
+import { accountResponse } from '@/mocks/fixtures/account';
 
 export const accountHandlers = [
   // 모든 계정 목록 조회 API
