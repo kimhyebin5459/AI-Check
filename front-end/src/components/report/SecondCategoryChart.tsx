@@ -1,7 +1,7 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-import { secondCategory } from '@/types/report';
 import { formatMoney } from '@/utils/formatMoney';
+import { SecondCategory } from '@/types/report';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -15,13 +15,13 @@ const chartOptions = {
 };
 
 interface Props {
-  reportData: secondCategory[];
+  reportData: SecondCategory[];
   amount: number;
 }
 
 export default function SecondCategoryChart({ reportData, amount }: Props) {
   const chartData = {
-    labels: reportData.map((category) => category.name),
+    labels: reportData.map((category) => category.displayName),
     datasets: [
       {
         data: reportData.map((category) => category.amount),

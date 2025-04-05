@@ -1,15 +1,14 @@
-import { secondCategory } from '@/types/report';
+import { SecondCategory } from '@/types/report';
 import { formatMoney } from '@/utils/formatMoney';
 import clsx from 'clsx';
 
 interface Props {
   index: number;
-  secondCategory: secondCategory;
-  totalAmount: number;
+  secondCategory: SecondCategory;
 }
 
-export default function SecondCategoryItem({ index, secondCategory, totalAmount }: Props) {
-  const { name, amount } = secondCategory;
+export default function SecondCategoryItem({ index, secondCategory }: Props) {
+  const { displayName, amount, percentage } = secondCategory;
 
   return (
     <div className="flex w-full items-center justify-between px-2 text-xl">
@@ -24,11 +23,11 @@ export default function SecondCategoryItem({ index, secondCategory, totalAmount 
           })}
         ></div>
         <div>
-          <p className="font-semibold">{name}</p>
+          <p className="font-semibold">{displayName}</p>
           <p className="text-xs text-gray-600">{formatMoney(amount)}</p>
         </div>
       </div>
-      <p className="text-lg font-semibold text-gray-600">{Math.floor((amount / totalAmount) * 100)}%</p>
+      <p className="text-lg font-semibold text-gray-600">{Math.floor(percentage)}%</p>
     </div>
   );
 }

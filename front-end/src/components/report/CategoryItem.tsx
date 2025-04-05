@@ -1,21 +1,20 @@
 import { Arrow } from '@/public/icons';
-import { firstCategory } from '@/types/report';
 import { formatMoney } from '@/utils/formatMoney';
 import clsx from 'clsx';
 import Image from 'next/image';
 import CategoryIcon from './CategoryIcon';
 import useModal from '@/hooks/useModal';
 import CategoryModal from './CategoryModal';
+import { FirstCategory } from '@/types/report';
 
 interface Props {
   date: string;
-  firstCategory: firstCategory;
-  totalAmount: number;
+  firstCategory: FirstCategory;
   index: number;
 }
 
-export default function CategoryItem({ date, firstCategory, totalAmount, index }: Props) {
-  const { name, amount } = firstCategory;
+export default function CategoryItem({ date, firstCategory, index }: Props) {
+  const { displayName, amount, percentage } = firstCategory;
   const { isModalOpen, openModal, closeModal } = useModal();
 
   return (
@@ -31,12 +30,12 @@ export default function CategoryItem({ date, firstCategory, totalAmount, index }
               'bg-chart-5': index === 4,
             })}
           >
-            <CategoryIcon icon={name} color="white" />
+            <CategoryIcon icon={displayName} color="white" />
           </div>
           <div className="space-y-1">
-            <p className="text-xl font-semibold">{name}</p>
+            <p className="text-xl font-semibold">{displayName}</p>
             <div className="flex space-x-4 font-semibold text-gray-800">
-              <p>{Math.floor((amount / totalAmount) * 100)}%</p>
+              <p>{Math.floor(percentage)}%</p>
               <p>{formatMoney(amount)}</p>
             </div>
           </div>

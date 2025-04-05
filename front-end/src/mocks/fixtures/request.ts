@@ -1,6 +1,6 @@
-import { Request, RequestType, StatusType } from '@/types/request';
+import { TransferRequest, RequestType, StatusType } from '@/types/request';
 
-export const requestList: Request[] = [
+export const requestList = [
   {
     id: 1,
     type: 'INCREASE',
@@ -73,7 +73,7 @@ export const requestList: Request[] = [
     description: '배고파서 떡볶이 먹고싶어요',
     createdAt: '2025-03-11T14:13:53.588Z',
   },
-];
+] as TransferRequest[];
 
 export const requestTransfer = {
   id: 4,

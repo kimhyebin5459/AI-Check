@@ -1,6 +1,6 @@
 'use client';
 
-import { Request } from '@/types/request';
+import { TransferRequest } from '@/types/request';
 import { formatDate } from '@/utils/fotmatDate';
 import NotificationBadge from '@/components/notification/NotificationBadge';
 import RequestStatusBadge from '@/components/request/RequestStatusBadge';
@@ -8,7 +8,7 @@ import { formatMoney } from '@/utils/formatMoney';
 import { useRouter } from 'next/navigation';
 
 interface Props {
-  request: Request;
+  request: TransferRequest;
   isParent: boolean;
 }
 
