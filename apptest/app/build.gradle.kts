@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters += listOf("x86", "x86_64")
+            abiFilters += listOf("x86", "x86_64") // "x86", "x86_64", "arm64-v8a"
         }
     }
 
@@ -52,7 +52,9 @@ android {
 
 chaquopy {
     defaultConfig {
-        buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
+//        buildPython("/usr/local/bin/python3.10")
+        buildPython("/Users/seul/.pyenv/shims/python3")
+//        buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
         // buildPython("C:\\Users\\SSAFY\\anaconda3\\python.exe")
         // python 블럭은 여기서만 가능
         pip {
