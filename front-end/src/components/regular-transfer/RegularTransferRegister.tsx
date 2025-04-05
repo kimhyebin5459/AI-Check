@@ -4,14 +4,14 @@ import Button from '@/components/common/Button';
 import Header from '@/components/common/Header';
 import Input from '@/components/common/Input';
 import ProfileImage from '@/components/common/ProfileImage';
-import IntervalTags from '@/components/transfer/IntervalTags';
-import RegularTransferRegisterModal from '@/components/transfer/RegularTransferRegisterModal';
+import RegularTransferRegisterModal from '@/components/regular-transfer/RegularTransferRegisterModal';
 import useInput from '@/hooks/useInput';
 import useModal from '@/hooks/useModal';
 import { regularTransferList } from '@/mocks/fixtures/transfer';
 import { formatDay } from '@/utils/formatDay';
 import { getDayOptions } from '@/utils/getDayOptions';
 import React, { useEffect, useRef } from 'react';
+import IntervalTags from './IntervalTags';
 
 interface Props {
   paramsId: string;

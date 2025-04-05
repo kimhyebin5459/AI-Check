@@ -5,7 +5,7 @@ import ProfileImage from '@/components/common/ProfileImage';
 import Button from '@/components/common/Button';
 import { formatInterval } from '@/utils/formatInterval';
 import useModal from '@/hooks/useModal';
-import RegularTransferModal from '@/components/transfer/RegularTransferModal';
+import RegularTransferModal from '@/components/regular-transfer/RegularTransferModal';
 import { useRouter } from 'next/navigation';
 import { formatDay } from '@/utils/formatDay';
 import Plus from '@/public/icons/common/Plus';
