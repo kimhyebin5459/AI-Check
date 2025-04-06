@@ -20,7 +20,7 @@ export default function TransactionHistory({
   childId,
   startDate,
   endDate,
-  type,
+  type = 'ALL',
   showFilterHeader = true,
   onFilterClick,
   customFilterText = '한달 | 전체 ▼',

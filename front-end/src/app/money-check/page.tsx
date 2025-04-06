@@ -17,6 +17,7 @@ import { getFilterText } from '@/utils/formatTransaction';
 import { user } from '@/mocks/fixtures/user';
 import { account as accountData } from '@/mocks/fixtures/account';
 import { Account } from '@/types/account';
+import { TransactionFilterType } from '@/types/transaction';
 
 export default function Page() {
   const [account, setAccount] = useState<Account>(accountData);
@@ -26,7 +27,7 @@ export default function Page() {
     date.setMonth(date.getMonth() - 1);
     return date;
   });
-  const [transactionType, setTransactionType] = useState<string>('ALL');
+  const [transactionType, setTransactionType] = useState<TransactionFilterType>('ALL');
   const [dateRangeType, setDateRangeType] = useState<string>('MONTH'); // 날짜 범위 타입 추가
 
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -48,7 +49,12 @@ export default function Page() {
     router.push(`/money-check/calendar?year=${year}&month=${month}`);
   };
 
-  const handleFilterApply = (newStartDate: Date, newEndDate: Date, newType: string, newDateRangeType: string) => {
+  const handleFilterApply = (
+    newStartDate: Date,
+    newEndDate: Date,
+    newType: TransactionFilterType,
+    newDateRangeType: string
+  ) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
     setTransactionType(newType);

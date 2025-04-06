@@ -54,7 +54,8 @@ const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
     body: body ? JSON.stringify(body) : undefined,
     headers: {
       ...headers,
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfUEFSRU5UIiwiZXhwIjoxNzQzODM4NTMzfQ.Pnnezi5zcyUjpHKUWk7AUr1SkpYIPReoWG9r17vNSOY`,
+      Authorization:
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMSIsImF1dGgiOiJST0xFX1BBUkVOVCIsImV4cCI6MTc0NDAxMDQzOX0.8FhzbKNglZ9OvrvQKo0Q3U6ln4-R8QZPH-jIHE1SyiA',
     },
   });
 };

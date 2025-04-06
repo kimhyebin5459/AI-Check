@@ -19,20 +19,12 @@ export interface TransactionRecord {
   description: string;
   rating: number | null;
   time: string;
-  // isDutchPay?: boolean;
 }
 
 export interface TransactionGroup {
   date: string;
   records: TransactionRecord[];
 }
-
-// export interface GroupedTransactionRecord {
-//   displayName: string;
-//   amount: number;
-//   time: string;
-//   description: string;
-// }
 
 export interface Transaction {
   recordId: number;
@@ -44,7 +36,6 @@ export interface Transaction {
   description: string;
   rating: number;
   createdAt: string;
-  // isDutchPay?: boolean;
 }
 
 export type TransactionDetailResponse = {
@@ -52,7 +43,6 @@ export type TransactionDetailResponse = {
   record: Transaction;
 };
 
-// First, let's define the UpdateTransactionData type
 export interface UpdateTransactionData {
   recordId: number;
   firstCategoryName: string;

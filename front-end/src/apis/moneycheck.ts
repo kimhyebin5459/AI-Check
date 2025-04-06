@@ -23,7 +23,7 @@ export const getTransactionHistory = async ({
       `startDate=${startDate}&endDate=${endDate}` +
       (type !== 'ALL' ? `&type=${type}` : ``),
   });
-  const data = response;
+  const data = response.data;
   return data;
 };
 
