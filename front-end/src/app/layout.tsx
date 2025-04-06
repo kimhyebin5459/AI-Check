@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import { MSWComponent } from '@/app/_components/msw-component';
 import { Suspense } from 'react';
 import Head from 'next/head';
-import Providers from '@/app/providers';
+import Providers from '@/app/_components/providers';
 
 export const metadata: Metadata = {
   title: 'AICheck',

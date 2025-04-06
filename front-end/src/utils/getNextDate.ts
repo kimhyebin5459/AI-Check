@@ -8,6 +8,13 @@ const dayMap: { [key: string]: number } = {
   토요일: 6,
 };
 
+const formatDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const getNextDate = (interval: string, day: string): string => {
   const today = new Date();
   const targetDate = new Date(today);
@@ -37,5 +44,5 @@ export const getNextDate = (interval: string, day: string): string => {
     }
   }
 
-  return targetDate.toISOString().split('T')[0];
+  return formatDate(targetDate);
 };

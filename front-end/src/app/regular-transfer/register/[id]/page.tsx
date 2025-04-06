@@ -1,4 +1,5 @@
-import RegularTransferRegister from '@/components/transfer/RegularTransferRegister';
+import Header from '@/components/common/Header';
+import RegularTransferRegisterSection from '@/components/regular-transfer/RegularTransferRegisterSection';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -7,5 +8,10 @@ interface Props {
 export default async function Page({ params }: Props) {
   const id = (await params).id;
 
-  return <RegularTransferRegister paramsId={id} />;
+  return (
+    <div className="container px-5">
+      <Header hasBackButton hasBorder={false} />
+      <RegularTransferRegisterSection paramsId={id} />
+    </div>
+  );
 }
