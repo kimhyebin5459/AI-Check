@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Aicheck } from '@/public/icons';
 import { postSignIn } from '@/apis/user';
 import { useUserStore } from '@/stores/useUserStore';
+import { authBridge } from '@/apis/authBridge';
 
 interface FormData {
   email: string;
@@ -73,8 +74,9 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      const { accessToken, isParent, accountConnected } = await postSignIn(formData);
+      const { accessToken, isParent, accountConnected, refreshToken } = await postSignIn(formData);
 
+      authBridge.saveTokens(accessToken, refreshToken);
       setAccessToken(accessToken);
       setIsParent(isParent);
 
