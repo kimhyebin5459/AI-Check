@@ -7,6 +7,7 @@ import com.aicheck.business.domain.auth.dto.SendAuthCodeRequest;
 import com.aicheck.business.domain.auth.dto.SignInRequest;
 import com.aicheck.business.domain.auth.dto.SignInResponse;
 import com.aicheck.business.domain.auth.dto.SignupRequest;
+import com.aicheck.business.global.auth.annotation.CurrentMemberId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    private static final String MAIL_AUTH_SUCCESS_MESSAGE = "인증되었습니다";
     private static final String AUTH_MAIL_SUBJECT = "AICHECK 가입 인증번호";
 
     private final AuthService authService;
@@ -45,10 +45,16 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/check")
+    @PostMapping("/email/check")
     public ResponseEntity<?> checkAuthenticationCode(@Valid @RequestBody CheckCodeDto checkCodeDTO) {
         mailService.checkCode(checkCodeDTO);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reIssueToken(@CurrentMemberId Long memberId) {
+        return ResponseEntity.ok().body(authService.reIssueToken(memberId));
+    }
+
 
 }

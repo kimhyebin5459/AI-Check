@@ -28,20 +28,13 @@ public class ReportController {
         return "@@@";
     }
 
-    // 또래 리포트 생성용 임시 컨트롤러
-    @GetMapping("/test2")
-    public String test2() {
-
-        return "@@@@";
-    }
-
     @GetMapping
     public ResponseEntity<MonthlyReportResponse> getReport(@RequestParam Integer year,
                                                            @RequestParam Integer month,
                                                            @RequestParam Long childId) {
         return ResponseEntity.ok(reportService.findMonthlyReport(childId, year, month));
     }
-    
+
     @GetMapping("/my")
     public ResponseEntity<MonthlyReportResponse> getMyReport(@RequestParam Integer year,
                                                              @RequestParam Integer month,
