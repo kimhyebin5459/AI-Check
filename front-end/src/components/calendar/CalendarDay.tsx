@@ -16,12 +16,11 @@ export default function CalendarDay({ day, date, sum, active, isSelected, onClic
     return <div className="aspect-square opacity-30" />;
   }
 
-  // 요일에 따른 텍스트 색상 지정
   const getDayTextColor = (): string => {
     if (!date) return '';
     const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0) return 'text-red-500'; // 일요일
-    if (dayOfWeek === 6) return 'text-blue-500'; // 토요일
+    if (dayOfWeek === 0) return 'text-red-500';
+    if (dayOfWeek === 6) return 'text-blue-500';
     return 'text-gray-800';
   };
 
