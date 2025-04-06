@@ -1,26 +1,27 @@
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
 import ProfileImage from '@/components/common/ProfileImage';
-import { useRouter } from 'next/navigation';
+import useDeleteRegularTransfer from '@/hooks/query/useDeleteRegularTransfer';
 
 interface Props {
+  scheduleId: number;
   name: string;
   image: string;
   isModalOpen: boolean;
   closeModal: () => void;
 }
 
-export default function RegularTransferModal({ name, image, isModalOpen, closeModal }: Props) {
-  const router = useRouter();
+export default function RegularTransferModal({ scheduleId, name, image, isModalOpen, closeModal }: Props) {
+  const { mutate: deleteRegularTransfer } = useDeleteRegularTransfer();
 
   const handleClick = () => {
-    router.refresh();
+    deleteRegularTransfer(scheduleId);
     closeModal();
   };
 
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
-      <div className="flex flex-col items-center py-2 text-xl font-bold">
+      <div className="flex flex-col items-center pt-2 text-xl font-bold">
         <ProfileImage image={image} size="md" />
         <p className="pt-2">{name} 에게 보내는</p>
         <p>정기 용돈을 취소할까요?</p>

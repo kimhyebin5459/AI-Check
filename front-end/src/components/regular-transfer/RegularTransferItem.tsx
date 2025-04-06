@@ -9,22 +9,21 @@ import RegularTransferModal from '@/components/regular-transfer/RegularTransferM
 import { useRouter } from 'next/navigation';
 import { formatDay } from '@/utils/formatDay';
 import Plus from '@/public/icons/common/Plus';
+import { RegularTransfer } from '@/types/regularTransfer';
 
 interface Props {
-  childId: number;
-  childName: string;
-  image: string;
-  amount: number | null;
-  interval: string | null;
-  day: string | null;
+  index: number;
+  schedule: RegularTransfer;
 }
 
-export default function RegularTransferItem({ childId, childName, image, amount, interval, day }: Props) {
+export default function RegularTransferItem({ index, schedule }: Props) {
+  const { amount, interval, day, scheduleId } = schedule.schedules[0] || {};
+
   const { isModalOpen, openModal, closeModal } = useModal();
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/regular-transfer/register/${childId}`);
+    router.push(`/regular-transfer/register/${index}`);
   };
 
   return (
@@ -32,8 +31,8 @@ export default function RegularTransferItem({ childId, childName, image, amount,
       <div className="flex h-64 w-full flex-col justify-between p-5">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center space-x-4">
-            <ProfileImage size="md" image={image} />
-            <p className="text-2xl font-bold">{childName}</p>
+            <ProfileImage size="md" image={schedule?.image} />
+            <p className="text-2xl font-bold">{schedule?.childName}</p>
           </div>
           {!interval && (
             <div className="flex size-8 items-center justify-center" onClick={handleClick}>
@@ -41,7 +40,7 @@ export default function RegularTransferItem({ childId, childName, image, amount,
             </div>
           )}
         </div>
-        {interval && day ? (
+        {interval ? (
           <>
             <div className="flex flex-col space-y-3 font-semibold">
               <div className="flex justify-between">
@@ -52,7 +51,7 @@ export default function RegularTransferItem({ childId, childName, image, amount,
               </div>
               <div className="flex justify-between">
                 <p>금액</p>
-                <p>{formatMoney(amount as number)}</p>
+                <p>{formatMoney(amount)}</p>
               </div>
             </div>
             <div className="flex space-x-4">
@@ -68,7 +67,15 @@ export default function RegularTransferItem({ childId, childName, image, amount,
           </div>
         )}
       </div>
-      <RegularTransferModal name={childName} image={image} isModalOpen={isModalOpen} closeModal={closeModal} />
+      {scheduleId && (
+        <RegularTransferModal
+          scheduleId={scheduleId}
+          name={schedule?.childName}
+          image={schedule?.image}
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 }

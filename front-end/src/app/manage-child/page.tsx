@@ -6,7 +6,7 @@ import ChildAccountCard from '@/components/transfer/ChildAccountCard';
 import Link from 'next/link';
 import useGetChildAccountList from '@/hooks/query/useGetChildAccountList';
 import ErrorComponent from '@/app/_components/error-component';
-import LoadingComponent from '../_components/loading-component';
+import LoadingComponent from '@/app/_components/loading-component';
 
 export default function Page() {
   const { data: accounList, isPending, isError } = useGetChildAccountList();
@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="container justify-center">
-      <Header hasBackButton hasBorder={false} />
+      <Header hasBackButton hasBorder={false} backPath="/" />
       <div className="w-full space-y-10 overflow-y-auto px-5 pb-[5.5rem]">
         <div className="text-mdl flex w-full flex-col justify-start pt-16 font-bold">
           <p>자녀들을</p>
