@@ -13,19 +13,19 @@ export const difficultyReverseMapping: Record<string, string> = {
 };
 
 export const categoryMapping: Record<string, string> = {
-  TRANSPORTATION: '교통비',
+  TRANSPORTATION: '교통',
   FOOD: '식비',
-  EDUCATION: '교육비',
-  LEISURE: '여가비',
-  LIVING: '생활비',
+  EDUCATION: '교육',
+  LEISURE: '여가',
+  LIVING: '생활',
 };
 
 export const categoryReverseMapping: Record<string, string> = {
-  교통비: 'TRANSPORTATION',
+  교통: 'TRANSPORTATION',
   식비: 'FOOD',
-  교육비: 'EDUCATION',
-  여가비: 'LEISURE',
-  생활비: 'LIVING',
+  교육: 'EDUCATION',
+  여가: 'LEISURE',
+  생활: 'LIVING',
 };
 
 export const subCategoryMapping: Record<string, string> = {
@@ -37,11 +37,11 @@ export const subCategoryMapping: Record<string, string> = {
   MEAL: '식사',
   SNACK: '간식',
   BEVERAGE: '음료',
-  TEXTBOOK: '교재비',
-  STATIONERY: '학용품비',
+  TEXTBOOK: '교재',
+  STATIONERY: '학용품',
   SUPPLY: '준비물',
-  ENTERTAINMENT: '오락비',
-  TRAVEL: '여행비',
+  ENTERTAINMENT: '오락',
+  TRAVEL: '여행',
   CULTURE: '문화생활',
   CLOTHING: '의류',
   GIFT: '선물',
@@ -57,11 +57,11 @@ export const subCategoryReverseMapping: Record<string, string> = {
   식사: 'MEAL',
   간식: 'SNACK',
   음료: 'BEVERAGE',
-  교재비: 'TEXTBOOK',
-  학용품비: 'STATIONERY',
+  교재: 'TEXTBOOK',
+  학용품: 'STATIONERY',
   준비물: 'SUPPLY',
-  오락비: 'ENTERTAINMENT',
-  여행비: 'TRAVEL',
+  오락: 'ENTERTAINMENT',
+  여행: 'TRAVEL',
   문화생활: 'CULTURE',
   의류: 'CLOTHING',
   선물: 'GIFT',

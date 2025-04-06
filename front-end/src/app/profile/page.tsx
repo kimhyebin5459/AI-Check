@@ -4,7 +4,7 @@ import ProfileSection from '@/components/profile/ProfileSection';
 export default async function Page() {
   return (
     <div className="container space-y-7 bg-gray-50 px-5">
-      <Header hasBackButton title="내 정보" hasBorder={false} backPath="/" />
+      <Header hasBackButton title="내 정보" hasBorder={false} />
       <ProfileSection />
     </div>
   );

@@ -3,7 +3,7 @@ import Enjoy from '@/public/icons/category/Enjoy';
 import Living from '@/public/icons/category/Living';
 import Study from '@/public/icons/category/Study';
 import Tableware from '@/public/icons/category/Tableware';
-import { TransactionType } from '@/types/transaction';
+import { TransactionFilterType, TransactionType } from '@/types/transaction';
 import React from 'react';
 
 export const getRatingText = (rating: number): string => {
@@ -51,11 +51,11 @@ export const getTransactionTypeText = (type: TransactionType): string => {
 
 export const getCategoryIcon = (category: string) => {
   const iconMap: Record<string, React.FC> = {
-    교통비: Bus,
+    교통: Bus,
     식비: Tableware,
-    교육비: Study,
-    여가비: Enjoy,
-    생활비: Living,
+    교육: Study,
+    여가: Enjoy,
+    생활: Living,
   };
 
   return iconMap[category] || null;
@@ -69,7 +69,7 @@ export const getAmountDisplay = (type: TransactionType, amount: number): number 
   }
 };
 
-export const getFilterText = (dateRangeType: string, transactionType: string): string => {
+export const getFilterText = (dateRangeType: string, transactionType: TransactionFilterType | undefined): string => {
   let periodText = '';
 
   switch (dateRangeType) {
@@ -91,9 +91,6 @@ export const getFilterText = (dateRangeType: string, transactionType: string): s
 
   let typeText = '';
   switch (transactionType) {
-    case 'ALL':
-      typeText = '전체';
-      break;
     case 'INCOME':
       typeText = '수입';
       break;

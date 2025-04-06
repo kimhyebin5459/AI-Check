@@ -1,31 +1,15 @@
 'use client';
 
-// import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { TransactionRecord } from '@/types/transaction';
-// import { RightTriangle, DownTriangle } from '@/public/icons';
-// import GroupedTransactionCard from './GroupedTransactionCard';
 
 import { getCategoryIcon, getAmountDisplay, getRatingEmoji } from '@/utils/formatTransaction';
-
-// interface DutchPay {
-//   dutchPayId: number;
-//   displayName: string;
-//   amount: number;
-//   createdAt: string;
-// }
-
-// interface DutchPayResponse {
-//   recordId: number;
-//   dutchPays: DutchPay[];
-// }
 
 export default function TransactionCard({
   recordId,
   firstCategoryName,
   secondCategoryName,
-  // isDutchPay,
   displayName,
   type,
   amount,
@@ -34,31 +18,10 @@ export default function TransactionCard({
   time,
   isParent,
 }: TransactionRecord & { isParent?: boolean }) {
-  // const [isOpened, setIsOpened] = useState(false);
-  // const [dutchPays, setDutchPays] = useState<DutchPay[]>([]);
-
-  // useEffect(() => {
-  //   if (isOpened && isDutchPay) {
-  //     fetch(`/api/v1/dutch-pays?recordId=${recordId}`)
-  //       .then((response) => response.json())
-  //       .then((data: DutchPayResponse) => {
-  //         setDutchPays(data.dutchPays);
-  //       })
-  //       .catch((error) => {
-  //         console.error('더치페이 데이터 가져오기 실패:', error);
-  //       });
-  //   }
-  // }, [isOpened, recordId, isDutchPay]);
-
   const displayAmount = getAmountDisplay(type, amount);
 
   const CategoryIcon = getCategoryIcon(firstCategoryName);
 
-  // const handleOpen = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   setIsOpened(!isOpened);
-  // };
   const router = useRouter();
 
   const handleCardClick = () => {
@@ -76,18 +39,6 @@ export default function TransactionCard({
           <div className="mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
             {CategoryIcon && <CategoryIcon />}
           </div>
-          {/* {isDutchPay && (
-                <div
-                  className="mr-3 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md"
-                  onClick={handleOpen}
-                >
-                  {isOpened ? (
-                    <Image src={DownTriangle} alt="접기" width={16} height={16} />
-                  ) : (
-                    <Image src={RightTriangle} alt="펼치기" width={16} height={16} />
-                  )}
-                </div>
-              )} */}
         </div>
         <div className="flex-1">
           <div className="flex justify-between text-xl">
@@ -108,21 +59,6 @@ export default function TransactionCard({
           </div>
         </div>
       </div>
-
-      {/* {isOpened && (
-        <div className="ml-10 border-l-2 border-gray-300 pl-2">
-          {dutchPays.map((dutchPay) => (
-            <GroupedTransactionCard
-              key={dutchPay.dutchPayId}
-              dutchPayId={dutchPay.dutchPayId}
-              displayName={dutchPay.displayName}
-              amount={dutchPay.amount}
-              time={dutchPay.createdAt.split(' ')[1].substring(0, 5)}
-              description={`${displayName} 정산`}
-            />
-          ))}
-        </div>
-      )} */}
     </div>
   );
 }

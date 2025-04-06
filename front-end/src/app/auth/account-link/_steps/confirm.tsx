@@ -14,7 +14,6 @@ type Props = {
 };
 
 export default function Confirm({ account, onNext, onPrev }: Props) {
-  // 네이티브 뒤로가기 처리
   useEffect(() => {
     window.history.pushState({ page: 'confirm' }, '');
 
@@ -52,7 +51,6 @@ export default function Confirm({ account, onNext, onPrev }: Props) {
 
   return (
     <div className="flex flex-grow flex-col items-center px-6">
-      {/* Content container with centered alignment */}
       <div className="flex w-full flex-1 flex-col items-center justify-center">
         <h1 className="text-mdl mb-10 font-bold">선택하신 계좌가 맞나요?</h1>
 

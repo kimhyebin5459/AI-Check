@@ -69,6 +69,16 @@ const request = async (requestProps: Props) => {
   }
 };
 
+// const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
+//   return await fetch(`${BASE_URL}/${url}`, {
+//     method,
+//     body: body ? JSON.stringify(body) : undefined,
+//     headers: {
+//       ...headers,
+//     },
+//   });
+// };
+
 const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
   let accessToken = useUserStore.getState().accessToken;
 
