@@ -1,6 +1,6 @@
 package com.example.myapplication
 
-import com.example.myapplication.DeepVoiceDetector2
+import org.tensorflow.lite.flex.FlexDelegate
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.os.Bundle
@@ -21,7 +21,7 @@ import java.nio.channels.FileChannel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var voicePhishingDetector: VoicePhishingDetector
-    private lateinit var deepVoiceDetector: DeepVoiceDetector2
+    private lateinit var deepVoiceDetector: DeepVoiceDetector4
     private lateinit var urlDetector: UrlDetector
     private lateinit var ortEnv: OrtEnvironment
     private lateinit var ortSession: OrtSession
@@ -37,13 +37,20 @@ class MainActivity : AppCompatActivity() {
 
         try {
             val fileName = "real 이시우 95님과 통화 3"
+//            val fileName = "realyu"
 //            val fileName = "mixed_siu"
 //            val fileName = "fake 사탄"
+//            val fileName = "deep KsponSpeech_0023_KsponSpeech_022578_fake"
 //            val fileName = "fake generated_K05741143-AMG23-L1N2D1-E-K0KK-00555023"
+//            val fileName = "real K0001A013-BMG20-L1N2D1-E-K0KK-04705616"
+//            val fileName = "real K0001A013-BMG20-L1N2D1-E-K0KK-04705619"
             // 오디오 파일 복사
             copyAudioFileToInternalStorage("${fileName}.wav")
 
             // 모델 로드
+//            val options = Interpreter.Options()
+//            options.addDelegate(FlexDelegate())
+
             val interpreterDeepVoice = Interpreter(loadModelFile("deepvoice_model.tflite"))
             val interpreterVoicePhishing = Interpreter(loadModelFile("model2.tflite"))
             val interpreterSTT = Interpreter(loadModelFile("stt_float36.tflite"))
@@ -67,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
             // 탐지기 초기화
             voicePhishingDetector = VoicePhishingDetector(this, interpreterSTT, interpreterVoicePhishing, wordToIndex)
-            deepVoiceDetector = DeepVoiceDetector2(this, interpreterDeepVoice)
+            deepVoiceDetector = DeepVoiceDetector4(this, interpreterDeepVoice)
             urlDetector = UrlDetector(
                 ortSession = ortSession,    // OrtSession
                 ortEnv = ortEnv,            // OrtEnvironment
@@ -90,6 +97,12 @@ class MainActivity : AppCompatActivity() {
                     val result = deepVoiceDetector.detect(audioPath)
 
                     val resultText = """
+                        
+                        
+                        
+                        
+                        
+                        
             🎧 딥 보이스 탐지 결과
             
             📁 파일 이름: ${result["basename"]}

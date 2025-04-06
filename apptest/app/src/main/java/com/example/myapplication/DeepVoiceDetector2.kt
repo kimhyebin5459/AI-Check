@@ -36,132 +36,6 @@ class DeepVoiceDetector2(
         return inputArray
     }
 
-//    fun detect(audioFilePath: String, threshold: Float = 0.4f): Map<String, Any> {
-//        val py = Python.getInstance()
-//        val preprocess = py.getModule("preprocess")
-//        val audioFile = File(audioFilePath)
-//        val baseName = audioFile.nameWithoutExtension
-//        val melImagePath = File(context.cacheDir, "${baseName}_mel.png").absolutePath // "${audioFile.parent}/$baseName" + "_mel.png"
-//
-//        // 🔁 1. Python 전처리 호출
-//        val result: PyObject = preprocess.callAttr(
-//            "process_audio_to_mel_and_features",
-//            audioFilePath,
-//            melImagePath
-//        )
-//
-//        Log.d("DeepVoiceDetector", "📦 Python result: ${result.toString()}")
-//
-//        Log.d("DeepVoiceDetector", "📦 Python full vector result: ${result["full_vector"].toString()}")
-//        Log.d("DeepVoiceDetector", "📦 Python full seg vector result: ${result["segment_vectors"].toString()}")
-//        Log.d("DeepVoiceDetector", "📦 Python full full seq result: ${result["full_sequence"].toString()}")
-//        Log.d("DeepVoiceDetector", "📦 Python full seg seq result: ${result["segment_sequences"].toString()}")
-//
-//
-//        // 🔁 2. 이미지 로딩 및 TFLite 입력 형태로 변환
-//        val imageBitmap = loadImage(melImagePath)
-//        val imageInput = preprocessImage(imageBitmap)
-////        val imageInputRaw = result["mel_image"]
-////        val imageInput = Array(1) { Array(128) { Array(500) { FloatArray(1) } } }
-//
-////        imageInputRaw?.asList()?.let { rows ->
-////            if (rows.size != 128) throw IllegalArgumentException("Invalid mel_image shape: expected 128 rows")
-////
-////            for (i in 0 until 128) {
-////                val row = rows[i].asList()
-////                if (row.size != 500) throw IllegalArgumentException("Invalid mel_image row[$i] width: expected 500")
-////
-////                for (j in 0 until 500) {
-////                    val value = row[j].asList().getOrNull(0)?.toFloat()
-////                        ?: throw IllegalStateException("Pixel at [$i][$j][0] is null")
-////                    imageInput[0][i][j][0] = value
-////                }
-////            }
-////        } ?: throw IllegalStateException("mel_image is null or unreadable")
-//
-//        val resultMap = result.asMap()
-//
-//        // 🔁 3. 전체 오디오 feature
-//        val fullVector = resultMap["full_vector"]?.asList()?.map { it.toFloat() }?.toFloatArray()
-//        val fullSequence = resultMap["full_sequence"]
-//
-//        if (fullVector == null || fullVector.isEmpty()) {
-//            throw IllegalStateException("fullVector is null or empty")
-//        }
-//
-//
-//        val sequenceArray = Array(1) { Array(400) { FloatArray(128) } }
-//        fullSequence?.asList()?.let { rows ->
-//            for ((i, row) in rows.withIndex()) {
-//                val rowList = row.asList().map { it.toFloat() }
-//                sequenceArray[0][i] = rowList.toFloatArray()
-//            }
-//        }
-//
-//        val vectorArray = fullVector // Array(1) { fullVector }
-//
-//        // 🔁 4. 전체 추론
-//        val output = Array(1) { FloatArray(2) }
-//        interpreter.runForMultipleInputsOutputs(
-//            arrayOf(sequenceArray, imageInput, vectorArray),
-//            mapOf(0 to output)
-//        )
-//        val deepfakeProb = output[0][1]
-//
-//        // 🔁 5. Segment-level 추론 결과 수집용 변수
-//        val segmentProbs = mutableListOf<Float>()
-//
-//        val segmentSequences = result["segment_sequences"]
-//        val segmentVectors = result["segment_vectors"]
-//
-//        println("✅ vectorArray size: ${vectorArray?.size}")
-//        println("✅ imageInput shape: [${imageInput.size}][${imageInput[0].size}][${imageInput[0][0].size}][${imageInput[0][0][0].size}]")
-//        println("✅ sequenceArray shape: [${sequenceArray.size}][${sequenceArray[0].size}][${sequenceArray[0][0].size}]")
-//
-//
-//        if (segmentSequences != null && segmentVectors != null) {
-//            println("🔎 Segment-level predictions:")
-//            val seqList = segmentSequences.asList()
-//            val vecList = segmentVectors.asList()
-//
-//            for (i in seqList.indices) {
-//                val segSeq = seqList[i].asList()
-//                val segVec = (vecList[i].asList() as List<Number>).map { it.toFloat() }
-//
-//                val segSeqArray = Array(1) { Array(400) { FloatArray(128) } }
-//                for ((j, row) in segSeq.withIndex()) {
-//                    segSeqArray[0][j] = (row.asList() as List<Number>).map { it.toFloat() }.toFloatArray()
-//                }
-//
-//                val segVecArray = Array(1) { segVec.toFloatArray() }
-//                val segOutput = Array(1) { FloatArray(2) }
-//
-//                interpreter.runForMultipleInputsOutputs(
-//                    arrayOf(segSeqArray, imageInput, segVecArray),
-//                    mapOf(0 to segOutput)
-//                )
-//
-//                val segProb = segOutput[0][1]
-//                segmentProbs.add(segProb)
-//                println("Segment #$i → Deepfake Prob: $segProb")
-//            }
-//        }
-//
-//        // 🔁 6. Segment-level 판단 기준 계산
-//        val meanSegmentProb = if (segmentProbs.isNotEmpty()) segmentProbs.average().toFloat() else 0f
-//        val isDeepfakeSegment = meanSegmentProb > threshold
-//
-//        return mapOf(
-//            "basename" to baseName,
-//            "true_label" to if (deepfakeProb > threshold) "‼️ Fake" else "✅ Real",
-//            "segment_probs" to segmentProbs,
-//            "mean_segment_prob" to meanSegmentProb,
-//            "is_deepfake_segment" to isDeepfakeSegment,
-//            "deepfake_prob_full" to deepfakeProb,
-//            "is_deepfake_full" to (deepfakeProb > threshold)
-//        )
-//    }
-
     fun detect(audioFilePath: String, threshold: Float = 0.4f): Map<String, Any> {
         val py = Python.getInstance()
         val preprocess = py.getModule("preprocess")
@@ -215,7 +89,8 @@ class DeepVoiceDetector2(
             }
         }
 
-        val vectorArray = fullVector
+        val vectorArray = Array(1) { fullVector }  // 이렇게 감싸야 합니다!
+
 
         // 🔁 4. 전체 추론
         val output = Array(1) { FloatArray(2) }

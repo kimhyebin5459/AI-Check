@@ -48,25 +48,37 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    packaging {
+        jniLibs {
+//            excludes.add("lib/arm64-v8a/libtensorflowlite_jni.so")
+//            excludes.add("lib/armeabi-v7a/libtensorflowlite_jni.so")
+        }
+
+    }
 }
 
 chaquopy {
     defaultConfig {
-//        buildPython("/usr/local/bin/python3.10")
-//        buildPython("/Users/seul/.pyenv/shims/python3")
-        buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
+        // buildPython("/usr/local/bin/python3.10")
+        buildPython("/Users/seul/.pyenv/shims/python3")
+        // buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
         // buildPython("C:\\Users\\SSAFY\\anaconda3\\python.exe")
         // python 블럭은 여기서만 가능
         pip {
+            install("librosa==0.8.1")
+            install("resampy==0.2.2")
+            install("numba==0.48.0")
+            install("matplotlib")
             install("numpy")
-            install("scipy")
             install("pillow")
-//            install("librosa==0.8.1")
-//            install("joblib==0.11")
-            install("librosa==0.4.2")
+            install("scipy")
+//            install("numpy==1.23.5")
         }
     }
 }
+
+
 
 dependencies {
     implementation("androidx.core:core-ktx:1.15.0")
@@ -77,9 +89,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.9")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.9")
+
     implementation("com.google.ai.edge.litert:litert:1.2.0")
     implementation("com.github.wendykierp:JTransforms:3.1")
-    implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.11.0")
+//    implementation("org.tensorflow:tensorflow-lite:2.18.0")
+    implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.14.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-extensions-android:0.13.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.15.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")

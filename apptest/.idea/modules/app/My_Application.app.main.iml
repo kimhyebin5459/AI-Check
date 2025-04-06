@@ -3,6 +3,14 @@
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/../../../app/src/main" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/../../../app/src/main/assets" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../app/src/main/java/com/example/myapplication/cache" />
     </content>
+  </component>
+  <component name="PyNamespacePackagesService">
+    <option name="namespacePackageFolders">
+      <list>
+        <option value="$MODULE_DIR$/../../../app/src/main/python" />
+      </list>
+    </option>
   </component>
 </module>

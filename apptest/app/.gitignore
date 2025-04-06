@@ -1,1 +1,10 @@
-/build
+# Gradle
+.gradle/
+**/build/
+
+# IntelliJ IDEA
+*.iml
+.idea/
+
+# 기타
+.DS_Store

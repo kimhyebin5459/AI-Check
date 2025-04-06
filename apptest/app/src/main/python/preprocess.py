@@ -1,18 +1,8 @@
-import os
-os.environ["LIBROSA_CACHE_DIR"] = ""
-os.environ["JOBLIB_TEMP_FOLDER"] = "/data/user/0/com.example.myapplication/cache"  # 쓸 수 있는 디렉토리로 지정
-
 
 import librosa
+librosa.cache = lambda func: func
 import numpy as np
-from PIL import Image
 
-import wave
-import scipy.signal
-
-# import types
-# import librosa.cache
-# librosa.cache.cache = types.SimpleNamespace(__call__=lambda func: func)
 
 IMG_HEIGHT = 128
 IMG_WIDTH = 500
