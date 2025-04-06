@@ -7,13 +7,13 @@
 // import accountHandlers from './accountHandler';
 // import chatHandlers from './chat';
 
-// export const handlers = [
-//   ...dutchPayHandlers,
-//   ...transactionHandlers,
-//   ...calendarHandlers,
-//   ...securityHandlers,
-//   ...childProfilesHandlers,
-//   ...chatbotDifficultyHandlers,
-//   ...accountHandlers,
-//   ...chatHandlers,
-// ];
+export const handlers = [
+  // ...dutchPayHandlers,
+  // ...transactionHandlers,
+  // ...calendarHandlers,
+  // ...securityHandlers,
+  // ...childProfilesHandlers,
+  // ...chatbotDifficultyHandlers,
+  // ...accountHandlers,
+  // ...chatHandlers,
+];
