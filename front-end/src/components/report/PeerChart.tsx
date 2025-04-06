@@ -1,6 +1,6 @@
 import { Bar } from 'react-chartjs-2';
 import { Chart, BarElement, Tooltip, Legend, CategoryScale, LinearScale } from 'chart.js';
-import { peerCategory } from '@/types/report';
+import { PeerReport } from '@/types/report';
 
 Chart.register(BarElement, Tooltip, Legend, CategoryScale, LinearScale);
 
@@ -44,7 +44,7 @@ const options = {
 
 interface Props {
   name: string;
-  reportData: peerCategory[];
+  reportData: PeerReport[];
 }
 
 export default function PeerChart({ name, reportData }: Props) {

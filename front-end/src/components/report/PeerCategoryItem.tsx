@@ -1,10 +1,10 @@
-import { peerCategory } from '@/types/report';
 import { formatMoney } from '@/utils/formatMoney';
 import CategoryIcon from '@/components/report/CategoryIcon';
 import PeerGapBadge from './PeerGapBadge';
+import { PeerReport } from '@/types/report';
 
 interface Props {
-  peerCategory: peerCategory;
+  peerCategory: PeerReport;
 }
 
 export default function PeerCategoryItem({ peerCategory }: Props) {

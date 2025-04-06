@@ -10,19 +10,13 @@ interface Props {
 export default function CategoryReportSection({ date, childId }: Props) {
   console.log(date.split('-'), childId);
 
-  const { report, totalAmount } = categoryReport;
+  const { categories, totalAmount } = categoryReport;
 
   return (
     <>
-      <FirstCategoryChart reportData={report} totalAmount={totalAmount} />
-      {report.map((catecory, index) => (
-        <CategoryItem
-          date={date}
-          key={catecory.name}
-          firstCategory={catecory}
-          totalAmount={totalAmount}
-          index={index}
-        />
+      <FirstCategoryChart reportData={categories} totalAmount={totalAmount} />
+      {categories.map((catecory, index) => (
+        <CategoryItem date={date} key={catecory.firstCategoryId} firstCategory={catecory} index={index} />
       ))}
     </>
   );
