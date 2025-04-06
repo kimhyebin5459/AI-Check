@@ -77,7 +77,7 @@ export const requestList = [
 
 export const requestTransfer = {
   id: 4,
-  type: 'INCREASE' as RequestType,
+  type: 'ONE_TIME' as RequestType,
   status: 'WAITING' as StatusType,
   childId: 1,
   image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
@@ -89,7 +89,7 @@ export const requestTransfer = {
 
 export const requestInCrease = {
   id: 4,
-  type: 'ONE_TIME' as RequestType,
+  type: 'INCREASE' as RequestType,
   status: 'WAITING' as StatusType,
   childId: 1,
   image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
