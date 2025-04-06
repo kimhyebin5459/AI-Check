@@ -6,11 +6,12 @@ import Button from '@/components/common/Button';
 import Footer from '@/components/common/footer/Footer';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChartButton, CalendarButton } from '@/public/icons';
+import { ChartButton, CalendarButton, Sprout, Arrow } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
 import TransactionHistory from '@/components/money-check/TransactionHistory';
 import DateFilterModal from '@/components/money-check/DateFilterModal';
 import useModal from '@/hooks/useModal';
+import Link from 'next/link';
 
 import { getFilterText } from '@/utils/formatTransaction';
 
@@ -37,12 +38,9 @@ export default function Page() {
 
   const router = useRouter();
 
-  const handleProfileClick = () => {
-    router.push('/profile');
-  };
-
   const handleChartClick = () => {
-    router.push(`/report/1`); // 추후 본인 childId로 수정
+    const userId = account?.accountId;
+    router.push(`/report/${userId}`); // 추후 본인 childId로 수정
   };
 
   const handleCalendarClick = () => {
@@ -72,19 +70,34 @@ export default function Page() {
           <main className="scrollbar-hide w-full overflow-y-auto p-5">
             <div>
               <div className="flex w-full items-center justify-between">
-                <div className="flex cursor-pointer items-center text-2xl">
-                  <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                    <span className="font-bold">{user?.name}</span>
-                    &nbsp;
-                    <span className="font-light">님</span>
-                  </div>
-                  <span className="ml-1">&gt;</span>
+                <div className="flex items-center gap-2">
+                  {isParent ? (
+                    <ProfileImage image={user?.image} size="sm" />
+                  ) : (
+                    <Image src={Sprout} alt="sprout icon" className="size-7"></Image>
+                  )}
+                  <Link href={'/profile'}>
+                    <div className="flex items-center space-x-1">
+                      <p className="text-2xl font-bold">{user?.name} </p>
+                      <p className="text-2xl font-medium">님</p>
+                      <div className="size-7 rotate-180">
+                        <Image src={Arrow} alt="arrow icon"></Image>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
                 <div className="flex space-x-2">
                   {!isParent && (
                     <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
                   )}
-                  <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
+                  {!isParent && (
+                    <Image
+                      src={CalendarButton}
+                      alt="월별보기"
+                      onClick={handleCalendarClick}
+                      className="cursor-pointer"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -111,7 +124,13 @@ export default function Page() {
                 </div>
               </div>
               <div className="flex justify-center rounded-b-lg bg-white pb-3">
-                <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="w-[220px]"
+                  isFullWidth={false}
+                  onClick={() => router.push('/transfer')}
+                >
                   송금
                 </Button>
               </div>
