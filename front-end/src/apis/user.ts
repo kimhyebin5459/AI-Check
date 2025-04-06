@@ -18,8 +18,13 @@ export const postEmailConfirm = async (code: string) => {
   return await fetcher.post({ url: 'aicheck/auth/email/check', body: { code } });
 };
 
-export const postReissueAccessToken = async () => {
-  return await fetcher.post({ url: 'aicheck/auth/reissue' });
+export const postReissueAccessToken = async (refreshToken: string) => {
+  return await fetcher.post({
+    url: 'aicheck/auth/reissue',
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
 };
 
 export const getChildProfileList = async (): Promise<ChildProfile[]> => {

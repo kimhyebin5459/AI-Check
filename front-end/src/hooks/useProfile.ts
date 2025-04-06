@@ -2,7 +2,7 @@ import { Account } from '@/types/account';
 import { MyAccountInfo } from '@/types/user';
 import { useEffect, useState } from 'react';
 
-export default function useProfile(image: string, account: MyAccountInfo) {
+const useProfile = (image: string, account: MyAccountInfo) => {
   const [profileImage, setProfileImage] = useState<string>(image);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [editAccount, setEditAccount] = useState<Account>({
@@ -31,4 +31,6 @@ export default function useProfile(image: string, account: MyAccountInfo) {
   };
 
   return { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange };
-}
+};
+
+export default useProfile;
