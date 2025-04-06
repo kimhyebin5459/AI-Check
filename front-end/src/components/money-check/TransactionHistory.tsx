@@ -45,6 +45,8 @@ export default function TransactionHistory({
           type,
         });
 
+        console.log('called!');
+
         if (data && Array.isArray(data)) {
           setTransactions(data);
         } else {

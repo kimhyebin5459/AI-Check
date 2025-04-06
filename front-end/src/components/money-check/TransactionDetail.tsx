@@ -7,7 +7,7 @@ import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
 
-import { FIRST_CATEGORIES, SECOND_CATEGORIES_MAP } from '@/constants/categories';
+import { ALL_CATEGORIES } from '@/constants/categories';
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
 import { Transaction, UpdateTransactionData } from '@/types/transaction';
 import { getDetail, updateTransactionRecord } from '@/apis/moneycheck';
@@ -65,8 +65,22 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
     setMemo(e.target.value);
   };
 
+  // 카테고리 이름으로 ID 찾기 함수
+  const getFirstCategoryId = (categoryName: string): number => {
+    const category = ALL_CATEGORIES.find((cat) => cat.displayName === categoryName);
+    return category ? category.id : 0;
+  };
+
+  const getSecondCategoryId = (firstCategoryName: string, secondCategoryName: string): number => {
+    const firstCategory = ALL_CATEGORIES.find((cat) => cat.displayName === firstCategoryName);
+    if (!firstCategory) return 0;
+
+    const secondCategory = firstCategory.secondCategories.find((cat) => cat.displayName === secondCategoryName);
+    return secondCategory ? secondCategory.id : 0;
+  };
+
   const confirmHandler = async () => {
-    if (!transaction || !transaction || !transaction.recordId) {
+    if (!transaction || !transaction.recordId) {
       alert('거래 정보가 없습니다.');
       return;
     }
@@ -76,10 +90,20 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       return;
     }
 
+    const firstCategoryId = getFirstCategoryId(selectedFirstCategory);
+    const secondCategoryId = selectedSecondCategory
+      ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
+      : 0;
+
+    if (!firstCategoryId) {
+      alert('대분류 ID를 찾을 수 없습니다.');
+      return;
+    }
+
     const updatedData: UpdateTransactionData = {
       recordId: transaction.recordId,
-      firstCategoryName: selectedFirstCategory,
-      secondCategoryName: selectedSecondCategory || '',
+      firstCategoryId: firstCategoryId,
+      secondCategoryId: secondCategoryId,
       description: memo || '',
     };
 
@@ -88,7 +112,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
 
       await updateTransactionRecord(updatedData);
 
-      // 업데이트 성공 후 상세정보 다시 로드
       const updatedTransaction = await getDetail(Number(recordId));
       setTransaction(updatedTransaction);
       setLoading(false);
@@ -125,13 +148,13 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
           <section className="mt-4">
             <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
-              {FIRST_CATEGORIES.map((category) => (
+              {ALL_CATEGORIES.map((category) => (
                 <Tag
-                  key={category}
-                  isSelected={selectedFirstCategory === category}
-                  onClick={() => firstCategoryClickHandler(category)}
+                  key={category.id}
+                  isSelected={selectedFirstCategory === category.displayName}
+                  onClick={() => firstCategoryClickHandler(category.displayName)}
                 >
-                  {category}
+                  {category.displayName}
                 </Tag>
               ))}
             </div>
@@ -141,16 +164,17 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
             <h3 className="mb-1 text-base">소분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedFirstCategory &&
-                SECOND_CATEGORIES_MAP[selectedFirstCategory] &&
-                SECOND_CATEGORIES_MAP[selectedFirstCategory].map((category) => (
-                  <Tag
-                    key={category}
-                    isSelected={selectedSecondCategory === category}
-                    onClick={() => secondCategoryClickHandler(category)}
-                  >
-                    {category}
-                  </Tag>
-                ))}
+                ALL_CATEGORIES.find((cat) => cat.displayName === selectedFirstCategory)?.secondCategories.map(
+                  (category) => (
+                    <Tag
+                      key={category.id}
+                      isSelected={selectedSecondCategory === category.displayName}
+                      onClick={() => secondCategoryClickHandler(category.displayName)}
+                    >
+                      {category.displayName}
+                    </Tag>
+                  )
+                )}
             </div>
           </section>
 

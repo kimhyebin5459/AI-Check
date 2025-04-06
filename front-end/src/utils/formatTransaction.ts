@@ -51,11 +51,11 @@ export const getTransactionTypeText = (type: TransactionType): string => {
 
 export const getCategoryIcon = (category: string) => {
   const iconMap: Record<string, React.FC> = {
-    교통비: Bus,
+    교통: Bus,
     식비: Tableware,
-    교육비: Study,
-    여가비: Enjoy,
-    생활비: Living,
+    교육: Study,
+    여가: Enjoy,
+    생활: Living,
   };
 
   return iconMap[category] || null;

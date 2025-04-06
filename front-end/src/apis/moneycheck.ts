@@ -36,12 +36,14 @@ export const getCalendar = async (year: number, month: number): Promise<Calendar
 };
 
 export const getDetail = async (recordId: number): Promise<Transaction> => {
-  const response = await fetcher.get({ url: `aicheck/transaction-records/detail?recordId=${recordId}` });
+  const response = await fetcher.get({ url: `aicheck/transaction-records/${recordId}` });
   const data = response;
   return data;
 };
 
 export const updateTransactionRecord = async (updateData: UpdateTransactionData) => {
+  console.log(updateData);
+
   return await fetcher.patch({ url: 'aicheck/transaction-records', body: updateData });
 };
 
