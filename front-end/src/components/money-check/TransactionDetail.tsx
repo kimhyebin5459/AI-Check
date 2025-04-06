@@ -6,16 +6,11 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
-// import DutchPayDetail from '@/components/money-check/DutchPayDetail';
 
-import { FIRST_CATEGORIES, SECOND_CATEGORIES_MAP } from '@/constants/categories';
+import { ALL_CATEGORIES } from '@/constants/categories';
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
-import { Transaction } from '@/types/transaction';
-
-type TransactionDetailResponse = {
-  date: string;
-  record: Transaction;
-};
+import { Transaction, UpdateTransactionData } from '@/types/transaction';
+import { getDetail, updateTransactionRecord } from '@/apis/moneycheck';
 
 interface Props {
   paramsId: string;
@@ -25,7 +20,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const router = useRouter();
   const recordId = paramsId;
 
-  const [transaction, setTransaction] = useState<TransactionDetailResponse | null>(null);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,17 +37,11 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       }
 
       try {
-        const response = await fetch(`/aicheck/transaction-records/detail?recordId=${recordId}`);
-
-        if (!response.ok) {
-          throw new Error('거래 정보를 가져오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedFirstCategory(data.record.firstCategoryName);
-        setSelectedSecondCategory(data.record.secondCategoryName);
-        setMemo(data.record.description);
+        setSelectedFirstCategory(data.firstCategoryName);
+        setSelectedSecondCategory(data.secondCategoryName);
+        setMemo(data.description);
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -76,12 +65,22 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
     setMemo(e.target.value);
   };
 
-  // const dutchPayHandler = () => {
-  //   router.push('');
-  // };
+  // 카테고리 이름으로 ID 찾기 함수
+  const getFirstCategoryId = (categoryName: string): number => {
+    const category = ALL_CATEGORIES.find((cat) => cat.displayName === categoryName);
+    return category ? category.id : 0;
+  };
+
+  const getSecondCategoryId = (firstCategoryName: string, secondCategoryName: string): number => {
+    const firstCategory = ALL_CATEGORIES.find((cat) => cat.displayName === firstCategoryName);
+    if (!firstCategory) return 0;
+
+    const secondCategory = firstCategory.secondCategories.find((cat) => cat.displayName === secondCategoryName);
+    return secondCategory ? secondCategory.id : 0;
+  };
 
   const confirmHandler = async () => {
-    if (!transaction || !transaction.record || !transaction.record.recordId) {
+    if (!transaction || !transaction.recordId) {
       alert('거래 정보가 없습니다.');
       return;
     }
@@ -91,38 +90,32 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       return;
     }
 
-    const updatedData = {
-      recordId: transaction.record.recordId,
-      firstCategoryName: selectedFirstCategory,
-      secondCategoryName: selectedSecondCategory || '',
+    const firstCategoryId = getFirstCategoryId(selectedFirstCategory);
+    const secondCategoryId = selectedSecondCategory
+      ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
+      : 0;
+
+    if (!firstCategoryId) {
+      alert('대분류 ID를 찾을 수 없습니다.');
+      return;
+    }
+
+    const updatedData: UpdateTransactionData = {
+      recordId: transaction.recordId,
+      firstCategoryId: firstCategoryId,
+      secondCategoryId: secondCategoryId,
       description: memo || '',
     };
 
     try {
       setLoading(true);
 
-      const response = await fetch('/aicheck/transaction-records/update', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
+      await updateTransactionRecord(updatedData);
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: '응답 처리 중 오류가 발생했습니다.' }));
-        throw new Error(errorData.message || '거래 정보 업데이트에 실패했습니다.');
-      }
-
-      const result = await response.json();
-
-      if (result && result.data) {
-        setTransaction(result.data);
-        setLoading(false);
-        router.back();
-      } else {
-        alert('응답 데이터가 유효하지 않습니다.');
-      }
+      const updatedTransaction = await getDetail(Number(recordId));
+      setTransaction(updatedTransaction);
+      setLoading(false);
+      router.back();
     } catch (err) {
       alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
     } finally {
@@ -148,20 +141,20 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
         <Header title="거래 상세" hasBackButton></Header>
         <div className="w-full overflow-y-auto px-5 pt-5">
           <section>
-            <h2 className="text-xl font-semibold">{transaction.record.displayName}</h2>
-            <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.record.createdAt}</p>
+            <h2 className="text-xl font-semibold">{transaction.displayName}</h2>
+            <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.createdAt}</p>
           </section>
 
           <section className="mt-4">
             <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
-              {FIRST_CATEGORIES.map((category) => (
+              {ALL_CATEGORIES.map((category) => (
                 <Tag
-                  key={category}
-                  isSelected={selectedFirstCategory === category}
-                  onClick={() => firstCategoryClickHandler(category)}
+                  key={category.id}
+                  isSelected={selectedFirstCategory === category.displayName}
+                  onClick={() => firstCategoryClickHandler(category.displayName)}
                 >
-                  {category}
+                  {category.displayName}
                 </Tag>
               ))}
             </div>
@@ -171,16 +164,17 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
             <h3 className="mb-1 text-base">소분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               {selectedFirstCategory &&
-                SECOND_CATEGORIES_MAP[selectedFirstCategory] &&
-                SECOND_CATEGORIES_MAP[selectedFirstCategory].map((category) => (
-                  <Tag
-                    key={category}
-                    isSelected={selectedSecondCategory === category}
-                    onClick={() => secondCategoryClickHandler(category)}
-                  >
-                    {category}
-                  </Tag>
-                ))}
+                ALL_CATEGORIES.find((cat) => cat.displayName === selectedFirstCategory)?.secondCategories.map(
+                  (category) => (
+                    <Tag
+                      key={category.id}
+                      isSelected={selectedSecondCategory === category.displayName}
+                      onClick={() => secondCategoryClickHandler(category.displayName)}
+                    >
+                      {category.displayName}
+                    </Tag>
+                  )
+                )}
             </div>
           </section>
 
@@ -198,23 +192,18 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
           <section className="mt-3">
             <div className="mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 금액</span>
-              <span className="text-base font-medium">{transaction.record.amount.toLocaleString()}원</span>
+              <span className="text-base font-medium">{transaction.amount.toLocaleString()}원</span>
             </div>
-
-            {/* 더치페이 내역 표시 영역 */}
-            {/* {transaction.record.isDutchPay && (
-              <DutchPayDetail recordId={transaction.record.recordId} amount={transaction.record.amount} />
-            )} */}
 
             <div className="mt-2 mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 유형</span>
-              <span className="text-base font-medium">{getTransactionTypeText(transaction.record.type)}</span>
+              <span className="text-base font-medium">{getTransactionTypeText(transaction.type)}</span>
             </div>
             {!isParent && (
               <div className="mb-4 flex justify-between">
                 <span className="text-base text-gray-800">평가</span>
                 <span className="text-base font-medium">
-                  {getRatingText(transaction.record.rating)} {getRatingEmoji(transaction.record.rating)}
+                  {getRatingText(transaction.rating)} {getRatingEmoji(transaction.rating)}
                 </span>
               </div>
             )}
@@ -222,9 +211,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
         </div>
       </div>
       <div className="bottom-btn">
-        {/* <Button size="md" onClick={dutchPayHandler}>
-              1/N 정산하기
-            </Button> */}
         <Button size="md" onClick={confirmHandler}>
           확인
         </Button>

@@ -1,7 +1,6 @@
 'use client';
 
 import Modal from '@/components/common/Modal';
-import { useRouter } from 'next/navigation';
 import ProfileImage from '@/components/common/ProfileImage';
 import Button from '@/components/common/Button';
 import { formatMoney } from '@/utils/formatMoney';
@@ -9,18 +8,26 @@ import { getNextDate } from '@/utils/getNextDate';
 import { useEffect, useState } from 'react';
 import { account } from '@/mocks/fixtures/account';
 import { formatInterval } from '@/utils/formatInterval';
+import usePostRegularTransferList from '@/hooks/query/usePostRegularTransferList';
+import { IntervalType } from '@/types/regularTransfer';
+import usePatchRegularTransferList from '@/hooks/query/usePatchRegularTransferList';
 
 interface Props {
+  childId: number;
+  scheduleId: number;
   name: string;
   image: string;
   amount: number;
-  interval: string;
+  interval: IntervalType;
   day: string;
   isModalOpen: boolean;
   closeModal: () => void;
+  isNewSchedule: boolean;
 }
 
 export default function RegularTransferRegisterModal({
+  childId,
+  scheduleId,
   name,
   image,
   amount,
@@ -28,22 +35,28 @@ export default function RegularTransferRegisterModal({
   day,
   isModalOpen,
   closeModal,
+  isNewSchedule,
 }: Props) {
-  const router = useRouter();
   const myAccount = account.accountNo;
 
-  const [nextDate, setNextDate] = useState<string | null>(null);
+  const { mutate: addRegularTransfer } = usePostRegularTransferList();
+  const { mutate: updateRegularTransfer } = usePatchRegularTransferList();
+
+  const [startDate, setStartDate] = useState<string>('');
 
   useEffect(() => {
     if (isModalOpen && interval && day) {
       const calculatedNextDate = getNextDate(formatInterval(interval), day);
-      setNextDate(calculatedNextDate);
+      setStartDate(calculatedNextDate);
     }
   }, [isModalOpen, interval, day]);
 
   const handleClick = () => {
-    console.log(amount, interval, nextDate);
-    router.push('/regular-transfer');
+    if (isNewSchedule) {
+      addRegularTransfer({ childId, amount, interval, startDate });
+    } else {
+      updateRegularTransfer({ scheduleId, schedule: { childId, amount, interval, startDate } });
+    }
     closeModal();
   };
 
@@ -72,7 +85,7 @@ export default function RegularTransferRegisterModal({
         <div className="border-[0.03rem] border-gray-200"></div>
         <div className="flex justify-between">
           <p>첫 송금일</p>
-          <p className="text-gray-600">{nextDate}</p>
+          <p className="text-gray-600">{startDate}</p>
         </div>
       </div>
       <Button onClick={handleClick}>등록하기</Button>
