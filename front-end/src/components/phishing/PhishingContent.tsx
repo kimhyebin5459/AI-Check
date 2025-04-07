@@ -4,11 +4,16 @@ import { useState, useEffect } from 'react';
 import NavButton from '@/components/main/NavButton';
 import SemicircleGauge from '@/components/phishing/SemicircleGauge';
 import { PHISHING_ITEM } from '@/constants/phising';
-import { PhishingStats } from '@/types/phishing';
-import { getPhishing } from '@/apis/phishing';
+
+interface PhisingStats {
+  totalCountAverage: number;
+  urlCount: number;
+  voiceCount: number;
+  familyCount: number;
+}
 
 export default function PhishingContent() {
-  const [stats, setStats] = useState<PhishingStats | null>(null);
+  const [stats, setStats] = useState<PhisingStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +21,21 @@ export default function PhishingContent() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const statsData = await getPhishing();
+        // Mock 토큰 (실제 환경에서는 인증 상태에서 가져와야 함)
+        const accessToken = 'mock-jwt-token';
+
+        // 통계 데이터 가져오기 - MSW에서 가로챔
+        const statsResponse = await fetch('aicheck/phishings', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!statsResponse.ok) {
+          throw new Error('통계 데이터를 불러오는데 실패했습니다.');
+        }
+
+        const statsData = await statsResponse.json();
         setStats(statsData);
       } catch (err) {
         setError(err instanceof Error ? err.message : '데이터를 불러오는데 오류가 발생했습니다.');
