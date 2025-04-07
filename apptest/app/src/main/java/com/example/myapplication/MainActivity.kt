@@ -115,12 +115,12 @@ class MainActivity : AppCompatActivity() {
             
 📊 세그먼트 확률:
 ${result["segment_probs"]}
-            
-📈 평균 세그먼트 확률: ${result["mean_segment_prob"]}
-🧠 세그먼트 딥페이크 여부: ${result["is_deepfake_segment"]}
-            
+                        
 🌐 전체 딥페이크 확률: ${result["deepfake_prob_full"]}
 ✅ 전체 딥페이크 여부: ${result["is_deepfake_full"]}
+
+📈 평균 세그먼트 확률: ${result["mean_segment_prob"]}
+🧠 세그먼트/최종 딥페이크 여부: ${result["is_deepfake_segment"]}
         """.trimIndent()
 
                     tvResult.text = resultText
