@@ -2,7 +2,7 @@ import fetcher from '@/apis/fetcher';
 import { IncreasePostForm, IncreaseRequest, StatusType, Summary, TransferRequest } from '@/types/request';
 
 export const getRequestList = async () => {
-  const response = await fetcher.get({ url: 'aicheck/allowance/parent' });
+  const response = await fetcher.get({ url: 'aicheck/allowance' });
   return response as TransferRequest[];
 };
 

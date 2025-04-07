@@ -14,8 +14,8 @@ export default function AccountCard({ name, image }: Props) {
   const { data: account } = useGetMyAccount();
   const { data: memoData, isLoading: memoLoading } = useGetMemoRate();
 
-  const memoCount = memoData?.memoCount || 0;
-  const totalCount = memoData?.totalCount || 0;
+  const memoCount = memoData?.memoCount || 99;
+  const totalCount = memoData?.totalCount || 99;
 
   return (
     <div className="shadow-base grid w-full grid-cols-7 rounded-xl border border-yellow-300">

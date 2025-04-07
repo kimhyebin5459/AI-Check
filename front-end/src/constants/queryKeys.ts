@@ -10,4 +10,5 @@ export const QUERY_KEYS = {
   CHECK_REPORT_REGISTERED: 'check_report_registered',
   SUMMARY: 'summary',
   MEMO_RATE: 'memo-rate',
+  REQUEST_LIST: 'request-list',
 };
