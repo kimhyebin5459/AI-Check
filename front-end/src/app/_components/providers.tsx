@@ -25,7 +25,6 @@ export default function Providers({ children }: ProvidersProps) {
       })
   );
 
-  const [authorized, setAuthorized] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ export default function Providers({ children }: ProvidersProps) {
       window.location.href = '/auth/signin';
     } else {
       useUserStore.getState().setAccessToken(accessToken);
-      setAuthorized(true);
       setChecked(true);
     }
   }, [pathname]);

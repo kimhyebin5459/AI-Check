@@ -1,7 +1,7 @@
 import fetcher from '@/apis/fetcher';
-import { TransferPostForm } from '@/types/transfer';
+import { AccountContirmResponse, TransferPostForm } from '@/types/transfer';
 
-export const getAccountConfirm = async (accountNo: number) => {
+export const getAccountConfirm = async (accountNo: string): Promise<AccountContirmResponse> => {
   const response = await fetcher.get({ url: `aicheck/transfer/${accountNo}` });
   return response;
 };

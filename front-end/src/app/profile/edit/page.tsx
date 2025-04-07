@@ -1,7 +1,5 @@
 'use client';
 
-import { postAccount } from '@/apis/account';
-import { patchUserInfo } from '@/apis/user';
 import ErrorComponent from '@/app/_components/error-component';
 import LoadingComponent from '@/app/_components/loading-component';
 import Button from '@/components/common/Button';
