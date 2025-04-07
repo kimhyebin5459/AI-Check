@@ -13,6 +13,7 @@ import DateFilterModal from '@/components/money-check/DateFilterModal';
 import useModal from '@/hooks/useModal';
 import { getFilterText } from '@/utils/formatTransaction';
 import Spinner from '@/components/common/Spinner';
+import { TransactionFilterType } from '@/types/transaction';
 
 interface Account {
   accountId?: number;
@@ -21,7 +22,6 @@ interface Account {
   balance?: number;
 }
 
-// User 타입 정의
 interface User {
   image: string;
   name?: string;
@@ -54,7 +54,7 @@ export default function MoneyCheckClient({ params }: Props) {
     date.setMonth(date.getMonth() - 1);
     return date;
   });
-  const [transactionType, setTransactionType] = useState<string>('ALL');
+  const [transactionType, setTransactionType] = useState<TransactionFilterType>('ALL');
   const [dateRangeType, setDateRangeType] = useState<string>('MONTH');
 
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -107,7 +107,12 @@ export default function MoneyCheckClient({ params }: Props) {
     router.push(`/report?id=${childId}`);
   };
 
-  const handleFilterApply = (newStartDate: Date, newEndDate: Date, newType: string, newDateRangeType: string) => {
+  const handleFilterApply = (
+    newStartDate: Date,
+    newEndDate: Date,
+    newType: TransactionFilterType,
+    newDateRangeType: string
+  ) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
     setTransactionType(newType);

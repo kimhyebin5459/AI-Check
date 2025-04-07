@@ -1,41 +1,36 @@
 'use client';
 
+import ErrorComponent from '@/app/_components/error-component';
+import LoadingComponent from '@/app/_components/loading-component';
 import Button from '@/components/common/Button';
 import Header from '@/components/common/Header';
 import ProfileImage from '@/components/common/ProfileImage';
 import AccountEditModal from '@/components/profile/AccountEditModal';
+import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 import useModal from '@/hooks/useModal';
-import { user } from '@/mocks/fixtures/user';
+import useProfile from '@/hooks/useProfile';
 import { Arrow } from '@/public/icons';
 import Plus from '@/public/icons/common/Plus';
-import { myAccountInfo } from '@/types/user';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export default function Page() {
   const router = useRouter();
 
-  const { name, birth, image, account } = user;
+  const { data: user, isPending, isError } = useGetUserInfo();
 
-  const [profileImage, setProfileImage] = useState<string>(image);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [editAccount, setEditAccount] = useState<myAccountInfo>(account);
+  const { image = '', name = '', birth = '', account = { id: 0, name: '', no: '' } } = user || {};
+  const { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange } = useProfile(image, account);
+
   const { isModalOpen, closeModal, openModal } = useModal();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-      setSelectedFile(file);
-    }
-  };
-
   const handleClick = () => {
-    console.log(selectedFile, editAccount.id);
+    console.log(selectedFile, editAccount.accountId);
     router.push('/profile');
   };
+
+  if (isPending) return <LoadingComponent />;
+  if (isError) return <ErrorComponent />;
 
   return (
     <>
@@ -58,14 +53,14 @@ export default function Page() {
           </div>
           <div className="flex w-full items-center justify-between">
             <p className="text-gray-600">생년월일</p>
-            <p>{`${birth.slice(0, 4)}.${birth.slice(4, 6)}.${birth.slice(6)}`}</p>
+            <p>{birth.replaceAll('-', '.')}</p>
           </div>
           <div className="flex w-full items-start justify-between">
             <p className="text-gray-600">연동 계좌</p>
             <div className="flex space-x-3" onClick={openModal}>
               <div className="text-right">
-                <p>{editAccount.no}</p>
-                <p className="-mt-1 text-sm">{editAccount.name}</p>
+                <p>{editAccount.accountNo}</p>
+                <p className="-mt-1 text-sm">{editAccount.accountName}</p>
               </div>
               <Image src={Arrow} alt="arrow icon" className="mt-0.5 size-6 rotate-180" />
             </div>

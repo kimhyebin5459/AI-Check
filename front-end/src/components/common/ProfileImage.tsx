@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 interface Props {
-  image: string;
+  image?: string;
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
@@ -14,7 +14,7 @@ const sizeToPixels = {
 };
 
 export default function ProfileImage({ image, size }: Props) {
-  const defaultImage = '/images/defaultImage.jpg';
+  const defaultImage = '/images/defaultImage.png';
 
   return (
     <div
@@ -28,6 +28,7 @@ export default function ProfileImage({ image, size }: Props) {
         height={sizeToPixels[size]}
         className="object-cover"
         unoptimized={true}
+        priority
       />
     </div>
   );

@@ -1,7 +1,7 @@
 export type IntervalType = 'WEEKLY' | 'BIWEEKLY' | 'MONTHLY';
 
 export interface RegularTransfer {
-  childId: 2;
+  childId: number;
   childName: string;
   image: string;
   childAccountNo: string;

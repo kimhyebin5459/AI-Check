@@ -10,12 +10,8 @@ import useModal from '@/hooks/useModal';
 import RatingModal from '@/components/money-check/RatingModal';
 
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
-import { Transaction, TransactionType } from '@/types/transaction';
-
-type TransactionDetailResponse = {
-  date: string;
-  record: Transaction;
-};
+import { TransactionType, Transaction, UpdateRatingData } from '@/types/transaction';
+import { getDetail, updateRating } from '@/apis/moneycheck';
 
 interface Props {
   paramsId: string;
@@ -25,7 +21,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
   const router = useRouter();
   const recordId = paramsId;
 
-  const [transaction, setTransaction] = useState<TransactionDetailResponse | null>(null);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -40,15 +36,9 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
       }
 
       try {
-        const response = await fetch(`/aicheck/transaction-records/detail?recordId=${recordId}`);
-
-        if (!response.ok) {
-          throw new Error('거래 정보를 가져오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
+        const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedRating(data.record.rating || 0);
+        setSelectedRating(data.rating || 0);
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -65,7 +55,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
   };
 
   const submitRating = async (rating: number) => {
-    if (!transaction || !transaction.record || !transaction.record.recordId) {
+    if (!transaction || !transaction.recordId) {
       alert('거래 정보가 없습니다.');
       return;
     }
@@ -73,44 +63,18 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
     try {
       setLoading(true);
 
-      const ratingData = {
-        recordId: transaction.record.recordId,
+      const ratingData: UpdateRatingData = {
+        recordId: transaction.recordId,
         rating: rating,
       };
 
-      const response = await fetch('/aicheck/transaction-records/rating', {
-        method: 'POST', // POST 메서드 사용
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(ratingData),
+      await updateRating(ratingData);
+
+      // 상태 업데이트
+      setTransaction({
+        ...transaction,
+        rating: rating,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: '응답 처리 중 오류가 발생했습니다.' }));
-        throw new Error(errorData.message || '평가 등록에 실패했습니다.');
-      }
-
-      if (response.status !== 204 && response.status !== 201) {
-        const result = await response.json();
-        if (result && result.data) {
-          setTransaction({
-            ...transaction,
-            record: {
-              ...transaction.record,
-              rating: rating,
-            },
-          });
-        }
-      } else {
-        setTransaction({
-          ...transaction,
-          record: {
-            ...transaction.record,
-            rating: rating,
-          },
-        });
-      }
     } catch (err) {
       alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
     } finally {
@@ -141,19 +105,19 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
         <Header title="거래 상세" hasBackButton></Header>
         <div className="w-full overflow-y-auto px-5 pt-5">
           <section>
-            <h2 className="text-xl font-semibold">{transaction.record.displayName}</h2>
-            <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.record.createdAt}</p>
+            <h2 className="text-xl font-semibold">{transaction.displayName}</h2>
+            <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.createdAt}</p>
           </section>
 
           <section className="mt-4">
             <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               <Tag
-                key={transaction.record.firstCategoryName}
+                key={transaction.firstCategoryName}
                 isSelected={true}
                 onClick={() => {}} // 비활성화
               >
-                {transaction.record.firstCategoryName}
+                {transaction.firstCategoryName}
               </Tag>
             </div>
           </section>
@@ -162,11 +126,11 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
             <h3 className="mb-1 text-base">소분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
               <Tag
-                key={transaction.record.secondCategoryName || '미지정'}
+                key={transaction.secondCategoryName || '미지정'}
                 isSelected={true}
                 onClick={() => {}} // 비활성화
               >
-                {transaction.record.secondCategoryName || '미지정'}
+                {transaction.secondCategoryName || '미지정'}
               </Tag>
             </div>
           </section>
@@ -174,20 +138,20 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
           <section className="mt-2">
             <h3 className="mb-1 text-base">메모</h3>
             <div className="w-full rounded-lg border border-gray-200 p-3 text-base">
-              {transaction.record.description || '메모가 없습니다.'}
+              {transaction.description || '메모가 없습니다.'}
             </div>
           </section>
 
           <section className="mt-3">
             <div className="mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 금액</span>
-              <span className="text-base font-medium">{transaction.record.amount.toLocaleString()}원</span>
+              <span className="text-base font-medium">{transaction.amount.toLocaleString()}원</span>
             </div>
 
             <div className="mt-2 mb-4 flex justify-between">
               <span className="text-base text-gray-800">거래 유형</span>
               <span className="text-base font-medium">
-                {getTransactionTypeText(transaction.record.type as TransactionType)}
+                {getTransactionTypeText(transaction.type as TransactionType)}
               </span>
             </div>
 

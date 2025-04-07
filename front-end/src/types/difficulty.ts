@@ -17,5 +17,11 @@ export interface Category {
 
 // 자녀별 챗봇 난이도 설정 타입
 export interface ChatbotDifficulty {
+<<<<<<< HEAD
   categoryDifficulties: Category[];
+=======
+  childId: number;
+  categoryDifficulties: Category[];
+  content: string;
+>>>>>>> 0376e32bc0bc9b5ecb4b78f7d2c5d392ebd9b26a
 }

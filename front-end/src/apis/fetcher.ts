@@ -1,4 +1,7 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import { BASE_URL } from '@/apis/config';
+import { useUserStore } from '@/stores/useUserStore';
+import { authBridge } from './authBridge';
+import { postReissueAccessToken } from './user';
 
 interface Props {
   url: string;
@@ -17,11 +20,41 @@ type FetchProps = Omit<Props, 'method'>;
 
 const request = async (requestProps: Props) => {
   try {
-    const response = await fetchRequest(requestProps);
-    const data = await response.json();
+    let response = await fetchRequest(requestProps);
+    let contentType = response.headers.get('content-type');
+    let data = contentType?.includes('application/json') ? await response.json() : null;
+
+    if (response.status === 401) {
+      try {
+        const refreshToken = authBridge.getRefreshToken();
+        if (!refreshToken) {
+          throw new Error('Refresh token is missing');
+        }
+        const refreshResult = await postReissueAccessToken(refreshToken);
+
+        if (refreshResult?.accessToken) {
+          useUserStore.getState().setAccessToken(refreshResult.accessToken);
+
+          const currentRefreshToken = authBridge.getRefreshToken();
+          if (currentRefreshToken) {
+            authBridge.saveTokens(refreshResult.accessToken, currentRefreshToken);
+          }
+
+          response = await fetchRequest(requestProps);
+          contentType = response.headers.get('content-type');
+          data = contentType?.includes('application/json') ? await response.json() : null;
+        }
+      } catch (refreshError) {
+        console.log(
+          `%c🔴[Token Refresh Failed]`,
+          'color: red; font-weight: bold; background: #ffebeb; padding: 1px 4px; border-radius: 4px;',
+          refreshError
+        );
+      }
+    }
 
     if (!response.ok) {
-      await handleError(response, data);
+      await handleError(response, data ?? {});
     }
 
     console.log(
@@ -36,12 +69,33 @@ const request = async (requestProps: Props) => {
   }
 };
 
+// const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
+//   return await fetch(`${BASE_URL}/${url}`, {
+//     method,
+//     body: body ? JSON.stringify(body) : undefined,
+//     headers: {
+//       ...headers,
+//     },
+//   });
+// };
+
 const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
+  let accessToken = useUserStore.getState().accessToken;
+
+  if (!accessToken || accessToken === 'VALUE') {
+    const appToken = authBridge.getAccessToken();
+    if (appToken) {
+      useUserStore.getState().setAccessToken(appToken);
+      accessToken = appToken;
+    }
+  }
+
   return await fetch(`${BASE_URL}/${url}`, {
     method,
     body: body ? JSON.stringify(body) : undefined,
     headers: {
       ...headers,
+      ...(accessToken && accessToken !== 'VALUE' ? { Authorization: `Bearer ${accessToken}` } : {}),
     },
   });
 };
@@ -53,7 +107,7 @@ const handleError = async (response: Response, errorData: APIErrorResponse) => {
     errorData
   );
 
-  throw new Error(`API Error ${response}`);
+  throw new Error(`API Error ${response.status}: ${errorData.message || response.statusText}`);
 };
 
 const fetcher = {

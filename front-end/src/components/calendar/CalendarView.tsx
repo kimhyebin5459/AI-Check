@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CalendarResponse, CalendarDay as CalendarDayType } from '@/types/calendar';
 import CalendarDay from './CalendarDay';
 import MonthlySummary from './MonthlySummary';
+import { getCalendar } from '@/apis/moneycheck';
 
 interface Props {
   year: number;
@@ -23,13 +24,7 @@ export default function CalendarView({ year, month, onDateSelect, selectedDate }
       setError(null);
 
       try {
-        const response = await fetch(`/aicheck/transaction-records/calendar?year=${year}&month=${month}`);
-
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-
-        const data = (await response.json()) as CalendarResponse;
+        const data = await getCalendar(year, month);
         setCalendarData(data || { calendar: [] });
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
