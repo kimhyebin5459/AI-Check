@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 const useGetMyAccountList = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.MY_ACCOUNT_LIST],
-    queryFn: () => getMyAccountList(),
+    queryFn: getMyAccountList,
   });
 };
 

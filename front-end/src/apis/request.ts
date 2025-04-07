@@ -1,5 +1,5 @@
 import fetcher from '@/apis/fetcher';
-import { IncreasePostForm, IncreaseRequest, StatusType, TransferRequest } from '@/types/request';
+import { IncreasePostForm, IncreaseRequest, StatusType, Summary, TransferRequest } from '@/types/request';
 
 export const getRequestList = async () => {
   const response = await fetcher.get({ url: 'aicheck/allowance/parent' });
@@ -26,7 +26,7 @@ export const getIncreaseRequest = async (id: number): Promise<IncreaseRequest> =
   return await fetcher.get({ url: `aicheck/allowance/increase/details/${id}` });
 };
 
-export const getSummary = async (childId: number, reportId: string) => {
-  const response = await fetcher.get({ url: `aicheck/allowance/summary?${childId}&${reportId}` });
+export const getSummary = async (childId: number, reportId: string): Promise<Summary> => {
+  const response = await fetcher.get({ url: `aicheck/allowance/summary?childId=${childId}&reportId=${reportId}` });
   return response;
 };

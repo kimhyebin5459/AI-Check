@@ -39,8 +39,8 @@ export default function Page() {
   const router = useRouter();
 
   const handleChartClick = () => {
-    const userId = account?.accountId;
-    router.push(`/report/${userId}`); // 추후 본인 childId로 수정
+    const userId = user?.memberId;
+    router.push(`/report/${userId}`);
   };
 
   const handleCalendarClick = () => {
