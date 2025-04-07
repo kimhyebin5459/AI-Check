@@ -26,3 +26,12 @@ export interface IncreasePostForm {
   increaseAmount: number;
   description: string;
 }
+
+export interface Summary {
+  year: number;
+  month: number;
+  firstCategoryName: string;
+  secondCategoryName: string;
+  memoCount: number;
+  totalCount: number;
+}

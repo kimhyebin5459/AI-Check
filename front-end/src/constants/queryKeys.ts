@@ -9,4 +9,5 @@ export const QUERY_KEYS = {
   CATEGORY_REPORT: 'category-report',
   PEER_REPORT: 'peer-report',
   CHECK_REPORT_REGISTERED: 'check_report_registered',
+  SUMMARY: 'summary',
 };

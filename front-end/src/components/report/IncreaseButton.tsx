@@ -4,15 +4,16 @@ import { useRouter } from 'next/navigation';
 
 interface Props {
   reportId: string;
+  childId: number;
 }
 
-export default function IncreaseButton({ reportId }: Props) {
+export default function IncreaseButton({ reportId, childId }: Props) {
   const router = useRouter();
 
   const { data: isRegistered } = useGetCheckIsRegistered(reportId);
 
   const handleClick = () => {
-    router.push(`/request/send?reportId=${reportId}`);
+    router.push(`/request/send?reportId=${reportId}&childId=${childId}`);
   };
 
   return (

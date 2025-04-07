@@ -32,7 +32,7 @@ export default function CategoryReportSection({ date, childId, userId }: Props) 
           {report.categories.map((catecory, index) => (
             <CategoryItem date={date} key={catecory.firstCategoryId} firstCategory={catecory} index={index} />
           ))}
-          {userId === childId && report.id && <IncreaseButton reportId={report.id} />}
+          {userId === childId && report.id && <IncreaseButton reportId={report.id} childId={childId} />}
         </>
       )}
     </>

@@ -17,6 +17,7 @@ export default function Page() {
   const money = 10000;
 
   const reportId = searchParams.get('reportId');
+  const childId = Number(searchParams.get('childId'));
 
   const handleClick = () => {
     console.log(amount, description);
@@ -27,7 +28,7 @@ export default function Page() {
     <div className="container px-5">
       <Header hasBackButton hasBorder={false} title="용돈 인상 요청 보내기" />
       <div className="flex w-full flex-col items-center space-y-5 pt-4">
-        {reportId && <ReportSummaryCard reportId={reportId} />}
+        {reportId && <ReportSummaryCard reportId={reportId} childId={childId} />}
         <IncreaseContent prevAmount={money} afterAmount={money + Number(amount)} />
         <Input
           type="number"
