@@ -13,6 +13,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   authCode: string;
+  isParent: boolean;
 }
 
 interface FormErrors {
@@ -32,6 +33,7 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
     authCode: '',
+    isParent: true, // 기본값은 부모계정으로 설정, 필요에 따라 변경 가능
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -184,6 +186,10 @@ export default function SignupPage() {
         <h1 className="mb-5 text-xl font-bold">{pageDescription}</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-grow flex-col">
+          {errors.general && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-center text-red-500">{errors.general}</div>
+          )}
+
           <Input
             label="이메일"
             type="email"

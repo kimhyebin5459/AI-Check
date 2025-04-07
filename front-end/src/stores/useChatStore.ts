@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import chatApi from '@/api/chat';
+import chatApi from '@/apis/chat';
 import { ChatType, ChatMessage, ChatSession, PersuadeResponse, QuestionResponse, State } from '@/types/chat';
 
 // 채팅 스토어 인터페이스
