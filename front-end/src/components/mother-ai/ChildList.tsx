@@ -67,7 +67,7 @@ export default function ChildList() {
   }
 
   return (
-    <div className="h-[72%] rounded-xl bg-white p-4">
+    <div className="h-[72%] rounded-tl-4xl rounded-tr-4xl bg-white px-7 pt-9">
       {children.map((child) => (
         <div
           key={child.childId}
@@ -76,7 +76,7 @@ export default function ChildList() {
         >
           <div className="flex items-center gap-3">
             <ProfileImage image={child.image} size="sm" />
-            <span className="text-lg">{child.name}</span>
+            <span className="text-xl font-bold">{child.name}</span>
           </div>
           <div>
             <svg

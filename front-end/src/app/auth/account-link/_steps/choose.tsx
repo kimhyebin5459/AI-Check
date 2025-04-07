@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import AccountCard from '@/components/auth/AccountCard';
 import { Account } from '@/types/account';
 import Spinner from '@/components/common/Spinner';
+import { getMyAccountList } from '@/apis/account';
 
 type Props = {
   onNext: (account: Account) => void;
@@ -14,6 +15,7 @@ type Props = {
 export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Props) {
   const [accounts, setLocalAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (cachedAccounts.length > 0) {
@@ -22,17 +24,21 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
       return;
     }
 
-    const mockAccounts = [
-      { accountId: 1, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
-      { accountId: 2, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
-      { accountId: 3, accountName: 'OO은행 계좌', accountNo: '123-456789-12' },
-    ];
+    const fetchAccounts = async () => {
+      try {
+        setIsLoading(true);
+        const accountsData = await getMyAccountList();
+        setLocalAccounts(accountsData);
+        setAccounts(accountsData);
+      } catch (err) {
+        console.error('Error fetching accounts:', err);
+        setError('계좌 목록을 불러오는데 실패했습니다');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    setTimeout(() => {
-      setLocalAccounts(mockAccounts);
-      setAccounts(mockAccounts);
-      setIsLoading(false);
-    }, 500);
+    fetchAccounts();
   }, [cachedAccounts, setAccounts]);
 
   const handleSelectAccount = (account: Account, e?: React.MouseEvent) => {
@@ -47,6 +53,24 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
     return (
       <div className="flex flex-grow flex-col items-center justify-center">
         <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
+      </div>
+    );
+  }
+
+  if (accounts.length === 0) {
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center text-gray-500">
+          연동 가능한 계좌가 없습니다
+        </div>
       </div>
     );
   }

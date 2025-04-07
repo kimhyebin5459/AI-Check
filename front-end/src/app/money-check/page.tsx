@@ -6,39 +6,41 @@ import Button from '@/components/common/Button';
 import Footer from '@/components/common/footer/Footer';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChartButton, CalendarButton } from '@/public/icons';
+import { ChartButton, CalendarButton, Sprout, Arrow } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
 import TransactionHistory from '@/components/money-check/TransactionHistory';
 import DateFilterModal from '@/components/money-check/DateFilterModal';
 import useModal from '@/hooks/useModal';
+import Link from 'next/link';
 
 import { getFilterText } from '@/utils/formatTransaction';
 
-import { user } from '@/mocks/fixtures/user';
-import { account as accountData } from '@/mocks/fixtures/account';
-import { Account } from '@/types/account';
+import { account as defaultAccountData } from '@/mocks/fixtures/account';
+import { TransactionFilterType } from '@/types/transaction';
+import { useUserStore } from '@/stores/useUserStore';
+import useGetMyAccount from '@/hooks/query/useGetMyAccount';
+import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 
 export default function Page() {
-  const [account, setAccount] = useState<Account>(accountData);
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [startDate, setStartDate] = useState<Date>(() => {
     const date = new Date();
     date.setMonth(date.getMonth() - 1);
     return date;
   });
-  const [transactionType, setTransactionType] = useState<string>('ALL');
-  const [dateRangeType, setDateRangeType] = useState<string>('MONTH'); // 날짜 범위 타입 추가
+  const [transactionType, setTransactionType] = useState<TransactionFilterType>('ALL');
+  const [dateRangeType, setDateRangeType] = useState<string>('MONTH');
 
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { isParent } = useUserStore();
+  const { data: account, isLoading } = useGetMyAccount();
+  const { data: user } = useGetUserInfo();
 
   const router = useRouter();
 
-  const handleProfileClick = () => {
-    router.push('/profile');
-  };
-
   const handleChartClick = () => {
-    router.push('/report');
+    const userId = account?.accountId;
+    router.push(`/report/${userId}`); // 추후 본인 childId로 수정
   };
 
   const handleCalendarClick = () => {
@@ -48,7 +50,12 @@ export default function Page() {
     router.push(`/money-check/calendar?year=${year}&month=${month}`);
   };
 
-  const handleFilterApply = (newStartDate: Date, newEndDate: Date, newType: string, newDateRangeType: string) => {
+  const handleFilterApply = (
+    newStartDate: Date,
+    newEndDate: Date,
+    newType: TransactionFilterType,
+    newDateRangeType: string
+  ) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
     setTransactionType(newType);
@@ -63,17 +70,34 @@ export default function Page() {
           <main className="scrollbar-hide w-full overflow-y-auto p-5">
             <div>
               <div className="flex w-full items-center justify-between">
-                <div className="flex cursor-pointer items-center text-2xl">
-                  <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                    <span className="font-bold">김○○</span>
-                    &nbsp;
-                    <span className="font-light">님</span>
-                  </div>
-                  <span className="ml-1">&gt;</span>
+                <div className="flex items-center gap-2">
+                  {isParent ? (
+                    <ProfileImage image={user?.image} size="sm" />
+                  ) : (
+                    <Image src={Sprout} alt="sprout icon" className="size-7"></Image>
+                  )}
+                  <Link href={'/profile'}>
+                    <div className="flex items-center space-x-1">
+                      <p className="text-2xl font-bold">{user?.name} </p>
+                      <p className="text-2xl font-medium">님</p>
+                      <div className="size-7 rotate-180">
+                        <Image src={Arrow} alt="arrow icon"></Image>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
                 <div className="flex space-x-2">
-                  <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
-                  <Image src={CalendarButton} alt="월별보기" onClick={handleCalendarClick} className="cursor-pointer" />
+                  {!isParent && (
+                    <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
+                  )}
+                  {!isParent && (
+                    <Image
+                      src={CalendarButton}
+                      alt="월별보기"
+                      onClick={handleCalendarClick}
+                      className="cursor-pointer"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -82,20 +106,31 @@ export default function Page() {
             <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
               <div className="rounded-t-lg bg-yellow-300 p-2.5">
                 <div className="flex items-center">
-                  <ProfileImage image={user.image} size="md" />
+                  <ProfileImage image={user?.image} size="md" />
                   <div className="ml-5 font-light">
-                    <p className="text-xl text-white">씨피뱅크 입출금 통장</p>
-                    <p className="text-base text-white">12-34567-89</p>
+                    <p className="text-xl text-white">{account?.accountName}</p>
+                    <p className="text-base text-white">{account?.accountNo}</p>
                   </div>
                 </div>
               </div>
               <div className="py-4">
                 <div className="text-center text-4xl font-bold">
-                  {account?.balance && account.balance.toLocaleString()}원
+                  {isLoading
+                    ? '로딩 중...'
+                    : account?.balance !== undefined
+                      ? account.balance.toLocaleString()
+                      : defaultAccountData.balance.toLocaleString()}
+                  원
                 </div>
               </div>
               <div className="flex justify-center rounded-b-lg bg-white pb-3">
-                <Button variant="primary" size="md" className="w-[220px]" isFullWidth={false}>
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="w-[220px]"
+                  isFullWidth={false}
+                  onClick={() => router.push('/transfer')}
+                >
                   송금
                 </Button>
               </div>

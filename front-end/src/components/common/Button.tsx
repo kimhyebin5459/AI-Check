@@ -39,8 +39,8 @@ export default function Button({
 
   const sizeStyles: Record<ButtonSize, string> = {
     sm: 'font-bold whitespace-nowrap h-12 px-4 flex items-center justify-center text-base',
-    md: 'font-semibold whitespace-nowrap h-14 px-6 flex items-center justify-center text-lg',
-    lg: 'font-bold whitespace-nowrap h-16 px-6 flex items-center justify-center text-xl',
+    md: 'font-semibold whitespace-nowrap h-14 px-4 flex items-center justify-center text-lg',
+    lg: 'font-bold whitespace-nowrap h-16 px-4 flex items-center justify-center text-xl',
   };
 
   const widthStyles = isFullWidth ? 'w-full' : '';

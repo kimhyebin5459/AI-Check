@@ -7,23 +7,8 @@ import {
   categoryMapping,
   categoryReverseMapping,
 } from '@/utils/mapDifficulty';
-
-// 타입 정의
-interface SubCategory {
-  subCategoryId: number;
-  subCategoryName: string;
-  difficulty: string;
-}
-
-interface Category {
-  categoryId: number;
-  categoryName: string;
-  subCategories: SubCategory[];
-}
-
-interface ChatbotDifficulty {
-  categoryDifficulties: Category[];
-}
+import { getChatbotDifficulty, updateChatbotDifficulty, copyChatbotDifficulty } from '@/apis/custom';
+import { SubCategory, Category, ChatbotDifficulty } from '@/types/difficulty';
 
 interface DifficultyContextType {
   // 상태
@@ -69,13 +54,7 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
       setError(null);
 
       try {
-        const response = await fetch(`/aicheck/chatbot/prompt/${childId}`);
-
-        if (!response.ok) {
-          throw new Error('설정을 불러오는데 실패했습니다.');
-        }
-
-        const data: ChatbotDifficulty = await response.json();
+        const data = await getChatbotDifficulty(Number(childId));
         setDifficultyData(data);
 
         // 카테고리별 난이도 초기화
@@ -202,17 +181,10 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
     if (!difficultyData) return false;
 
     try {
-      const response = await fetch(`/aicheck/chatbot/prompt/${childId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(difficultyData),
+      await updateChatbotDifficulty({
+        childId: Number(childId),
+        difficulty: difficultyData,
       });
-
-      if (!response.ok) {
-        throw new Error('설정을 저장하는데 실패했습니다.');
-      }
 
       return true;
     } catch (err) {
@@ -222,27 +194,22 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
     }
   };
 
-  // 다른 자녀의 설정 복사 - 복사 API를 사용하지 않고 조회 API만 사용
+  // 다른 자녀의 설정 복사
   const copySettingsFromChild = async (sourceChildId: string): Promise<void> => {
     try {
-      // 복사 API 대신 조회 API를 사용하여 소스 자녀의 설정을 가져옴
-      const response = await fetch(`/aicheck/chatbot/prompt/${sourceChildId}`);
+      const result = await copyChatbotDifficulty({
+        targetChildId: Number(childId),
+        sourceChildId: Number(sourceChildId),
+      });
 
-      if (!response.ok) {
-        throw new Error('설정을 불러오는데 실패했습니다.');
-      }
-
-      // 소스 자녀의 설정 데이터 가져오기
-      const sourceData: ChatbotDifficulty = await response.json();
-
-      // 가져온 설정을 현재 화면에 적용
-      setDifficultyData(sourceData);
+      // 복사된 결과를 화면에 적용
+      setDifficultyData(result);
 
       // 카테고리별 난이도 초기화
       const difficultyMap: Record<string, string> = {};
       const initialExpandedState: Record<string, boolean> = {};
 
-      sourceData.categoryDifficulties.forEach((category: Category) => {
+      result.categoryDifficulties.forEach((category: Category) => {
         const koreanCategoryName = categoryMapping[category.categoryName] || category.categoryName;
 
         if (areAllSameDifficulty(category.subCategories)) {

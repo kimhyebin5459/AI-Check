@@ -22,19 +22,19 @@ export default function AccountCard({ account, onSelect, hasSelectButton = true 
 
   return (
     <div
-      className="flex items-center justify-between rounded-xl border border-gray-400 p-4"
+      className={`flex items-center justify-between rounded-xl p-4 ${hasSelectButton ? 'border border-gray-400' : 'shadow-outline'}`}
       onClick={hasSelectButton ? handleClick : undefined}
     >
       <div>
-        <div className="mb-1 flex items-center text-xl text-gray-700">
-          <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-md bg-gray-200">
-            <div className="h-6 w-6 items-center justify-center">
-              <Image src={Bank} alt="은행" width={24} height={24} priority />
-            </div>
+        <div className="flex items-center space-x-3 text-xl text-gray-700">
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gray-200">
+            <Image src={Bank} alt="은행" className="h-6 w-6 items-center justify-center" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">{`${account.accountName}`}</p>
+            <p className="text-base text-gray-600">{account.accountNo}</p>
           </div>
         </div>
-        <div className="text-sm text-gray-600">{`${account.accountName} 계좌`}</div>
-        <div className="text-base text-gray-600">{account.accountNo}</div>
       </div>
       {hasSelectButton && (
         <Button

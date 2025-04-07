@@ -1,13 +1,33 @@
+import { MyAccountInfo } from '@/types/user';
+
 export const user = {
   name: '김나비',
   birth: '20000101',
   image: 'https://img.freepik.com/free-psd/close-up-woman-with-donuts_23-2149144461.jpg?semt=ais_hybrid',
   account: {
-    id: '1',
+    id: 1,
     name: '입출금 계좌',
-    no: '10001',
-  },
+    no: '12345678911',
+  } as MyAccountInfo,
 };
+
+export const myAccountList = [
+  {
+    id: 1,
+    name: '입출금 계좌',
+    no: '12345678911',
+  },
+  {
+    id: 2,
+    name: '월급용 계좌',
+    no: '12345678922',
+  },
+  {
+    id: 3,
+    name: '저축용 계좌',
+    no: '12345678933',
+  },
+] as MyAccountInfo[];
 
 export const userList = [
   {

@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TransactionCard from '@/components/money-check/TransactionCard';
-import { TransactionGroup } from '@/types/transaction';
-import { formatDateToParam } from '@/utils/fotmatDate';
+import { TransactionFilterType } from '@/types/transaction';
+import useTransactionHistory from '@/hooks/query/useTransactionHistory';
+import Spinner from '@/components/common/Spinner';
 
 type Props = {
   childId?: string;
   startDate: Date;
   endDate: Date;
-  type?: string;
+  type?: TransactionFilterType;
   showFilterHeader?: boolean;
   onFilterClick?: () => void;
   customFilterText?: string;
@@ -24,50 +25,16 @@ export default function TransactionHistory({
   onFilterClick,
   customFilterText = '한달 | 전체 ▼',
 }: Props) {
-  const [transactions, setTransactions] = useState<TransactionGroup[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadTransactionData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // 추후 실제 api 연동시 주석 풀고 const 지우기
-        // let response;
-        // if (childId) {
-        //   response = await fetch(
-        //     `/aicheck/transaction-records/child?childId=${childId}&startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
-        //   );
-        // } else {
-        const response = await fetch(
-          `/aicheck/transaction-records?startDate=${formatDateToParam(startDate)}&endDate=${formatDateToParam(endDate)}&type=${type}`
-        );
-        // }
-
-        if (!response.ok) {
-          throw new Error('API 호출 실패');
-        }
-
-        const result = await response.json();
-
-        if (result.data && Array.isArray(result.data)) {
-          setTransactions(result.data);
-        } else {
-          setTransactions([]);
-        }
-      } catch (error) {
-        console.error('트랜잭션 데이터 로드 실패:', error);
-        setError('거래 내역을 불러오는 데 실패했습니다.');
-        setTransactions([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadTransactionData();
-  }, [startDate, endDate, type, childId]);
+  const {
+    data: transactions = [],
+    isLoading,
+    error,
+  } = useTransactionHistory({
+    childId: childId ? Number(childId) : undefined,
+    startDate,
+    endDate,
+    type,
+  });
 
   function formatDate(dateStr: string): string {
     const currentDate = new Date();
@@ -88,17 +55,21 @@ export default function TransactionHistory({
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="rounded-lg bg-white p-4 text-center shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-        거래 내역을 불러오는 중...
+        <div className="flex justify-center py-4">
+          <Spinner />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="rounded-lg bg-white p-4 text-center text-red-500 shadow-[0_0_20px_rgba(0,0,0,0.25)]">{error}</div>
+      <div className="rounded-lg bg-white p-4 text-center text-red-500 shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+        거래 내역을 불러오는 데 실패했습니다.
+      </div>
     );
   }
 

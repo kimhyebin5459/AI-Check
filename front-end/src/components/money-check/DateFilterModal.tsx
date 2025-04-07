@@ -5,14 +5,15 @@ import Button from '@/components/common/Button';
 import Tag from '@/components/common/Tag';
 
 import { formatDateToParam } from '@/utils/fotmatDate';
+import { TransactionFilterType } from '@/types/transaction';
 
 interface Props {
   isModalOpen: boolean;
   onClose: () => void;
-  onApply: (startDate: Date, endDate: Date, type: string, dateRangeType: string) => void; // dateRangeType 추가
+  onApply: (startDate: Date, endDate: Date, type: TransactionFilterType, dateRangeType: string) => void; // dateRangeType 추가
   initialStartDate: Date;
   initialEndDate: Date;
-  initialType: string;
+  initialType: TransactionFilterType;
   initialDateRangeType?: string;
 }
 
@@ -27,7 +28,7 @@ export default function DateFilterModal({
 }: Props) {
   const [startDate, setStartDate] = useState<Date>(initialStartDate);
   const [endDate, setEndDate] = useState<Date>(initialEndDate);
-  const [type, setType] = useState<string>(initialType);
+  const [type, setType] = useState<TransactionFilterType>(initialType);
   const [dateRangeType, setDateRangeType] = useState<string>(initialDateRangeType);
 
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {

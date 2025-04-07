@@ -1,9 +1,11 @@
 import Header from '@/components/common/Header';
+import ProfileSection from '@/components/profile/ProfileSection';
 
-export default function Page() {
+export default async function Page() {
   return (
-    <div className="container bg-gray-50">
-      <Header hasBackButton title="내 정보" hasBorder={false} />내 정보 페이지
+    <div className="container space-y-7 bg-gray-50 px-5">
+      <Header hasBackButton title="내 정보" hasBorder={false} />
+      <ProfileSection />
     </div>
   );
 }

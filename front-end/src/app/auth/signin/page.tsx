@@ -8,6 +8,9 @@ import Input from '@/components/common/Input';
 import Header from '@/components/common/Header';
 import Image from 'next/image';
 import { Aicheck } from '@/public/icons';
+import { postSignIn } from '@/apis/user';
+import { useUserStore } from '@/stores/useUserStore';
+import { authBridge } from '@/apis/authBridge';
 
 interface FormData {
   email: string;
@@ -22,6 +25,8 @@ interface FormErrors {
 
 export default function Page() {
   const router = useRouter();
+  const { setAccessToken, setIsParent } = useUserStore();
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -69,9 +74,13 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { accessToken, isParent, accountConnected, refreshToken } = await postSignIn(formData);
 
-      router.push('/auth/account-link');
+      authBridge.saveTokens(accessToken, refreshToken);
+      setAccessToken(accessToken);
+      setIsParent(isParent);
+
+      router.push(`${!accountConnected ? '/auth/account-link' : '/'}`);
     } catch (error) {
       console.error('Login failed:', error);
       setErrors({

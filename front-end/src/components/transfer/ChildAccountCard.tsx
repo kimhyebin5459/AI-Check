@@ -1,34 +1,31 @@
 import { formatMoney } from '@/utils/formatMoney';
 import ProfileImage from '../common/ProfileImage';
 import Link from 'next/link';
+import { ChildAccount } from '@/types/account';
 
 interface Props {
-  childId: number;
-  image: string;
-  name: string;
-  balance: number;
-  accountNo: string;
-  accountName: string;
+  account: ChildAccount;
 }
 
-export default function ChildAccountCard({ childId, image, name, balance, accountNo, accountName }: Props) {
-  console.log(childId, accountName);
-
+export default function ChildAccountCard({ account }: Props) {
   return (
-    <Link href={`manage-child/money-check/${childId}`}>
-      <div className="shadow-base grid h-28 w-full grid-cols-7 rounded-xl border border-yellow-200">
-        <div className="col-span-2 flex items-center justify-center rounded-tl-xl rounded-bl-xl bg-yellow-200">
-          <ProfileImage image={image} size="lg" />
+    <Link
+      href={`manage-child/money-check/${account?.memberId}`}
+      className="shadow-base mb-4 grid h-28 w-full grid-cols-7 rounded-xl border border-yellow-200"
+    >
+      <div className="col-span-2 flex items-center justify-center rounded-tl-xl rounded-bl-xl bg-yellow-200">
+        <ProfileImage image={account?.image} size="lg" />
+      </div>
+      <div className="col-span-5 flex flex-col justify-between rounded-tr-xl rounded-br-xl bg-white p-4">
+        <div className="flex justify-between">
+          <p className="text-xl font-bold">{account?.name}</p>
+          <p className={`${account?.balance > 9999999 ? 'text-lg' : 'text-xl'} font-bold`}>
+            {formatMoney(account?.balance)}
+          </p>
         </div>
-        <div className="col-span-5 flex flex-col justify-between p-4">
-          <div className="flex justify-between">
-            <p className="text-xl font-bold">{name}</p>
-            <p className="text-2xl font-bold">{formatMoney(balance)}</p>
-          </div>
-          <div className="flex flex-col font-semibold text-gray-600">
-            <p className="text-xs">{accountName}</p>
-            <p>{accountNo}</p>
-          </div>
+        <div className="flex flex-col font-semibold text-gray-600">
+          <p className="text-xs">{account?.accountName}</p>
+          <p>{account?.accountNo}</p>
         </div>
       </div>
     </Link>

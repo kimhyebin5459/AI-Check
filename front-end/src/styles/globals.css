@@ -65,10 +65,11 @@ body {
   --color-green-100: #ebf9eb;
   --color-green-200: #52bf55;
 
-  --color-chart-1: #90b2fc;
-  --color-chart-2: #7ac5d8;
-  --color-chart-3: #3f71e4;
-  --color-chart-4: #052977;
+  --color-chart-1: #235dd8;
+  --color-chart-2: #3ba2eb;
+  --color-chart-3: #2cc9d5;
+  --color-chart-4: #79dd88;
+  --color-chart-5: #c2e996;
 
   --color-purple: #b55de8;
   --color-periwinkle: #7a99ff;
@@ -78,6 +79,7 @@ body {
   --color-yellowgreen: #99da7d;
 
   --shadow-base: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  --shadow-outline: 0px 0px 15px 0px rgba(255, 226, 97, 0.79);
 
   --radius-modal: 1.75rem;
 

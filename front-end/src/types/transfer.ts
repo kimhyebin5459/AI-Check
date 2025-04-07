@@ -4,3 +4,8 @@ export interface Transfer {
   accountNo: string;
   amount: number;
 }
+
+export interface TransferPostForm {
+  receiverAccountNo: string;
+  amount: number;
+}

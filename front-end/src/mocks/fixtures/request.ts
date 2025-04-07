@@ -1,6 +1,6 @@
-import { Request, RequestType, StatusType } from '@/types/request';
+import { TransferRequest, RequestType, StatusType } from '@/types/request';
 
-export const requestList: Request[] = [
+export const requestList = [
   {
     id: 1,
     type: 'INCREASE',
@@ -73,11 +73,11 @@ export const requestList: Request[] = [
     description: '배고파서 떡볶이 먹고싶어요',
     createdAt: '2025-03-11T14:13:53.588Z',
   },
-];
+] as TransferRequest[];
 
 export const requestTransfer = {
   id: 4,
-  type: 'INCREASE' as RequestType,
+  type: 'ONE_TIME' as RequestType,
   status: 'WAITING' as StatusType,
   childId: 1,
   image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
@@ -89,7 +89,7 @@ export const requestTransfer = {
 
 export const requestInCrease = {
   id: 4,
-  type: 'ONE_TIME' as RequestType,
+  type: 'INCREASE' as RequestType,
   status: 'WAITING' as StatusType,
   childId: 1,
   image: 'https://www.shutterstock.com/image-illustration/3d-cute-girl-happy-pose-260nw-2399125661.jpg',
