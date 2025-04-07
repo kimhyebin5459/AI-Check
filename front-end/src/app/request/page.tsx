@@ -1,27 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import Header from '@/components/common/Header';
 import RequestCard from '@/components/request/RequestCard';
 import Spinner from '@/components/common/Spinner';
-import { getRequestList } from '@/apis/request';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
+import useGetRequestList from '@/hooks/query/useGetRequestList';
 
 export default function Page() {
   const [isParent, setIsParent] = useState<boolean>(false);
 
   const { data: userData, isLoading: userLoading, error: userError } = useGetUserInfo();
-
-  const {
-    data: requestList,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['requestList'],
-    queryFn: getRequestList,
-    enabled: !userLoading,
-  });
+  const { data: requestList, isLoading, error } = useGetRequestList(!userLoading);
 
   useEffect(() => {
     if (userData) {

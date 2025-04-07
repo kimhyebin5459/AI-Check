@@ -6,4 +6,5 @@ export const QUERY_KEYS = {
   CHILD_ACCOUNT_LIST: 'child-account-list',
   REGULAR_LIST: 'regular-list',
   MEMO_RATE: 'memo-rate',
+  REQUEST_LIST: 'request-list',
 };
