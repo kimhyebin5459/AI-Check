@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import chatApi from '@/apis/chat';
 import { ChatType, ChatMessage, ChatSession, PersuadeResponse, QuestionResponse, State } from '@/types/chat';
+import { startChat, sendPersuadeMessage, sendQuestionMessage, endChat } from '@/apis/chat';
 
 interface ChatStore {
   session: ChatSession | null;
@@ -26,7 +26,6 @@ const generateMessageId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-// Zustand 스토어 생성
 const useChatStore = create<ChatStore>()(
   devtools(
     persist(
@@ -41,7 +40,7 @@ const useChatStore = create<ChatStore>()(
           try {
             set({ isLoading: true, error: null, state: 'PROCEEDING' });
 
-            await chatApi.startChat({ type: chatType });
+            await startChat({ chatType });
 
             const firstMessage =
               chatType === 'PERSUADE'
@@ -141,14 +140,6 @@ const useChatStore = create<ChatStore>()(
                   ? 'FINISHED'
                   : state.state,
             }));
-
-            // // 채팅이 완료되었으면 자동으로 종료 API 호출
-            // if (
-            //   (session.chatType === 'PERSUADE' && (response as PersuadeResponse).isPersuaded) ||
-            //   (session.chatType === 'QUESTION' && (response as QuestionResponse).result !== 'JUDGING')
-            // ) {
-            //   //await chatApi.endChat({ type: session.chatType });
-            // }
           } catch (error) {
             console.error('메시지 전송 오류:', error);
             set({
@@ -160,7 +151,7 @@ const useChatStore = create<ChatStore>()(
 
         // 채팅 종료
         endChat: async () => {
-          const { session } = get();
+          const { session, state } = get();
           if (!session) {
             set({ error: '활성화된 채팅 세션이 없습니다.' });
             return;
@@ -169,13 +160,18 @@ const useChatStore = create<ChatStore>()(
           try {
             set({ isLoading: true, error: null });
 
-            // 백엔드 API 호출
-            await endChat({ chatType: session.chatType });
+            // 채팅이 자연스럽게 완료되지 않은 경우에만 API 호출
+            // 즉, state가 'FINISHED'가 아닌 경우에만 API 호출
+            if (state !== 'FINISHED' && session.isActive) {
+              await endChat({ chatType: session.chatType });
+            }
 
             // 세션 비활성화
             set((state) => ({
               session: state.session ? { ...state.session, isActive: false } : null,
               isLoading: false,
+              // 강제 종료 시에도 state를 FINISHED로 설정
+              state: 'FINISHED',
             }));
           } catch (error) {
             console.error('채팅 종료 오류:', error);
@@ -200,14 +196,14 @@ const useChatStore = create<ChatStore>()(
 
         // 비활성 체크 (5분 이상 활동이 없으면 자동 종료)
         checkInactivity: () => {
-          const { session } = get();
-          if (!session || !session.isActive) return;
+          const { session, state } = get();
+          if (!session || !session.isActive || state === 'FINISHED') return;
 
           const now = Date.now();
           const timeSinceLastActivity = now - session.lastActivity;
 
           if (timeSinceLastActivity > INACTIVE_TIMEOUT) {
-            get().endChat(); // 비활성 시간초과 시 채팅 종료
+            get().endChat(); // 비활성 시간초과 시 채팅 종료 (이 경우 endChat API 호출)
           }
         },
       }),

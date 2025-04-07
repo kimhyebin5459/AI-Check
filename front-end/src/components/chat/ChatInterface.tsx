@@ -73,6 +73,10 @@ export default function ChatInterface({ onClickClose }: Props) {
     setIsResultModalOpened(state === 'FINISHED');
   }, [state, setIsResultModalOpened]);
 
+  const handleCloseButton = () => {
+    onClickClose();
+  };
+
   return (
     <div>
       <div className="flex h-full w-full flex-col">
@@ -93,7 +97,7 @@ export default function ChatInterface({ onClickClose }: Props) {
 
       <div className="bottom-btn absolute w-full bg-white px-4 pt-2 pb-8">
         <div className="mt-2 mb-2 flex justify-start">
-          <button onClick={onClickClose} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
+          <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">
               <span>대화 종료하기 </span> <X size={20} />
             </div>
