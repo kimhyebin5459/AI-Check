@@ -14,18 +14,10 @@ import useModal from '@/hooks/useModal';
 import { getFilterText } from '@/utils/formatTransaction';
 import Spinner from '@/components/common/Spinner';
 import { TransactionFilterType } from '@/types/transaction';
-
-interface Account {
-  accountId?: number;
-  accountName: string;
-  accountNo: string;
-  balance?: number;
-}
-
-interface User {
-  image: string;
-  name?: string;
-}
+import { getChildAccount } from '@/apis/account';
+import { Account } from '@/types/account';
+import { ChildProfile } from '@/types/user';
+import useGetChildProfileList from '@/hooks/query/useGetChildProfileList';
 
 interface Props {
   params: Promise<{ childId: string }>;
@@ -44,9 +36,12 @@ export default function MoneyCheckClient({ params }: Props) {
   }, [params]);
 
   const [account, setAccount] = useState<Account | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [childProfile, setChildProfile] = useState<ChildProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // 아이 프로필 목록 쿼리 추가
+  const { data: childProfileList, isLoading: isProfileLoading } = useGetChildProfileList();
 
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [startDate, setStartDate] = useState<Date>(() => {
@@ -60,33 +55,31 @@ export default function MoneyCheckClient({ params }: Props) {
   const { isModalOpen, openModal, closeModal } = useModal();
   const router = useRouter();
 
-  // 자녀 계정 정보 불러오기
+  // 아이 프로필 찾기
+  useEffect(() => {
+    if (childProfileList && childId) {
+      const foundChild = childProfileList.find((child) => child.childId === Number(childId));
+      if (foundChild) {
+        setChildProfile(foundChild);
+      }
+    }
+  }, [childProfileList, childId]);
+
   useEffect(() => {
     const fetchChildData = async () => {
+      if (!childId) return;
+
       setLoading(true);
       try {
-        // 자녀 계정 정보 가져오기
-        if (!childId) return;
+        const response = await getChildAccount(Number(childId));
 
-        const response = await fetch(`/aicheck/accounts/${childId}`);
-
-        if (!response.ok) {
-          throw new Error('계정 정보를 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
-
-        console.log('here:', data);
+        console.log('here:', response);
 
         setAccount({
-          accountName: data.account.accountName || '입출금 계좌',
-          accountNo: data.account.accountNo || '',
-          balance: data.account.balance || 0,
-        });
-
-        setUser({
-          image: data.account.image || '/placeholder-profile.png',
-          name: data.account.name || '아이',
+          accountId: response.accountId,
+          accountName: response.accountName || '입출금 계좌',
+          accountNo: response.accountNo || '',
+          balance: response.balance || 0,
         });
       } catch (err) {
         console.error('Error fetching child data:', err);
@@ -119,7 +112,8 @@ export default function MoneyCheckClient({ params }: Props) {
     setDateRangeType(newDateRangeType);
   };
 
-  if (loading) {
+  // 로딩 상태 병합 (계좌 로딩 + 프로필 로딩)
+  if (loading || isProfileLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner size="md" />
@@ -127,10 +121,20 @@ export default function MoneyCheckClient({ params }: Props) {
     );
   }
 
-  if (error || !account || !user) {
+  if (error || !account) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center p-5">
         <p className="mb-4 text-center text-red-500">{error || '데이터를 불러오는데 실패했습니다.'}</p>
+        <Button onClick={() => window.location.reload()}>다시 시도</Button>
+      </div>
+    );
+  }
+
+  // 프로필 정보가 없을 경우 처리
+  if (!childProfile) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center p-5">
+        <p className="mb-4 text-center text-red-500">아이 프로필 정보를 찾을 수 없습니다.</p>
         <Button onClick={() => window.location.reload()}>다시 시도</Button>
       </div>
     );
@@ -146,7 +150,7 @@ export default function MoneyCheckClient({ params }: Props) {
               <div className="flex w-full items-center justify-between">
                 <div className="flex cursor-pointer items-center text-2xl">
                   <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                    <span className="font-bold">{user.name}</span>
+                    <span className="font-bold">{childProfile.name}</span>
                     &nbsp;
                     <span className="font-light">님</span>
                   </div>
@@ -161,7 +165,7 @@ export default function MoneyCheckClient({ params }: Props) {
             <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
               <div className="rounded-t-lg bg-yellow-300 p-2.5">
                 <div className="flex items-center">
-                  <ProfileImage image={user.image} size="md" />
+                  <ProfileImage image={childProfile.image} size="md" />
                   <div className="ml-5 font-light">
                     <p className="text-xl text-white">{account.accountName}</p>
                     <p className="text-base text-white">{account.accountNo}</p>
