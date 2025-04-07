@@ -28,9 +28,10 @@ const chartOptions = {
 interface Props {
   reportData: FirstCategory[];
   totalAmount: number;
+  name: string;
 }
 
-export default function FirstCategoryChart({ reportData, totalAmount }: Props) {
+export default function FirstCategoryChart({ reportData, totalAmount, name }: Props) {
   const chartData = {
     labels: reportData.map((category) => category.displayName),
     datasets: [
@@ -45,8 +46,9 @@ export default function FirstCategoryChart({ reportData, totalAmount }: Props) {
   return (
     <div className="relative flex w-70 items-center justify-center">
       <Doughnut data={chartData} options={chartOptions} />
-      <div className="absolute left-0 w-50 text-center">
-        <p className="text-xl font-bold">{formatMoney(totalAmount)}</p>
+      <div className="absolute left-0 w-50 pb-1.5 text-center">
+        <p className="-mb-0.5 text-xs font-medium">{name}님의 지출 합계</p>
+        <p className="text-xl font-extrabold">{formatMoney(totalAmount)}</p>
       </div>
     </div>
   );
