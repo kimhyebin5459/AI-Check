@@ -5,4 +5,5 @@ export const QUERY_KEYS = {
   CHILD_PROFILE_LIST: 'child-profile-list',
   CHILD_ACCOUNT_LIST: 'child-account-list',
   REGULAR_LIST: 'regular-list',
+  MEMO_RATE: 'memo-rate',
 };
