@@ -2,8 +2,8 @@
 
 import UserItem from '@/components/main/UserItem';
 import { formatMoney } from '@/utils/formatMoney';
-import { memoRate } from '@/mocks/fixtures/account';
 import useGetMyAccount from '@/hooks/query/useGetMyAccount';
+import useGetMemoRate from '@/hooks/query/useGetMemoRate';
 
 interface Props {
   name: string;
@@ -12,7 +12,7 @@ interface Props {
 
 export default function AccountCard({ name, image }: Props) {
   const { data: account } = useGetMyAccount();
-  const { memoCount, totalCount } = memoRate;
+  const { data: memo } = useGetMemoRate();
 
   return (
     <div className="shadow-base grid w-full grid-cols-7 rounded-xl border border-yellow-300">
@@ -20,7 +20,7 @@ export default function AccountCard({ name, image }: Props) {
         <UserItem image={image} name={name} />
       </div>
       <div className="col-span-5 flex w-full flex-col justify-between rounded-tr-xl rounded-br-xl bg-white p-4">
-        <p className={`${account?.balance || 0 > 9999999 ? 'text-xl' : 'text-2xl'} font-bold`}>
+        <p className={`${account?.balance && account?.balance > 9999999 ? 'text-xl' : 'text-2xl'} font-bold`}>
           {formatMoney(account?.balance)}
         </p>
         <div className="font-light text-gray-900">
@@ -29,8 +29,8 @@ export default function AccountCard({ name, image }: Props) {
         </div>
         <div className="flex items-end justify-end">
           <p className="font-thin">메모 작성률</p>
-          <p className="pl-2 text-4xl font-semibold">{memoCount}</p>
-          <p className="text-2xl font-semibold">/{totalCount}</p>
+          <p className="pl-2 text-4xl font-semibold">{memo?.memoCount}</p>
+          <p className="text-2xl font-semibold">/{memo?.totalCount}</p>
         </div>
       </div>
     </div>
