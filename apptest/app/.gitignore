@@ -5,6 +5,7 @@
 # IntelliJ IDEA
 *.iml
 .idea/
+app/cache/
 
 # 기타
 .DS_Store
