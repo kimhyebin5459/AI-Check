@@ -18,7 +18,11 @@
                 android:layout_height="wrap_content"
                 android:text="딥보이스/보이스피싱 결과가 여기에 표시됩니다"
                 android:layout_marginBottom="24dp" />
-
+        <EditText
+                android:id="@+id/etAudioFilename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="오디오 파일명을 입력하세요 (확장자 제외)" />
         <Button
                 android:id="@+id/btnPredictDeepVoice"
                 android:layout_width="match_parent"
