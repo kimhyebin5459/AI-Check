@@ -16,8 +16,7 @@ export default function Page() {
   const { value: description, onChange: onChangeDescription } = useInput<string>('');
   const money = 10000;
 
-  const year = Number(searchParams.get('year'));
-  const month = Number(searchParams.get('month'));
+  const reportId = searchParams.get('reportId');
 
   const handleClick = () => {
     console.log(amount, description);
@@ -28,7 +27,7 @@ export default function Page() {
     <div className="container px-5">
       <Header hasBackButton hasBorder={false} title="용돈 인상 요청 보내기" />
       <div className="flex w-full flex-col items-center space-y-5 pt-4">
-        <ReportSummaryCard year={year} month={month} />
+        {reportId && <ReportSummaryCard reportId={reportId} />}
         <IncreaseContent prevAmount={money} afterAmount={money + Number(amount)} />
         <Input
           type="number"
