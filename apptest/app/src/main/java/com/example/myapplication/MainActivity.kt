@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
             val interpreterDeepVoice = Interpreter(loadModelFile("deepvoice_model.tflite"))
             val interpreterVoicePhishing = Interpreter(loadModelFile("model2.tflite"))
             val interpreterSTT = Interpreter(loadModelFile("stt_float36.tflite"))
+            // 악성 url 모델
+            val onnxModelPath = copyModelToInternalStorage("tfidf_1000_xgb_2000_2025_04_01_07_11_17_acc_9336_xgboost (1).onnx")
 
             // vocab.json 로드
             val vocabJson = assets.open("vocab.json").bufferedReader().use { it.readText() }
@@ -64,14 +66,18 @@ class MainActivity : AppCompatActivity() {
             val scalerParamsJson = assets.open("scaler_params.json").bufferedReader().use { it.readText() }
             val scalerParams = Json.decodeFromString<ScalerParams>(scalerParamsJson)
 
-            // ONNX 모델 로드
-            val onnxModelPath = copyModelToInternalStorage("tfidf_1000_xgb_2000_2025_04_01_07_11_17_acc_9336_xgboost (1).onnx")
+
             ortEnv = OrtEnvironment.getEnvironment()
             ortSession = ortEnv.createSession(onnxModelPath, OrtSession.SessionOptions())
 
-            // 탐지기 초기화
+
+            // 1. 보이스피싱 탐지
+            // 1-1. 통화 내용 기반 탐지
             voicePhishingDetector = VoicePhishingDetector(this, interpreterSTT, interpreterVoicePhishing, wordToIndex)
+            // 1-2. 딥보이스 포함 탐지
             deepVoiceDetector = DeepVoiceDetectorWithChaquopy(this, interpreterDeepVoice)
+
+            // 2. 악성 url 탐지
             urlDetector = UrlDetector(
                 ortSession = ortSession,    // OrtSession
                 ortEnv = ortEnv,            // OrtEnvironment
