@@ -22,11 +22,6 @@ import CalendarButton from './moneycheck/calendarbutton.svg';
 import ChartButton from './moneycheck/chart-button.svg';
 import Chain from './moneycheck/chain.svg';
 
-import Board from './main/board.svg';
-import Devil from './main/devil.svg';
-import Duck from './main/duck.svg';
-import Money from './main/money.svg';
-
 import Shield from './phishing/shield.svg';
 import TriangleAlert from './phishing/triangle-alert.svg';
 
@@ -49,10 +44,6 @@ export {
   Chain,
   RightTriangle,
   DownTriangle,
-  Board,
-  Devil,
-  Duck,
-  Money,
   Spin,
   Shield,
   TriangleAlert,

@@ -1,5 +1,4 @@
 import { reportSummary } from '@/mocks/fixtures/report';
-import { Duck } from '@/public/icons';
 import Image from 'next/image';
 
 interface Props {
@@ -29,7 +28,7 @@ export default function ReportSummaryCard({ year, month }: Props) {
           <span className="text-xl font-bold">{memoCount}건</span>에 메모를 남겼어요.
         </p>
       </div>
-      <Image src={Duck} alt="duck icon" className="absolute top-6 right-3 size-24" />
+      <Image src="/images/duck.png" alt="duck icon" className="absolute top-6 right-3 size-24" />
     </div>
   );
 }

@@ -1,17 +1,14 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { startChat, endChat, sendPersuadeMessage, sendQuestionMessage } from '@/apis/chat';
+import chatApi from '@/apis/chat';
 import { ChatType, ChatMessage, ChatSession, PersuadeResponse, QuestionResponse, State } from '@/types/chat';
 
-// 채팅 스토어 인터페이스
 interface ChatStore {
-  // 상태
   session: ChatSession | null;
   isLoading: boolean;
   error: string | null;
   state: State;
 
-  // 액션
   startChat: (chatType: ChatType) => Promise<void>;
   sendMessage: (message: string) => Promise<void>;
   endChat: () => Promise<void>;
@@ -25,7 +22,6 @@ interface ChatStore {
 // 비활성 타임아웃 설정 (5분 = 300,000밀리초)
 const INACTIVE_TIMEOUT = 300000;
 
-// 메시지 ID 생성 함수
 const generateMessageId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
@@ -35,7 +31,6 @@ const useChatStore = create<ChatStore>()(
   devtools(
     persist(
       (set, get) => ({
-        // 초기 상태
         session: null,
         isLoading: false,
         error: null,
@@ -46,8 +41,7 @@ const useChatStore = create<ChatStore>()(
           try {
             set({ isLoading: true, error: null, state: 'PROCEEDING' });
 
-            // 백엔드 API 호출
-            await startChat({ chatType: chatType });
+            await chatApi.startChat({ type: chatType });
 
             const firstMessage =
               chatType === 'PERSUADE'

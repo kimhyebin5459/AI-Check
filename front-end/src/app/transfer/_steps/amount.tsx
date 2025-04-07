@@ -4,12 +4,13 @@ import Header from '@/components/common/Header';
 import NumberKeypad from '@/components/common/NumberKeypad';
 import Tag from '@/components/common/Tag';
 import { MONEY_UNIT } from '@/constants/moneyUnit';
+import useTransferAmount from '@/hooks/useTransferAmount';
 import { Arrow } from '@/public/icons';
 import { Account } from '@/types/account';
 import { Transfer } from '@/types/transfer';
 import { formatMoney } from '@/utils/formatMoney';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 type Props = {
   transferInfo: Transfer;
@@ -19,9 +20,12 @@ type Props = {
 };
 
 export default function Amount({ transferInfo, myAccount, onNext, onPrev }: Props) {
-  const [amount, setAmount] = useState(0);
+  const { accountName, accountNo, balance = 0 } = myAccount;
 
-  const { accountName, accountNo, balance } = myAccount;
+  const { amount, isWithdrawable, handleNumberClick, handleNumberPlus, handleBackspace } = useTransferAmount(
+    transferInfo.amount,
+    balance
+  );
 
   useEffect(() => {
     window.history.pushState({ page: 'amount' }, '');
@@ -39,26 +43,6 @@ export default function Amount({ transferInfo, myAccount, onNext, onPrev }: Prop
     };
   }, [onPrev]);
 
-  useEffect(() => {
-    if (balance && amount > balance) {
-      setAmount(balance);
-    }
-  }, [amount, balance]);
-
-  const handleNumberPlus = (num: number) => {
-    setAmount(amount + num);
-  };
-
-  const handleNumberClick = (num: number) => {
-    setAmount(amount * 10 + num);
-  };
-
-  const handleBackspace = () => {
-    if (amount > 0) {
-      setAmount(Math.floor(amount / 10));
-    }
-  };
-
   const handleSubmit = () => {
     onNext({ ...transferInfo, amount: amount });
   };
@@ -75,11 +59,16 @@ export default function Amount({ transferInfo, myAccount, onNext, onPrev }: Prop
           <p className="text-mdl font-bold">얼마를 보낼까요?</p>
         </div>
       </div>
-      <p
-        className={`flex min-h-9 items-center justify-center font-semibold ${!amount ? 'text-xl text-gray-400' : 'text-2xl'}`}
+      <div
+        className={`flex min-h-9 flex-col items-center justify-center font-semibold ${
+          !amount ? 'text-xl text-gray-400' : amount > balance ? 'text-2xl text-red-600' : 'text-2xl'
+        }`}
       >
         {!amount ? '금액을 입력하세요' : formatMoney(amount)}
-      </p>
+        {amount > balance && (
+          <p className="text-center text-base font-semibold text-red-600">출금 가능 금액을 초과할 수 없어요.</p>
+        )}
+      </div>
       <div className="w-full space-y-4">
         <div className="flex justify-between rounded-full bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800">
           <div className="flex space-x-2">
@@ -104,6 +93,7 @@ export default function Amount({ transferInfo, myAccount, onNext, onPrev }: Prop
           rightAction="submit"
           onBackspace={handleBackspace}
           onSubmit={handleSubmit}
+          isSubmitEnabled={isWithdrawable}
         />
       </div>
     </div>

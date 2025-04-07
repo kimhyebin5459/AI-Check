@@ -6,16 +6,20 @@ export const postSignIn = async ({ email, password }: SignInPostForm) => {
   return response;
 };
 
-export const postSignUp = async ({ isParent, email, password }: SignUpPostForm) => {
-  return await fetcher.post({ url: 'aicheck/auth/signup', body: { isParent, email, password } });
+export const postParentSignUp = async ({ email, password }: SignUpPostForm) => {
+  return await fetcher.post({ url: 'aicheck/auth/signup', body: { email, password } });
+};
+
+export const postChildSignUp = async ({ email, password }: SignUpPostForm) => {
+  return await fetcher.post({ url: 'aicheck/auth/signup/child', body: { email, password } });
 };
 
 export const postEmailVerification = async (email: string) => {
   return await fetcher.post({ url: 'aicheck/auth/email', body: { email } });
 };
 
-export const postEmailConfirm = async (code: string) => {
-  return await fetcher.post({ url: 'aicheck/auth/email/check', body: { code } });
+export const postEmailConfirm = async (email: string, code: string) => {
+  return await fetcher.post({ url: 'aicheck/auth/email/check', body: { email, code } });
 };
 
 export const postReissueAccessToken = async (refreshToken: string) => {
@@ -29,6 +33,13 @@ export const postReissueAccessToken = async (refreshToken: string) => {
 
 export const getChildProfileList = async (): Promise<ChildProfile[]> => {
   return await fetcher.get({ url: 'aicheck/members/children/profiles' });
+};
+
+export const patchUserInfo = async (image: File) => {
+  const formData = new FormData();
+  formData.append('image', image);
+
+  return await fetcher.patch({ url: 'aicheck/members/details', body: formData, headers: {} });
 };
 
 export const getUserInfo = async (): Promise<User> => {

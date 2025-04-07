@@ -1,11 +1,16 @@
 'use client';
 
+import ErrorComponent from '@/app/_components/error-component';
+import LoadingComponent from '@/app/_components/loading-component';
 import ProfileImage from '@/components/common/ProfileImage';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 import Link from 'next/link';
 
 export default function Page() {
-  const { data: user } = useGetUserInfo();
+  const { data: user, isPending, isError } = useGetUserInfo();
+
+  if (isPending) return <LoadingComponent />;
+  if (isError) return <ErrorComponent />;
 
   return (
     <>

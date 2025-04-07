@@ -14,7 +14,7 @@ export const getTransactionHistory = async ({
   endDate,
   type,
 }: TransactionReq): Promise<TransactionGroup[]> => {
-  const baseUrl = childId ? `aicheck/transaction-records/child/` : `aicheck/transaction-records`;
+  const baseUrl = childId ? `aicheck/transaction-records/child` : `aicheck/transaction-records`;
 
   const response = await fetcher.get({
     url:
