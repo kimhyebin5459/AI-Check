@@ -6,7 +6,6 @@ export interface SignInPostForm {
 }
 
 export interface SignUpPostForm {
-  isParent: boolean;
   email: string;
   password: string;
 }
