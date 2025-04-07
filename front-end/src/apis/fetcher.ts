@@ -92,7 +92,7 @@ const fetchRequest = async ({ url, method, body, headers = {} }: Props) => {
 
   return await fetch(`${BASE_URL}/${url}`, {
     method,
-    body: body ? JSON.stringify(body) : undefined,
+    body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined,
     headers: {
       ...headers,
       ...(accessToken && accessToken !== 'VALUE' ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -120,7 +120,12 @@ const fetcher = {
   },
 
   patch({ url, body, headers }: FetchProps) {
-    return request({ url, method: 'PATCH', body, headers: { ...headers, 'Content-Type': 'application/json' } });
+    return request({
+      url,
+      method: 'PATCH',
+      body,
+      headers: { ...headers, ...(body instanceof FormData ? {} : { 'Content-Type': 'application/json' }) },
+    });
   },
 
   put({ url, body, headers }: FetchProps) {

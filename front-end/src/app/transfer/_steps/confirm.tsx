@@ -4,7 +4,7 @@ import Button from '@/components/common/Button';
 import Header from '@/components/common/Header';
 import ProfileImage from '@/components/common/ProfileImage';
 import { Account } from '@/types/account';
-import { Transfer } from '@/types/transfer';
+import { Transfer, TransferPostForm } from '@/types/transfer';
 import { formatMoney } from '@/utils/formatMoney';
 import { useEffect } from 'react';
 
@@ -13,9 +13,10 @@ type Props = {
   myAccount: Account;
   onNext: () => void;
   onPrev: () => void;
+  onCreateTransfer: (form: TransferPostForm) => void;
 };
 
-export default function Confirm({ transferInfo, myAccount, onNext, onPrev }: Props) {
+export default function Confirm({ transferInfo, myAccount, onNext, onPrev, onCreateTransfer }: Props) {
   const { accountName, accountNo, balance } = myAccount;
   const { name, image, amount } = transferInfo;
 
@@ -36,7 +37,7 @@ export default function Confirm({ transferInfo, myAccount, onNext, onPrev }: Pro
   }, [onPrev]);
 
   const handleClick = () => {
-    console.log(transferInfo.accountNo, amount);
+    onCreateTransfer({ receiverAccountNo: transferInfo.accountNo, amount });
     onNext();
   };
 
@@ -46,7 +47,7 @@ export default function Confirm({ transferInfo, myAccount, onNext, onPrev }: Pro
       <div className="flex w-full flex-col items-center space-y-6 pt-14">
         <ProfileImage image={image} size="xl" />
         <div className="text-center text-2xl font-bold">
-          <p>{name} 에게</p>
+          <p>{name} 님께</p>
           <p>{formatMoney(amount)}을 보낼까요?</p>
         </div>
 

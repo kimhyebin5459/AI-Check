@@ -4,9 +4,17 @@ interface Props {
   rightAction: 'arrow' | 'submit';
   onBackspace: () => void;
   onSubmit?: () => void;
+  isSubmitEnabled?: boolean;
 }
 
-export default function NumberKeypad({ onNumberClick, leftAction = null, rightAction, onBackspace, onSubmit }: Props) {
+export default function NumberKeypad({
+  onNumberClick,
+  leftAction = null,
+  rightAction,
+  onBackspace,
+  onSubmit,
+  isSubmitEnabled,
+}: Props) {
   return (
     <div className="mx-auto mt-auto mb-16 w-full max-w-xs">
       <div className="grid w-full grid-cols-3 gap-x-10 gap-y-9">
@@ -40,8 +48,21 @@ export default function NumberKeypad({ onNumberClick, leftAction = null, rightAc
 
         <div className="flex items-center justify-center">
           <button
-            onClick={rightAction === 'arrow' ? onBackspace : onSubmit}
-            className={`grid h-12 w-full place-items-center font-semibold ${rightAction === 'arrow' ? 'text-3xl text-gray-400' : 'text-2xl'}`}
+            onClick={() => {
+              if (rightAction === 'submit' && !isSubmitEnabled) return;
+              if (rightAction === 'submit') {
+                if (isSubmitEnabled) onSubmit?.();
+              } else if (rightAction === 'arrow') {
+                onBackspace();
+              }
+            }}
+            className={`grid h-12 w-full place-items-center font-semibold ${
+              rightAction === 'arrow'
+                ? 'text-3xl text-gray-400'
+                : isSubmitEnabled
+                  ? 'text-2xl'
+                  : 'text-2xl text-gray-300'
+            }`}
           >
             {rightAction === 'arrow' ? '←' : '완료'}
           </button>

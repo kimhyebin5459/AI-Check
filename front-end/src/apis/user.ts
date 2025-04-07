@@ -35,6 +35,13 @@ export const getChildProfileList = async (): Promise<ChildProfile[]> => {
   return await fetcher.get({ url: 'aicheck/members/children/profiles' });
 };
 
+export const patchUserInfo = async (image: File) => {
+  const formData = new FormData();
+  formData.append('image', image);
+
+  return await fetcher.patch({ url: 'aicheck/members/details', body: formData, headers: {} });
+};
+
 export const getUserInfo = async (): Promise<User> => {
   return await fetcher.get({ url: 'aicheck/members/details' });
 };
