@@ -3,20 +3,39 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/common/Header';
 import PhishingCard from '@/components/phishing/PhishingCard';
-import { PhishingAlert } from '@/types/phishing';
-import { getPhishingAlerts } from '@/apis/phishing';
+
+interface PhisingAlert {
+  id: number;
+  displayName: string;
+  type: string;
+  url: string | null;
+  phoneNumber: string | null;
+  score: number;
+  createdAt: string;
+}
 
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [alerts, setAlerts] = useState<PhishingAlert[]>([]);
+  const [alerts, setAlerts] = useState<PhisingAlert[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const alertsData = await getPhishingAlerts();
+        const accessToken = 'mock-jwt-token';
 
+        const alertsResponse = await fetch('aicheck/phishings/family', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!alertsResponse.ok) {
+          throw new Error('알림 데이터를 불러오는데 실패했습니다.');
+        }
+
+        const alertsData = await alertsResponse.json();
         setAlerts(alertsData);
       } catch (err) {
         setError(err instanceof Error ? err.message : '데이터를 불러오는데 오류가 발생했습니다.');
