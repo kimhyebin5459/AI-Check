@@ -48,14 +48,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-
-    packaging {
-        jniLibs {
-//            excludes.add("lib/arm64-v8a/libtensorflowlite_jni.so")
-//            excludes.add("lib/armeabi-v7a/libtensorflowlite_jni.so")
-        }
-
-    }
 }
 
 chaquopy {
@@ -64,16 +56,18 @@ chaquopy {
         buildPython("/Users/seul/.pyenv/shims/python3")
         // buildPython("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python38\\python.exe")
         // buildPython("C:\\Users\\SSAFY\\anaconda3\\python.exe")
-        // python 블럭은 여기서만 가능
         pip {
             install("librosa==0.8.1")
             install("resampy==0.2.2")
             install("numba==0.48.0")
+
+            install("tensorflow==2.1.0")
+            install("protobuf==3.20.3")
+
             install("matplotlib")
             install("numpy")
             install("pillow")
             install("scipy")
-//            install("numpy==1.23.5")
         }
     }
 }
