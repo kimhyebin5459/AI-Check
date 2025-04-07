@@ -2,34 +2,27 @@
 
 import Header from '@/components/common/Header';
 import Button from '@/components/common/Button';
-import { useRouter } from 'next/navigation';
 import useInput from '@/hooks/useInput';
 import Image from 'next/image';
 import { Arrow } from '@/public/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CategoryReportSection from './CategoryReportSection';
 import PeerReportSection from './PeerReportSection';
-import { user } from '@/mocks/fixtures/user';
+import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 
 interface Props {
   paramsId: string;
 }
 
 export default function ReportSection({ paramsId }: Props) {
-  const router = useRouter();
+  const childId = Number(paramsId);
 
-  const { value, onChange } = useInput<string>(new Date().toISOString().slice(0, 7));
+  const { value, onChange } = useInput<string>(
+    new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 7)
+  );
   const [isCategory, setIsCategory] = useState<boolean>(true);
-  const name = user.name;
 
-  useEffect(() => {}, [value]);
-
-  const handleClick = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    router.push(`/request/send?year=${year}&month=${month}`);
-  };
+  const { data: user } = useGetUserInfo();
 
   const handleOpenPicker = () => {
     const input = document.querySelector("input[type='month']") as HTMLInputElement | null;
@@ -39,8 +32,8 @@ export default function ReportSection({ paramsId }: Props) {
   };
 
   return (
-    <div className="flex w-full flex-col items-center overflow-y-auto px-5">
-      <Header hasBackButton title={`${name}의 소비 리포트`} hasBorder={false} />
+    <div className="flex h-full w-full flex-col items-center overflow-y-auto px-5">
+      <Header hasBackButton title="소비 리포트" hasBorder={false} />
       <div className="relative">
         <input
           type="month"
@@ -64,14 +57,9 @@ export default function ReportSection({ paramsId }: Props) {
         </Button>
       </div>
       {isCategory ? (
-        <>
-          <CategoryReportSection date={value} childId={paramsId} />
-          <div className="w-full pt-5 pb-10">
-            <Button onClick={handleClick}>용돈 인상 요청 보내기</Button>
-          </div>
-        </>
+        <CategoryReportSection date={value} childId={childId} userId={user?.memberId || 0} />
       ) : (
-        <PeerReportSection date={value} childId={paramsId} name={name} />
+        <PeerReportSection date={value} childId={childId} />
       )}
     </div>
   );

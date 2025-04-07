@@ -5,4 +5,10 @@ export const QUERY_KEYS = {
   CHILD_PROFILE_LIST: 'child-profile-list',
   CHILD_ACCOUNT_LIST: 'child-account-list',
   REGULAR_LIST: 'regular-list',
+  CATEGORY_REPORT: 'category-report',
+  PEER_REPORT: 'peer-report',
+  CHECK_REPORT_REGISTERED: 'check_report_registered',
+  SUMMARY: 'summary',
+  MEMO_RATE: 'memo-rate',
+  REQUEST_LIST: 'request-list',
 };

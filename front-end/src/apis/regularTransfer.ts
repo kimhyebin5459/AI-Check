@@ -18,7 +18,7 @@ export const deleteRegularTransfer = async (scheduleId: number) => {
   return await fetcher.delete({ url: `batch/schedules/${scheduleId}` });
 };
 
-export const getCheckIsRegistered = async (reportId: number) => {
+export const getCheckIsRegistered = async (reportId: string) => {
   const response = await fetcher.get({ url: `batch/schedules/check?reportId=${reportId}` });
-  return response.check as boolean;
+  return response.registered as boolean;
 };

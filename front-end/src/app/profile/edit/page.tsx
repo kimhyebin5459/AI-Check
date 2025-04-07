@@ -7,6 +7,8 @@ import Header from '@/components/common/Header';
 import ProfileImage from '@/components/common/ProfileImage';
 import AccountEditModal from '@/components/profile/AccountEditModal';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
+import usePatchUserInfo from '@/hooks/query/usePatchUserInfo';
+import usePostAccount from '@/hooks/query/usePostAccount';
 import useModal from '@/hooks/useModal';
 import useProfile from '@/hooks/useProfile';
 import { Arrow } from '@/public/icons';
@@ -18,6 +20,8 @@ export default function Page() {
   const router = useRouter();
 
   const { data: user, isPending, isError } = useGetUserInfo();
+  const { mutate: updateUserInfo, isPending: isImagePending } = usePatchUserInfo();
+  const { mutate: updateAccount } = usePostAccount();
 
   const { image = '', name = '', birth = '', account = { id: 0, name: '', no: '' } } = user || {};
   const { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange } = useProfile(image, account);
@@ -25,7 +29,10 @@ export default function Page() {
   const { isModalOpen, closeModal, openModal } = useModal();
 
   const handleClick = () => {
-    console.log(selectedFile, editAccount.accountId);
+    if (selectedFile) {
+      updateUserInfo(selectedFile);
+    }
+    updateAccount(editAccount.accountId);
     router.push('/profile');
   };
 
@@ -67,7 +74,7 @@ export default function Page() {
           </div>
         </div>
         <div className="bottom-btn">
-          <Button onClick={handleClick}>수정하기</Button>
+          <Button onClick={handleClick}>{isImagePending ? '수정 중...' : '수정하기'}</Button>
         </div>
       </div>
       <AccountEditModal

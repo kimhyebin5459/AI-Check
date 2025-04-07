@@ -7,9 +7,11 @@ import Account from './_steps/account';
 import Amount from './_steps/amount';
 import Confirm from './_steps/confirm';
 import { Transfer } from '@/types/transfer';
-import { account } from '@/mocks/fixtures/account';
 import NoticePage from '@/components/common/NoticePage';
 import { useRouter } from 'next/navigation';
+import useGetMyAccount from '@/hooks/query/useGetMyAccount';
+import usePostTransfer from '@/hooks/query/usePostTransfer';
+import LoadingComponent from '@/app/_components/loading-component';
 
 export default function Page() {
   const router = useRouter();
@@ -21,7 +23,8 @@ export default function Page() {
     accountNo: 'default',
     amount: 0,
   });
-  const myAccount = account;
+  const { data: myAccount } = useGetMyAccount();
+  const { mutate: createTransfer, isPending } = usePostTransfer();
 
   const onNext = (transferInfo?: Transfer) => {
     if (transferInfo) {
@@ -34,14 +37,22 @@ export default function Page() {
     setStepLevel((prev) => prev - 1);
   };
 
+  if (isPending) return <LoadingComponent />;
+
   return (
     <div>
       {steps[stepLevel] === 'account' && <Account onNext={onNext} />}
-      {steps[stepLevel] === 'amount' && (
+      {steps[stepLevel] === 'amount' && myAccount && (
         <Amount transferInfo={transferInfo} myAccount={myAccount} onNext={onNext} onPrev={onPrev} />
       )}
-      {steps[stepLevel] === 'confirm' && (
-        <Confirm transferInfo={transferInfo} myAccount={myAccount} onNext={onNext} onPrev={onPrev} />
+      {steps[stepLevel] === 'confirm' && myAccount && (
+        <Confirm
+          transferInfo={transferInfo}
+          myAccount={myAccount}
+          onNext={onNext}
+          onPrev={onPrev}
+          onCreateTransfer={createTransfer}
+        />
       )}
       {steps[stepLevel] === 'success' && (
         <NoticePage

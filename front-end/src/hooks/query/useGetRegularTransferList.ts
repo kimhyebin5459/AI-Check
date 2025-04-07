@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 const useGetRegularTransferList = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.REGULAR_LIST],
-    queryFn: () => getRegularTransferList(),
+    queryFn: getRegularTransferList,
     staleTime: 5 * 60 * 1000,
   });
 };
