@@ -14,8 +14,8 @@ export const postEmailVerification = async (email: string) => {
   return await fetcher.post({ url: 'aicheck/auth/email', body: { email } });
 };
 
-export const postEmailConfirm = async (code: string) => {
-  return await fetcher.post({ url: 'aicheck/auth/email/check', body: { code } });
+export const postEmailConfirm = async (email: string, code: string) => {
+  return await fetcher.post({ url: 'aicheck/auth/email/check', body: { email, code } });
 };
 
 export const postReissueAccessToken = async (refreshToken: string) => {
