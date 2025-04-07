@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 const useGetMemoRate = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.MEMO],
-    queryFn: () => getMemoRate(),
+    queryFn: getMemoRate,
   });
 };
 
