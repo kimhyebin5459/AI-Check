@@ -16,8 +16,12 @@ export default function Page() {
           <Spinner />
         </div>
       ) : (
-        <div className="w-full space-y-1 overflow-y-auto">
-          {notificationList?.map((noti) => <NotificationItem key={noti.alarmId} {...noti} />)}
+        <div className="h-full w-full space-y-1 overflow-y-auto">
+          {notificationList && notificationList.length > 0 ? (
+            notificationList.map((noti) => <NotificationItem key={noti.alarmId} {...noti} />)
+          ) : (
+            <div className="flex h-full w-full items-center justify-center p-8 text-gray-500">아직 알림이 없습니다</div>
+          )}
         </div>
       )}
     </div>
