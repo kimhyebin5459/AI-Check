@@ -15,7 +15,6 @@ import Link from 'next/link';
 
 import { getFilterText } from '@/utils/formatTransaction';
 
-import { account as defaultAccountData } from '@/mocks/fixtures/account';
 import { TransactionFilterType } from '@/types/transaction';
 import { useUserStore } from '@/stores/useUserStore';
 import useGetMyAccount from '@/hooks/query/useGetMyAccount';
@@ -115,12 +114,7 @@ export default function Page() {
               </div>
               <div className="py-4">
                 <div className="text-center text-4xl font-bold">
-                  {isLoading
-                    ? '로딩 중...'
-                    : account?.balance !== undefined
-                      ? account.balance.toLocaleString()
-                      : defaultAccountData.balance.toLocaleString()}
-                  원
+                  {isLoading ? '로딩 중...' : (account?.balance || 0).toLocaleString()}원
                 </div>
               </div>
               <div className="flex justify-center rounded-b-lg bg-white pb-3">

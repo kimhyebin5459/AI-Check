@@ -1,5 +1,4 @@
 import PeerChart from '@/components/report/PeerChart';
-import { categoryReport, peerReport } from '@/mocks/fixtures/report';
 import { formatMoney } from '@/utils/formatMoney';
 import PeerCategoryItem from '@/components/report/PeerCategoryItem';
 import { mergeReports } from '@/utils/mergeReports';
