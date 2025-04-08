@@ -1,29 +1,15 @@
+import { NOTIFICATION_CONFIG } from '@/constants/notificationConfig';
+import { NotificationType } from '@/types/notification';
 import clsx from 'clsx';
 
 interface Props {
-  type: string;
+  type: NotificationType;
 }
-
-const notiType: Record<string, string> = {
-  VOICE: '피싱',
-  URL: '스미싱',
-  AIR: '용돈 인상',
-  AR: '용돈 요청',
-  REPORT: '리포트',
-};
 
 export default function NotificationBadge({ type }: Props) {
   return (
-    <div
-      className={clsx(`w-20 rounded-full text-center text-white`, {
-        'bg-purple': type === 'VOICE',
-        'bg-periwinkle': type === 'AR',
-        'bg-orange': type === 'AIR',
-        'bg-red': type === 'URL',
-        'bg-green': type === 'REPORT',
-      })}
-    >
-      <p className="font-semibold">{notiType[type]}</p>
+    <div className={clsx(`w-24 rounded-full text-center text-white`, NOTIFICATION_CONFIG[type].color)}>
+      <p className="font-semibold">{NOTIFICATION_CONFIG[type].label}</p>
     </div>
   );
 }

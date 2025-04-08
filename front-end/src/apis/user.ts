@@ -1,8 +1,15 @@
 import { ChildProfile, SignInPostForm, SignUpPostForm, User } from '@/types/user';
 import fetcher from '@/apis/fetcher';
+import { authBridge } from './authBridge';
 
 export const postSignIn = async ({ email, password }: SignInPostForm) => {
-  const response = await fetcher.post({ url: 'aicheck/auth/signin', body: { email, password } });
+  const fcmToken = authBridge.getFcmToken();
+
+  const response = await fetcher.post({
+    url: 'aicheck/auth/signin',
+    body: { email, password, fcmToken },
+  });
+
   return response;
 };
 

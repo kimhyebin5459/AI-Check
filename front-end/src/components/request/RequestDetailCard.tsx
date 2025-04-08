@@ -2,11 +2,11 @@ import { formatMoney } from '@/utils/formatMoney';
 import ProfileImage from '@/components/common/ProfileImage';
 import RequestDescription from '@/components/request/RequestDescription';
 import Button from '@/components/common/Button';
-import { useRouter } from 'next/navigation';
 import { REQUEST_STATUS, REQUEST_TYPE } from '@/constants/request';
-import { RequestType, StatusType } from '@/types/request';
+import { RequestPostForm, RequestType, StatusType } from '@/types/request';
 import { UserType } from '@/types/user';
 import IncreaseContent from '@/components/request/IncreaseContent';
+import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 
 interface Props {
   id: number;
@@ -17,6 +17,7 @@ interface Props {
   description: string;
   prevAmount?: number;
   amount: number;
+  onReply: (request: RequestPostForm) => void;
 }
 
 export default function RequestDetailCard({
@@ -28,18 +29,17 @@ export default function RequestDetailCard({
   prevAmount,
   amount,
   status,
+  onReply,
 }: Props) {
-  const role: UserType = 'PARENT';
-  const router = useRouter();
+  const { data: user } = useGetUserInfo();
+  const role: UserType = user?.type || 'PARENT';
 
   const handleClickReject = () => {
-    console.log(id, 'REJECTED');
-    router.refresh();
+    onReply({ status: 'REJECTED', id: id });
   };
 
   const handleClickAccept = () => {
-    console.log(id, 'ACCPETED');
-    router.refresh();
+    onReply({ status: 'ACCEPTED', id: id });
   };
 
   return (

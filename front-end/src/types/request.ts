@@ -17,6 +17,7 @@ export interface TransferRequest extends MoneyRequest {
   amount: number;
 }
 export interface IncreaseRequest extends MoneyRequest {
+  reportId: string;
   prevAmount: number;
   afterAmount: number;
 }
@@ -25,6 +26,11 @@ export interface IncreasePostForm {
   reportId: string;
   increaseAmount: number;
   reason: string;
+}
+
+export interface RequestPostForm {
+  id: number;
+  status: StatusType;
 }
 
 export interface Summary {

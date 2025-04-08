@@ -11,4 +11,6 @@ export const QUERY_KEYS = {
   SUMMARY: 'summary',
   MEMO_RATE: 'memo-rate',
   REQUEST_LIST: 'request-list',
+  INCREASE_REQUEST: 'increase-request',
+  TRANSFER_REQUEST: 'transfer-request',
 };
