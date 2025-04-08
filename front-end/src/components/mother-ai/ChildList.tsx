@@ -1,52 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import ProfileImage from '@/components/common/ProfileImage';
 import Spinner from '@/components/common/Spinner';
-
-interface ChildProfile {
-  childId: number;
-  name: string;
-  image: string;
-}
+import useGetChildProfileList from '@/hooks/query/useGetChildProfileList';
 
 export default function ChildList() {
   const router = useRouter();
-
-  const [children, setChildren] = useState<ChildProfile[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchChildren = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch('/aicheck/members/children/profiles');
-
-        if (!response.ok) {
-          throw new Error('자녀 목록을 불러오는데 실패했습니다.');
-        }
-
-        const data = await response.json();
-        setChildren(data.data || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChildren();
-  }, []);
+  const { data: children = [], isLoading, error } = useGetChildProfileList();
 
   const handleChildSelect = (childId: number) => {
     router.push(`/mother-ai/customize/${childId}`);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center p-10">
         <Spinner />
@@ -55,7 +23,11 @@ export default function ChildList() {
   }
 
   if (error) {
-    return <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>;
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">
+        {error instanceof Error ? error.message : '자녀 목록을 불러오는데 실패했습니다.'}
+      </div>
+    );
   }
 
   if (children.length === 0) {

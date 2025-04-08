@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { ChatType } from '@/types/chat';
 import useChatStore from '@/stores/useChatStore';
 import ChatBubble from './ChatBubble';
-import { useUserStore } from '@/stores/useUserStore';
+import { useAuth } from '@/hooks/useAuth';
+import { formatNameCall } from '@/utils/formatNameCall';
 
 export default function ChatChooser() {
   const [selectedType, setSelectedType] = useState<ChatType | null>(null);
 
   const { session, startChat } = useChatStore();
-  const { user } = useUserStore();
+  const { userInfo } = useAuth();
 
   useEffect(() => {
     if (!selectedType) return;
@@ -18,7 +19,7 @@ export default function ChatChooser() {
   return (
     <div className="mx-auto flex w-full flex-col p-4">
       <div className="mb-6 flex flex-col space-y-4">
-        <ChatBubble role="AI" content={`${user?.name}아, 무슨 일이야?`}></ChatBubble>
+        <ChatBubble role="AI" content={`${formatNameCall(userInfo?.name || '딸(아들)')}, 무슨 일이야?`}></ChatBubble>
         <div className="bg-skyblue-100 ml-12 flex w-fit flex-col gap-3 rounded-2xl p-3 text-base">
           <button
             className={`rounded-xl border p-3 ${selectedType === 'PERSUADE' || session?.chatType === 'PERSUADE' ? 'border-yellow-300 bg-yellow-100' : 'border-gray-200 bg-white'}`}

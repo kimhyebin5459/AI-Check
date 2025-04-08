@@ -52,14 +52,17 @@ export default function ChatInterface({ onClickClose }: Props) {
 
   // 비활성 타임아웃 체크
   useEffect(() => {
+    console.log('비활성 체크 인터벌 설정');
     const checkInactivityInterval = setInterval(() => {
+      console.log('비활성 체크 실행');
       useChatStore.getState().checkInactivity();
-    }, 60000); // 1분마다 체크
+    }, 60000);
 
     return () => {
+      console.log('비활성 체크 인터벌 제거');
       clearInterval(checkInactivityInterval);
     };
-  }, []);
+  }, []); // 빈 의존성 배열로 한 번만 생성되도록 함
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,9 +76,13 @@ export default function ChatInterface({ onClickClose }: Props) {
     setIsResultModalOpened(state === 'FINISHED');
   }, [state, setIsResultModalOpened]);
 
+  const handleCloseButton = () => {
+    onClickClose();
+  };
+
   return (
     <div>
-      <div className="flex h-full flex-col">
+      <div className="flex h-full w-full flex-col">
         <div className="mt-4 text-center text-gray-500">{formatDateToParam(new Date()).replaceAll('-', '/')}</div>
         <div className="bg-white p-2 text-center text-sm text-gray-500">
           <p>5분 동안 활동이 없으면 대화가 자동으로 종료됩니다.</p>
@@ -91,9 +98,9 @@ export default function ChatInterface({ onClickClose }: Props) {
         </div>
       </div>
 
-      <div className="absolute bottom-0 w-full bg-white px-4 pt-2 pb-8">
+      <div className="bottom-btn absolute w-full bg-white px-4 pt-2 pb-8">
         <div className="mt-2 mb-2 flex justify-start">
-          <button onClick={onClickClose} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
+          <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">
               <span>대화 종료하기 </span> <X size={20} />
             </div>
@@ -106,7 +113,7 @@ export default function ChatInterface({ onClickClose }: Props) {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="여기에 내용을 입력하세요"
             className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
-            disabled={isLoading || state === 'FINISHED'}
+            disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
           />
           <button
             type="submit"

@@ -4,13 +4,17 @@ import { Arrow, Sprout } from '@/public/icons';
 import ProfileImage from '@/components/common/ProfileImage';
 import ParentAccountCard from '@/components/main/ParentAccountCard';
 import NavButton from '@/components/main/NavButton';
-import UserListSection from '@/components/main/UserListSection';
 import Image from 'next/image';
-import AccountCard from '@/components/main/AccountCard';
 import Link from 'next/link';
 import { CHILD_ITEM, COMMON_ITEM, PARENT_ITEM } from '@/constants/main';
 import { UserType } from '@/types/user';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
+import dynamic from 'next/dynamic';
+import AccountCard from '@/components/main/AccountCard';
+
+const UserListSection = dynamic(() => import('@/components/main/UserListSection'), {
+  ssr: false,
+});
 
 export default function Home() {
   const { data: user } = useGetUserInfo();
@@ -36,14 +40,13 @@ export default function Home() {
           </div>
         </Link>
       </div>
-      {role === 'PARENT' ? (
+      {role === 'PARENT' && (
         <>
           <UserListSection />
           <ParentAccountCard />
         </>
-      ) : (
-        <AccountCard name={user?.name ?? ''} image={user?.image ?? ''} />
       )}
+      {role === 'CHILD' && <AccountCard name={user?.name ?? ''} image={user?.image ?? ''} />}
       <div className="flex h-full w-full space-x-5">
         <NavButton {...homeItems[0]} />
         <NavButton {...homeItems[1]} />

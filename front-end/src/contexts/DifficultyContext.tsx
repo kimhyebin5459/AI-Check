@@ -56,6 +56,7 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
       try {
         const data = await getChatbotDifficulty(Number(childId));
         setDifficultyData(data);
+        console.log('loadedData:', data);
 
         // 카테고리별 난이도 초기화
         const difficultyMap: Record<string, string> = {};
@@ -179,10 +180,10 @@ export function DifficultyProvider({ children, childId }: { children: ReactNode;
     console.log('setting log:', difficultyData);
 
     if (!difficultyData) return false;
+    if (difficultyData?.content == null) difficultyData.content = '';
 
     try {
       await updateChatbotDifficulty({
-        childId: Number(childId),
         difficulty: difficultyData,
       });
 
