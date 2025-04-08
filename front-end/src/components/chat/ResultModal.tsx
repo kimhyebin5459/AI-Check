@@ -34,7 +34,7 @@ export default function ResultModal({ isModalOpen, onClose, onGoToRequest }: Pro
       <p>{content}</p>
       <div className="flex w-full gap-2 space-y-6">
         <Button onClick={onClose}>닫기</Button>
-        <Button onClick={onGoToRequest}>보낸 요청 확인하기</Button>
+        {session?.chatType === 'PERSUADE' && <Button onClick={onGoToRequest}>보낸 요청 확인하기</Button>}
       </div>
     </Modal>
   );

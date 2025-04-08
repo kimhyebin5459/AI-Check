@@ -5,9 +5,11 @@ import LoadingComponent from '@/app/_components/loading-component';
 import ProfileImage from '@/components/common/ProfileImage';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Page() {
   const { data: user, isPending, isError } = useGetUserInfo();
+  const { logout } = useAuth();
 
   if (isPending) return <LoadingComponent />;
   if (isError) return <ErrorComponent />;
@@ -39,6 +41,9 @@ export default function Page() {
             <p className="-mt-1.5 text-sm font-light text-gray-400">{user?.account.name}</p>
           </div>
         </div>
+      </div>
+      <div className="w-full justify-start p-3 text-base text-gray-700" onClick={logout}>
+        로그아웃
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'secondary' | 'third';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 // 'sm' : 높이 48, 폰트 16px
@@ -35,6 +35,7 @@ export default function Button({
   const variantStyles: Record<ButtonVariant, string> = {
     primary: 'bg-yellow-300 text-white hover:bg-yellow-500',
     secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-300',
+    third: 'bg-yellow-200 text-black hover:bg-yellow-300',
   };
 
   const sizeStyles: Record<ButtonSize, string> = {

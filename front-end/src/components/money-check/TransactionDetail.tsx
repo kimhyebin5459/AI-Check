@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
@@ -11,6 +12,10 @@ import { ALL_CATEGORIES } from '@/constants/categories';
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
 import { Transaction, UpdateTransactionData } from '@/types/transaction';
 import { getDetail, updateTransactionRecord } from '@/apis/moneycheck';
+import { getTransactionDirection } from '@/utils/formatTransaction';
+import Spinner from '../common/Spinner';
+
+const TRANSACTION_HISTORY_KEY = 'transactionHistory';
 
 interface Props {
   paramsId: string;
@@ -18,6 +23,7 @@ interface Props {
 
 export default function TransactionDetail({ paramsId, isParent }: Props & { isParent?: boolean }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const recordId = paramsId;
 
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -27,6 +33,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const [selectedFirstCategory, setSelectedFirstCategory] = useState<string>('');
   const [selectedSecondCategory, setSelectedSecondCategory] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
+  const [transactionDirection, setTransactionDirection] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
 
   useEffect(() => {
     const fetchTransactionDetail = async () => {
@@ -39,9 +46,10 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       try {
         const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedFirstCategory(data.firstCategoryName);
-        setSelectedSecondCategory(data.secondCategoryName);
-        setMemo(data.description);
+        setSelectedFirstCategory(data.firstCategoryName || '');
+        setSelectedSecondCategory(data.secondCategoryName || '');
+        setMemo(data.description || '');
+        setTransactionDirection(getTransactionDirection(data.type));
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -65,7 +73,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
     setMemo(e.target.value);
   };
 
-  // 카테고리 이름으로 ID 찾기 함수
   const getFirstCategoryId = (categoryName: string): number => {
     const category = ALL_CATEGORIES.find((cat) => cat.displayName === categoryName);
     return category ? category.id : 0;
@@ -85,20 +92,16 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       return;
     }
 
-    if (!selectedFirstCategory) {
+    if (transactionDirection === 'EXPENSE' && !selectedFirstCategory) {
       alert('대분류를 선택해주세요.');
       return;
     }
 
-    const firstCategoryId = getFirstCategoryId(selectedFirstCategory);
-    const secondCategoryId = selectedSecondCategory
-      ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
-      : 0;
-
-    if (!firstCategoryId) {
-      alert('대분류 ID를 찾을 수 없습니다.');
-      return;
-    }
+    const firstCategoryId = transactionDirection === 'EXPENSE' ? getFirstCategoryId(selectedFirstCategory) : 0;
+    const secondCategoryId =
+      transactionDirection === 'EXPENSE' && selectedSecondCategory
+        ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
+        : 0;
 
     const updatedData: UpdateTransactionData = {
       recordId: transaction.recordId,
@@ -112,8 +115,11 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
 
       await updateTransactionRecord(updatedData);
 
+      queryClient.invalidateQueries({ queryKey: [TRANSACTION_HISTORY_KEY] });
+
       const updatedTransaction = await getDetail(Number(recordId));
       setTransaction(updatedTransaction);
+
       setLoading(false);
       router.back();
     } catch (err) {
@@ -124,11 +130,19 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   };
 
   if (loading) {
-    return <div className="mx-auto max-w-md px-4">로딩 중...</div>;
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="mx-auto max-w-md px-4">에러: {error}</div>;
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
+      </div>
+    );
   }
 
   if (!transaction) {
@@ -145,38 +159,51 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
             <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.createdAt}</p>
           </section>
 
-          <section className="mt-4">
-            <h3 className="mb-1 text-base">대분류</h3>
-            <div className="mb-4 flex flex-wrap gap-2">
-              {ALL_CATEGORIES.map((category) => (
-                <Tag
-                  key={category.id}
-                  isSelected={selectedFirstCategory === category.displayName}
-                  onClick={() => firstCategoryClickHandler(category.displayName)}
-                >
-                  {category.displayName}
+          {transactionDirection === 'INCOME' ? (
+            <section className="mt-4">
+              <h3 className="mb-1 text-base">거래 유형</h3>
+              <div className="mb-4">
+                <Tag isSelected={true} onClick={() => {}}>
+                  {getTransactionTypeText(transaction.type)}
                 </Tag>
-              ))}
-            </div>
-          </section>
-
-          <section className="mt-2">
-            <h3 className="mb-1 text-base">소분류</h3>
-            <div className="mb-4 flex flex-wrap gap-2">
-              {selectedFirstCategory &&
-                ALL_CATEGORIES.find((cat) => cat.displayName === selectedFirstCategory)?.secondCategories.map(
-                  (category) => (
+              </div>
+            </section>
+          ) : (
+            <>
+              <section className="mt-4">
+                <h3 className="mb-1 text-base">대분류</h3>
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {ALL_CATEGORIES.map((category) => (
                     <Tag
                       key={category.id}
-                      isSelected={selectedSecondCategory === category.displayName}
-                      onClick={() => secondCategoryClickHandler(category.displayName)}
+                      isSelected={selectedFirstCategory === category.displayName}
+                      onClick={() => firstCategoryClickHandler(category.displayName)}
                     >
                       {category.displayName}
                     </Tag>
-                  )
-                )}
-            </div>
-          </section>
+                  ))}
+                </div>
+              </section>
+
+              <section className="mt-2">
+                <h3 className="mb-1 text-base">소분류</h3>
+                <div className="mb-4 flex flex-wrap gap-2">
+                  {selectedFirstCategory &&
+                    ALL_CATEGORIES.find((cat) => cat.displayName === selectedFirstCategory)?.secondCategories.map(
+                      (category) => (
+                        <Tag
+                          key={category.id}
+                          isSelected={selectedSecondCategory === category.displayName}
+                          onClick={() => secondCategoryClickHandler(category.displayName)}
+                        >
+                          {category.displayName}
+                        </Tag>
+                      )
+                    )}
+                </div>
+              </section>
+            </>
+          )}
 
           <section className="mt-2">
             <h3 className="mb-1 text-base">메모</h3>
@@ -202,9 +229,13 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
             {!isParent && (
               <div className="mb-4 flex justify-between">
                 <span className="text-base text-gray-800">평가</span>
-                <span className="text-base font-medium">
-                  {getRatingText(transaction.rating)} {getRatingEmoji(transaction.rating)}
-                </span>
+                {transaction.rating && transaction.rating > 0 ? (
+                  <span className="text-base font-medium">
+                    {getRatingText(transaction.rating)} {getRatingEmoji(transaction.rating)}
+                  </span>
+                ) : (
+                  <span className="text-base font-medium text-yellow-500">아직 평가가 없어요</span>
+                )}
               </div>
             )}
           </section>

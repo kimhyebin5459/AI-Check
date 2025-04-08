@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/useUserStore';
 import useGetUserInfo from './query/useGetUserInfo';
+import { authBridge } from '@/apis/authBridge';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useAuth = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { accessToken, user, setUser } = useUserStore();
   const getIsParent = useUserStore((state) => state.getIsParent);
   const { data: userInfo, isLoading, error } = useGetUserInfo();
@@ -19,15 +22,17 @@ export const useAuth = () => {
 
   const requireAuth = () => {
     if (!isLoading && !isLoggedIn) {
-      router.push('/login');
+      router.push('/auth/signin');
       return false;
     }
     return true;
   };
 
   const logout = () => {
+    authBridge.clearTokens();
     useUserStore.getState().resetUserStore();
-    router.push('/login');
+    queryClient.clear();
+    router.push('/auth/signin');
   };
 
   return {

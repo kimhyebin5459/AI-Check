@@ -69,7 +69,9 @@ export default function RatingModal({ isOpen, onClose, onSubmit, initialRating }
           </div>
         </div>
 
-        <Button onClick={handleSubmit}>평가 완료</Button>
+        <Button onClick={handleSubmit} isDisabled={selectedRating === null}>
+          평가 완료
+        </Button>
       </div>
     </Modal>
   );
