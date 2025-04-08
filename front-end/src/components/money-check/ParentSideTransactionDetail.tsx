@@ -2,16 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 import Header from '@/components/common/Header';
 import Tag from '@/components/common/Tag';
 import Button from '@/components/common/Button';
 import useModal from '@/hooks/useModal';
 import RatingModal from '@/components/money-check/RatingModal';
+import Spinner from '../common/Spinner';
 
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
 import { TransactionType, Transaction, UpdateRatingData } from '@/types/transaction';
 import { getDetail, updateRating } from '@/apis/moneycheck';
+
+const TRANSACTION_HISTORY_KEY = 'transactionHistory';
 
 interface Props {
   paramsId: string;
@@ -19,6 +23,7 @@ interface Props {
 
 export default function ParentTransactionDetail({ paramsId }: Props) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const recordId = paramsId;
 
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -38,7 +43,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
       try {
         const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedRating(data.rating || 0);
+        setSelectedRating(data.rating !== undefined && data.rating !== null ? data.rating : null);
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -70,11 +75,12 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
 
       await updateRating(ratingData);
 
-      // 상태 업데이트
       setTransaction({
         ...transaction,
         rating: rating,
       });
+
+      queryClient.invalidateQueries({ queryKey: [TRANSACTION_HISTORY_KEY] });
     } catch (err) {
       alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
     } finally {
@@ -88,13 +94,20 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
   };
 
   if (loading) {
-    return <div className="mx-auto max-w-md px-4">로딩 중...</div>;
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="mx-auto max-w-md px-4">에러: {error}</div>;
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
+      </div>
+    );
   }
-
   if (!transaction) {
     return <div className="mx-auto max-w-md px-4">거래 정보를 찾을 수 없습니다.</div>;
   }
@@ -117,7 +130,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
                 isSelected={true}
                 onClick={() => {}} // 비활성화
               >
-                {transaction.firstCategoryName}
+                {transaction.firstCategoryName || getTransactionTypeText(transaction.type)}
               </Tag>
             </div>
           </section>
@@ -157,7 +170,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
 
             <div className="mb-4 flex cursor-pointer justify-between" onClick={openModal}>
               <span className="text-base text-gray-800">평가</span>
-              {!!selectedRating ? (
+              {selectedRating !== null && selectedRating > 0 ? (
                 <span className="text-base font-medium">
                   {getRatingText(selectedRating)} {getRatingEmoji(selectedRating)}
                 </span>

@@ -26,7 +26,7 @@ export default function Page() {
 
   return (
     <div className="container">
-      <Header title="알림" hasBorder={false} />
+      <Header title="알림" hasBorder />
       {isLoading ? (
         <div className="flex justify-center p-4">
           <Spinner />

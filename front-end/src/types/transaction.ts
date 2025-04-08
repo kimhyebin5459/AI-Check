@@ -14,7 +14,7 @@ export interface TransactionRecord {
   firstCategoryName: string;
   secondCategoryName: string | null;
   displayName: string;
-  type: TransactionType;
+  type: TransactionFilterType | TransactionType;
   amount: number;
   description: string;
   rating: number | null;

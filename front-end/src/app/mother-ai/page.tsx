@@ -7,7 +7,7 @@ import useChatStore from '../../stores/useChatStore';
 import { useState } from 'react';
 import CloseModal from '@/components/chat/CloseModal';
 
-export default function ChatPage() {
+export default function Page() {
   const router = useRouter();
   const [isCloseModalOpened, setIsCloseModalOpened] = useState<boolean>(false);
 
@@ -38,13 +38,13 @@ export default function ChatPage() {
     <div className="h-full pb-[139px]">
       <div className="container">
         <Header
-          title="엄마 설득하기"
+          title="부모님께 요청하기"
           hasBackButton
           onBackClick={() => {
             closeCheck();
           }}
         />
-        <main className="scrollbar-hide w-full flex-1 overflow-y-auto">
+        <main className="scrollbar-hide h-full w-full flex-1 overflow-y-auto">
           <ChatInterface onClickClose={closeCheck} />
         </main>
       </div>

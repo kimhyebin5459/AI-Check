@@ -6,7 +6,7 @@ export const PARENT_ITEM = {
 };
 
 export const CHILD_ITEM = {
-  lines: ['엄마', '설득하기'],
+  lines: ['부모님께', '요청하기'],
   image: '/images/duck.png',
   color: 'yellow-200',
   to: '/mother-ai',

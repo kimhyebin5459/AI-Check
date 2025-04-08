@@ -90,7 +90,7 @@ export default function ChatInterface({ onClickClose }: Props) {
         <ChatChooser />
 
         <div>
-          <div className="flex-1 overflow-auto px-4">
+          <div className="flex flex-col overflow-auto px-4">
             {!!session &&
               session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
             <div ref={messagesEndRef} />
@@ -98,7 +98,7 @@ export default function ChatInterface({ onClickClose }: Props) {
         </div>
       </div>
 
-      <div className="bottom-btn absolute w-full bg-white px-4 pt-2 pb-8">
+      <div className="bottom-btn absolute w-full bg-white px-4 pt-2">
         <div className="mt-2 mb-2 flex justify-start">
           <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">

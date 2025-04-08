@@ -161,12 +161,12 @@ export default function MoneyCheckClient({ params }: Props) {
             </div>
 
             <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-              <div className="rounded-t-lg bg-yellow-300 p-2.5">
+              <div className="rounded-t-lg bg-yellow-200 p-2.5">
                 <div className="flex items-center">
                   <ProfileImage image={childProfile.image} size="md" />
                   <div className="ml-5 font-light">
-                    <p className="text-xl text-white">{account.accountName}</p>
-                    <p className="text-base text-white">{account.accountNo}</p>
+                    <p className="text-xl">{account.accountName}</p>
+                    <p className="text-base">{account.accountNo}</p>
                   </div>
                 </div>
               </div>

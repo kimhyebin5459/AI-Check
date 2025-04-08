@@ -6,6 +6,7 @@ import SemicircleGauge from '@/components/phishing/SemicircleGauge';
 import { PHISHING_ITEM } from '@/constants/phising';
 import { PhishingStats } from '@/types/phishing';
 import { getPhishing } from '@/apis/phishing';
+import Spinner from '../common/Spinner';
 
 export default function PhishingContent() {
   const [stats, setStats] = useState<PhishingStats | null>(null);
@@ -31,16 +32,16 @@ export default function PhishingContent() {
 
   if (loading) {
     return (
-      <div className="flex h-40 items-center justify-center">
-        <p className="text-lg">데이터를 불러오는 중...</p>
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <Spinner />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex h-40 items-center justify-center">
-        <p className="text-lg text-red-500">{error}</p>
+      <div className="flex flex-grow flex-col items-center justify-center">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
       </div>
     );
   }
