@@ -1,7 +1,8 @@
 interface AndroidBridge {
-  getAccessToken(): string; // Returns JSON string with accessToken and refreshToken
+  getAccessToken(): string; // accessToken과 refreshToken이 포함된 JSON 문자열 반환
   saveTokens(accessToken: string, refreshToken: string): void;
-  clearTokens?(): void; // Optional method that may not exist in Android
+  clearTokens?(): void; // 선택적 메서드 (안드로이드에 존재하지 않을 수 있음)
+  getFcmToken?(): string; // FCM 토큰을 가져오는 메서드 추가
 }
 
 interface TokenBridge {
@@ -9,6 +10,7 @@ interface TokenBridge {
   getRefreshToken(): string | null;
   saveTokens(accessToken: string, refreshToken: string): void;
   clearTokens(): void;
+  getFcmToken?(): string | null; // FCM 토큰을 가져오는 메서드 추가
 }
 
 interface AndroidBiometric {
@@ -19,15 +21,16 @@ declare global {
   interface Window {
     AndroidBridge?: AndroidBridge;
     AndroidBiometric?: AndroidBiometric;
-    TokenBridge?: TokenBridge; // Keep for backward compatibility
+    TokenBridge?: TokenBridge; // 하위 호환성을 위해 유지
   }
 }
 
-// localStorage keys
+// localStorage 키
 const ACCESS_TOKEN_KEY = 'aicheck_access_token';
 const REFRESH_TOKEN_KEY = 'aicheck_refresh_token';
+const FCM_TOKEN_KEY = 'fcmToken'; // FCM 토큰 키 추가
 
-// Check if we're in the Android app environment
+// 안드로이드 앱 환경인지 확인
 const isAndroidApp = typeof window !== 'undefined' && !!window.AndroidBridge;
 const isWebWithTokenBridge = typeof window !== 'undefined' && !!window.TokenBridge;
 
@@ -35,17 +38,17 @@ class AuthBridge {
   getAccessToken(): string | null {
     if (isAndroidApp) {
       try {
-        // Parse the JSON string from AndroidBridge
+        // AndroidBridge에서 JSON 문자열 파싱
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.accessToken || null;
       } catch (e) {
-        console.error('Error parsing token data:', e);
+        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
       return window.TokenBridge!.getAccessToken();
     } else {
-      // Web environment uses localStorage
+      // 웹 환경에서는 localStorage 사용
       return localStorage.getItem(ACCESS_TOKEN_KEY);
     }
   }
@@ -53,11 +56,11 @@ class AuthBridge {
   getRefreshToken(): string | null {
     if (isAndroidApp) {
       try {
-        // Parse the JSON string from AndroidBridge
+        // AndroidBridge에서 JSON 문자열 파싱
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.refreshToken || null;
       } catch (e) {
-        console.error('Error parsing token data:', e);
+        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
@@ -80,11 +83,11 @@ class AuthBridge {
 
   clearTokens(): void {
     if (isAndroidApp) {
-      // Check if clearTokens exists in AndroidBridge
+      // AndroidBridge에 clearTokens가 존재하는지 확인
       if (window.AndroidBridge!.clearTokens) {
         window.AndroidBridge!.clearTokens();
       } else {
-        // Fallback: save empty tokens
+        // 대체 방법: 빈 토큰 저장
         window.AndroidBridge!.saveTokens('', '');
       }
     } else if (isWebWithTokenBridge) {
@@ -95,24 +98,58 @@ class AuthBridge {
     }
   }
 
-  // Method to request biometric authentication
+  // 생체 인증 요청 메서드
   requestBiometricAuth(): Promise<boolean> {
     return new Promise((resolve) => {
       if (typeof window !== 'undefined' && window.AndroidBiometric) {
         try {
           window.AndroidBiometric.authenticate();
-          // Note: This doesn't actually wait for authentication result
-          // You'll need a callback mechanism from Android
+          // 참고: 실제로 인증 결과를 기다리지 않음
+          // 안드로이드에서 콜백 메커니즘이 필요함
           resolve(true);
         } catch (e) {
-          console.error('Biometric authentication error:', e);
+          console.error('생체 인증 오류:', e);
           resolve(false);
         }
       } else {
-        console.warn('Biometric authentication not available');
+        console.warn('생체 인증을 사용할 수 없음');
         resolve(false);
       }
     });
+  }
+
+  // FCM 토큰 가져오는 메서드 추가
+  getFcmToken(): string | null {
+    if (isAndroidApp) {
+      try {
+        // AndroidBridge에 getFcmToken 메서드가 있는지 확인
+        if (window.AndroidBridge!.getFcmToken) {
+          return window.AndroidBridge!.getFcmToken();
+        }
+        return null;
+      } catch (e) {
+        console.error('FCM 토큰 가져오기 오류:', e);
+        return null;
+      }
+    } else if (isWebWithTokenBridge) {
+      // TokenBridge에 getFcmToken 메서드가 있는지 확인
+      if (window.TokenBridge!.getFcmToken) {
+        return window.TokenBridge!.getFcmToken();
+      }
+      return null;
+    } else {
+      // 웹 환경에서는 localStorage 사용
+      return localStorage.getItem(FCM_TOKEN_KEY);
+    }
+  }
+
+  // FCM 토큰 저장 메서드 추가
+  saveFcmToken(fcmToken: string): void {
+    if (!isAndroidApp && !isWebWithTokenBridge) {
+      // 웹 환경에서만 localStorage에 저장
+      localStorage.setItem(FCM_TOKEN_KEY, fcmToken);
+    }
+    // 안드로이드/TokenBridge 환경에서는 네이티브 쪽에서 직접 관리하므로 별도 저장 필요 없음
   }
 }
 

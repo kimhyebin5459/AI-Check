@@ -73,8 +73,6 @@ export default function MoneyCheckClient({ params }: Props) {
       try {
         const response = await getChildAccount(Number(childId));
 
-        console.log('here:', response);
-
         setAccount({
           accountId: response.accountId,
           accountName: response.accountName || '입출금 계좌',
@@ -97,7 +95,7 @@ export default function MoneyCheckClient({ params }: Props) {
   };
 
   const handleChartClick = () => {
-    router.push(`/report?id=${childId}`);
+    router.push(`/report/${childId}`);
   };
 
   const handleFilterApply = (
