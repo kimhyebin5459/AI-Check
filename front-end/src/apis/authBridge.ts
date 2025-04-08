@@ -83,11 +83,9 @@ class AuthBridge {
 
   clearTokens(): void {
     if (isAndroidApp) {
-      // AndroidBridge에 clearTokens가 존재하는지 확인
       if (window.AndroidBridge!.clearTokens) {
         window.AndroidBridge!.clearTokens();
       } else {
-        // 대체 방법: 빈 토큰 저장
         window.AndroidBridge!.saveTokens('', '');
       }
     } else if (isWebWithTokenBridge) {
@@ -98,25 +96,25 @@ class AuthBridge {
     }
   }
 
-  // 생체 인증 요청 메서드
-  requestBiometricAuth(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (typeof window !== 'undefined' && window.AndroidBiometric) {
-        try {
-          window.AndroidBiometric.authenticate();
-          // 참고: 실제로 인증 결과를 기다리지 않음
-          // 안드로이드에서 콜백 메커니즘이 필요함
-          resolve(true);
-        } catch (e) {
-          console.error('생체 인증 오류:', e);
-          resolve(false);
-        }
-      } else {
-        console.warn('생체 인증을 사용할 수 없음');
-        resolve(false);
-      }
-    });
-  }
+  // // 생체 인증 요청 메서드
+  // requestBiometricAuth(): Promise<boolean> {
+  //   return new Promise((resolve) => {
+  //     if (typeof window !== 'undefined' && window.AndroidBiometric) {
+  //       try {
+  //         window.AndroidBiometric.authenticate();
+  //         // 참고: 실제로 인증 결과를 기다리지 않음
+  //         // 안드로이드에서 콜백 메커니즘이 필요함
+  //         resolve(true);
+  //       } catch (e) {
+  //         console.error('생체 인증 오류:', e);
+  //         resolve(false);
+  //       }
+  //     } else {
+  //       console.warn('생체 인증을 사용할 수 없음');
+  //       resolve(false);
+  //     }
+  //   });
+  // }
 
   // FCM 토큰 가져오는 메서드 추가
   getFcmToken(): string | null {
