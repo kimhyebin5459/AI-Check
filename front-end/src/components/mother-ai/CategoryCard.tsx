@@ -3,29 +3,18 @@
 import React from 'react';
 import Tag from '@/components/common/Tag';
 import SubCategorySection from './SubCategorySection';
+import { DisplayDifficulty } from '@/types/difficulty';
+import { Category } from '@/types/difficulty';
 
-// 난이도 정의
-const DIFFICULTY_OPTIONS = ['쉬움', '중간', '어려움', '커스텀'] as const;
-
-interface SubCategory {
-  subCategoryId: number;
-  subCategoryName: string;
-  difficulty: string;
-}
-
-interface Category {
-  categoryId: number;
-  categoryName: string;
-  subCategories: SubCategory[];
-}
+const DIFFICULTY_OPTIONS: DisplayDifficulty[] = ['쉬움', '중간', '어려움', '커스텀'];
 
 interface Props {
   category: Category;
   koreanCategoryName: string;
-  currentDifficulty: string;
+  currentDifficulty: DisplayDifficulty;
   isExpanded: boolean;
   onToggle: () => void;
-  onDifficultyChange: (difficulty: string) => void;
+  onDifficultyChange: (difficulty: DisplayDifficulty) => void;
 }
 
 export default function CategoryCard({
@@ -80,7 +69,9 @@ export default function CategoryCard({
         </div>
       </div>
 
-      {isExpanded && currentDifficulty === '커스텀' && <SubCategorySection subCategories={category.subCategories} />}
+      {isExpanded && currentDifficulty === '커스텀' && (
+        <SubCategorySection parentCategory={category.categoryName} subCategories={category.subCategories} />
+      )}
     </div>
   );
 }

@@ -1,41 +1,40 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from '@/components/common/Header';
 import DifficultySettings from '@/components/mother-ai/DifficultySettings';
 import MotherAIClient from '@/components/mother-ai/MotherAIClient';
-import { DifficultyProvider } from '@/contexts/DifficultyContext';
+import { useDifficultyStore } from '@/stores/useDifficultyStore';
 
 interface Props {
   params: Promise<{ childId: string }>;
 }
 
 export default function CustomizePage({ params }: Props) {
-  const [childId, setChildId] = useState<string>('');
+  const { setChildId, fetchDifficultySettings, loading } = useDifficultyStore();
 
   useEffect(() => {
-    const fetchChildId = async () => {
+    const initializeChildId = async () => {
       const resolvedParams = await params;
       setChildId(resolvedParams.childId);
+      fetchDifficultySettings();
     };
 
-    fetchChildId();
-  }, [params]);
-
-  if (!childId) {
-    return <div>Loading...</div>;
-  }
+    initializeChildId();
+  }, [params, setChildId, fetchDifficultySettings]);
 
   return (
     <div className="h-full">
       <div className="container h-full">
         <Header title="엄마 AI 설정" hasBackButton />
         <main className="scrollbar-hide h-full w-full overflow-y-auto p-5">
-          <DifficultyProvider childId={childId}>
-            <MotherAIClient childId={childId}>
+          {loading && !useDifficultyStore.getState().difficultyData ? (
+            <div>Loading...</div>
+          ) : (
+            <MotherAIClient>
               <DifficultySettings />
             </MotherAIClient>
-          </DifficultyProvider>
+          )}
         </main>
       </div>
     </div>
