@@ -7,11 +7,11 @@ import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import LoadingComponent from './loading-component';
 
-interface ProvidersProps {
+interface Props {
   children?: ReactNode;
 }
 
-export default function Providers({ children }: ProvidersProps) {
+export default function Providers({ children }: Props) {
   const pathname = usePathname();
   const [queryClient] = useState(
     () =>

@@ -63,7 +63,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="h-full pb-[5.5rem]">
+      <div className="bg-gradation2 h-full pb-[5.5rem]">
         <div className="container">
           <Header title="용돈 기록장" />
           <main className="scrollbar-hide w-full overflow-y-auto p-5">
@@ -103,12 +103,12 @@ export default function Page() {
 
             {/* 유저상태 관리 방법 정해지면 컴포넌트 분리 수정 */}
             <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-              <div className="rounded-t-lg bg-yellow-300 p-2.5">
+              <div className="rounded-t-lg bg-yellow-200 p-2.5">
                 <div className="flex items-center">
                   <ProfileImage image={user?.image} size="md" />
                   <div className="ml-5 font-light">
-                    <p className="text-xl text-white">{account?.accountName}</p>
-                    <p className="text-base text-white">{account?.accountNo}</p>
+                    <p className="text-xl">{account?.accountName}</p>
+                    <p className="text-base">{account?.accountNo}</p>
                   </div>
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function Page() {
               </div>
               <div className="flex justify-center rounded-b-lg bg-white pb-3">
                 <Button
-                  variant="primary"
+                  variant="third"
                   size="md"
                   className="w-[220px]"
                   isFullWidth={false}

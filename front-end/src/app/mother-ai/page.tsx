@@ -38,7 +38,7 @@ export default function Page() {
     <div className="h-full pb-[139px]">
       <div className="container">
         <Header
-          title="엄마 설득하기"
+          title="부모님께 요청하기"
           hasBackButton
           onBackClick={() => {
             closeCheck();

@@ -46,13 +46,3 @@ export const updateTransactionRecord = async (updateData: UpdateTransactionData)
 export const updateRating = async (updateData: UpdateRatingData) => {
   return await fetcher.post({ url: 'aicheck/transaction-records/rating', body: updateData });
 };
-
-// export const 함수이름 = async (변수명: 타입명, 변수명: 타입명): Promise<리턴타입> => {
-//   const response = await fetcher.get({ url: '주소' });
-//   const data = await response.json(); //바디에서 제이슨 까야하면
-//   return data;
-// };
-
-// export const 함수이름 = async ({ 변수명1, 변수명2, 변수명3 }: 모두묶인타입명) => Promise<리턴타입> {
-//   return await fetcher.post({ url: `aicheck/auth/signin?어쩌구=${변수명3}`, body: { 변수명1, 변수명2 } });
-// };

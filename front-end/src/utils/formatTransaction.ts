@@ -104,14 +104,11 @@ export const getFilterText = (dateRangeType: string, transactionType: Transactio
   return `${periodText} | ${typeText} ▼`;
 };
 
-export const getTransactionDirection = (type: TransactionType | TransactionFilterType): 'INCOME' | 'OUTCOME' => {
-  if (type === 'INCOME') return 'INCOME';
-  if (type === 'EXPENSE') return 'OUTCOME';
-  if (type === 'ALL') return 'INCOME';
-
+export const getTransactionDirection = (type: TransactionType | TransactionFilterType): 'INCOME' | 'EXPENSE' => {
+  if (type === 'INCOME' || type === 'EXPENSE') return type;
   if (type === 'DEPOSIT' || type === 'INBOUND_TRANSFER') {
     return 'INCOME';
   } else {
-    return 'OUTCOME';
+    return 'EXPENSE';
   }
 };
