@@ -51,7 +51,7 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
       </div>
       <div className="flex h-full w-full justify-between pr-2">
         <div className="relative flex h-full w-full items-end">
-          <Image src={image} alt="nav image" fill className="object-contain object-bottom pb-1 pl-3" />
+          <Image src={image} alt="nav image" fill className="object-contain object-bottom pb-1 pl-3" priority />
         </div>
         {caseCnt !== undefined && (
           <div className="flex flex-col justify-end">
