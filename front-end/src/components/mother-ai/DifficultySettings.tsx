@@ -3,8 +3,9 @@
 import React from 'react';
 import Spinner from '@/components/common/Spinner';
 import CategoryCard from '@/components/mother-ai/CategoryCard';
-import { useDifficultySettings } from '@/hooks/useDifficultySettings';
 import { categoryMapping } from '@/utils/mapDifficulty';
+import { useDifficultyStore } from '@/stores/useDifficultyStore';
+import { DisplayDifficulty } from '@/types/difficulty';
 
 export default function DifficultySettings() {
   const {
@@ -15,7 +16,7 @@ export default function DifficultySettings() {
     error,
     toggleCategory,
     handleDifficultyChange,
-  } = useDifficultySettings();
+  } = useDifficultyStore();
 
   if (loading) {
     return (
@@ -35,11 +36,14 @@ export default function DifficultySettings() {
     );
   }
 
+  const defaultDifficulty: DisplayDifficulty = '중간';
+
   return (
     <div className="space-y-4">
       {difficultyData.categoryDifficulties.map((category) => {
         const koreanCategoryName = categoryMapping[category.categoryName] || category.categoryName;
-        const currentDifficulty = categoryDifficulties[koreanCategoryName] || '중간';
+
+        const currentDifficulty = (categoryDifficulties[koreanCategoryName] || defaultDifficulty) as DisplayDifficulty;
         const isExpanded = expandedCategories[koreanCategoryName] || false;
 
         return (
