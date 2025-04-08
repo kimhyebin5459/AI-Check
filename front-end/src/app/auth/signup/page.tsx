@@ -25,7 +25,8 @@ interface FormErrors {
 
 export default function SignupPage() {
   const router = useRouter();
-  const { accessToken, isParent } = useUserStore();
+  const { accessToken } = useUserStore();
+  const getIsParent = useUserStore((state) => state.getIsParent);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -39,9 +40,9 @@ export default function SignupPage() {
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
 
   const isLoggedIn = !!accessToken && accessToken !== 'VALUE';
+  const isParent = getIsParent();
 
   const pageTitle = isLoggedIn ? '자녀 계정 등록' : '부모 계정 등록';
-
   const pageDescription = isLoggedIn ? '자녀의 계정 정보를 입력해주세요' : '부모님 계정 정보를 입력해주세요';
 
   useEffect(() => {
