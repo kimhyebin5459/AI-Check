@@ -22,9 +22,9 @@ export interface IncreaseRequest extends MoneyRequest {
 }
 
 export interface IncreasePostForm {
-  reportId: number;
+  reportId: string;
   increaseAmount: number;
-  description: string;
+  reason: string;
 }
 
 export interface Summary {
