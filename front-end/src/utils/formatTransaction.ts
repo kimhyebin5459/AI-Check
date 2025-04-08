@@ -61,8 +61,8 @@ export const getCategoryIcon = (category: string) => {
   return iconMap[category] || null;
 };
 
-export const getAmountDisplay = (type: TransactionType, amount: number): number => {
-  if (type === 'DEPOSIT' || type === 'INBOUND_TRANSFER') {
+export const getAmountDisplay = (type: TransactionFilterType, amount: number): number => {
+  if (type === 'INCOME') {
     return +Math.abs(amount);
   } else {
     return -Math.abs(amount);
@@ -102,4 +102,16 @@ export const getFilterText = (dateRangeType: string, transactionType: Transactio
   }
 
   return `${periodText} | ${typeText} ▼`;
+};
+
+export const getTransactionDirection = (type: TransactionType | TransactionFilterType): 'INCOME' | 'OUTCOME' => {
+  if (type === 'INCOME') return 'INCOME';
+  if (type === 'EXPENSE') return 'OUTCOME';
+  if (type === 'ALL') return 'INCOME';
+
+  if (type === 'DEPOSIT' || type === 'INBOUND_TRANSFER') {
+    return 'INCOME';
+  } else {
+    return 'OUTCOME';
+  }
 };

@@ -2,9 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 
-import { TransactionRecord } from '@/types/transaction';
+import { TransactionRecord, TransactionType, TransactionFilterType } from '@/types/transaction';
 
-import { getCategoryIcon, getAmountDisplay, getRatingEmoji } from '@/utils/formatTransaction';
+import { getCategoryIcon, getRatingEmoji, getTransactionDirection } from '@/utils/formatTransaction';
+
+const getAmountDisplayFormat = (type: TransactionType | TransactionFilterType, amount: number) => {
+  const direction = getTransactionDirection(type);
+  const amountClass = direction === 'INCOME' ? 'text-blue-500' : 'text-red-500';
+  const prefix = direction === 'INCOME' ? '+' : '-';
+
+  return {
+    direction,
+    amountClass,
+    formattedAmount: `${prefix}${Math.abs(amount).toLocaleString()}원`,
+  };
+};
 
 export default function TransactionCard({
   recordId,
@@ -18,7 +30,7 @@ export default function TransactionCard({
   time,
   isParent,
 }: TransactionRecord & { isParent?: boolean }) {
-  const displayAmount = getAmountDisplay(type, amount);
+  const { amountClass, formattedAmount } = getAmountDisplayFormat(type, amount);
 
   const CategoryIcon = getCategoryIcon(firstCategoryName);
 
@@ -43,15 +55,12 @@ export default function TransactionCard({
         <div className="flex-1">
           <div className="flex justify-between text-xl">
             <div className="font-bold text-gray-700">{displayName}</div>
-            <div className={`font-medium ${displayAmount < 0 ? 'text-red-500' : 'text-blue-500'}`}>
-              {displayAmount < 0 ? '-' : '+'}
-              {Math.abs(displayAmount).toLocaleString()}원
-            </div>
+            <div className={`font-medium ${amountClass}`}>{formattedAmount}</div>
           </div>
           <div className="flex justify-between">
             <div>
               <div className="text-xs font-medium text-gray-500">
-                {time} | {secondCategoryName}
+                {time} | {secondCategoryName || ''}
               </div>
               <div className="flex justify-between font-light text-gray-500">{description}</div>
             </div>
