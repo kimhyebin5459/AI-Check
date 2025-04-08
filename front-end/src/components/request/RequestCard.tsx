@@ -6,6 +6,7 @@ import NotificationBadge from '@/components/notification/NotificationBadge';
 import RequestStatusBadge from '@/components/request/RequestStatusBadge';
 import { formatMoney } from '@/utils/formatMoney';
 import { useRouter } from 'next/navigation';
+import { NotificationType } from '@/types/notification';
 
 interface Props {
   request: TransferRequest;
@@ -24,7 +25,9 @@ export default function RequestCard({ request, isParent }: Props) {
     <div className="w-full space-y-3 rounded-xl bg-white px-5 py-4" onClick={handleClick}>
       <div className="flex items-center justify-between">
         <div className="flex space-x-2">
-          <NotificationBadge type={type === 'INCREASE' ? 'AIR' : 'AR'} />
+          <NotificationBadge
+            type={type === 'INCREASE' ? NotificationType['ALLOWANCE_INCREASE'] : NotificationType['ALLOWANCE']}
+          />
           <RequestStatusBadge status={status} />
         </div>
         <p className="text-xs font-thin">{formatDate(createdAt)}</p>
