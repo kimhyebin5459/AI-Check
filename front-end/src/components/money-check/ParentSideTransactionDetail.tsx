@@ -38,7 +38,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
       try {
         const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedRating(data.rating || 0);
+        setSelectedRating(data.rating !== undefined && data.rating !== null ? data.rating : null);
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
       } finally {
@@ -117,7 +117,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
                 isSelected={true}
                 onClick={() => {}} // 비활성화
               >
-                {transaction.firstCategoryName}
+                {transaction.firstCategoryName || getTransactionTypeText(transaction.type)}
               </Tag>
             </div>
           </section>

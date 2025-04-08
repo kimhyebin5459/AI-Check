@@ -44,7 +44,7 @@ export const updateTransactionRecord = async (updateData: UpdateTransactionData)
 };
 
 export const updateRating = async (updateData: UpdateRatingData) => {
-  return await fetcher.patch({ url: 'aicheck/transaction-records', body: updateData });
+  return await fetcher.post({ url: 'aicheck/transaction-records/rating', body: updateData });
 };
 
 // export const 함수이름 = async (변수명: 타입명, 변수명: 타입명): Promise<리턴타입> => {
