@@ -32,7 +32,7 @@ export default function Page() {
   const [dateRangeType, setDateRangeType] = useState<string>('MONTH');
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { isParent } = useUserStore();
+  const { getIsParent } = useUserStore();
   const { data: account, isLoading } = useGetMyAccount();
   const { data: user } = useGetUserInfo();
 
@@ -71,7 +71,7 @@ export default function Page() {
             <div>
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {isParent ? (
+                  {getIsParent() ? (
                     <ProfileImage image={user?.image} size="sm" />
                   ) : (
                     <Image src={Sprout} alt="sprout icon" className="size-7"></Image>
@@ -87,10 +87,10 @@ export default function Page() {
                   </Link>
                 </div>
                 <div className="flex space-x-2">
-                  {!isParent && (
+                  {!getIsParent() && (
                     <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
                   )}
-                  {!isParent && (
+                  {!getIsParent() && (
                     <Image
                       src={CalendarButton}
                       alt="월별보기"
