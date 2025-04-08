@@ -14,7 +14,7 @@ export const difficultyReverseMapping: Record<string, string> = {
 
 export const categoryMapping: Record<string, string> = {
   TRANSPORTATION: '교통',
-  FOOD: '식비',
+  FOOD: '음식',
   EDUCATION: '교육',
   LEISURE: '여가',
   LIVING: '생활',
@@ -22,7 +22,7 @@ export const categoryMapping: Record<string, string> = {
 
 export const categoryReverseMapping: Record<string, string> = {
   교통: 'TRANSPORTATION',
-  식비: 'FOOD',
+  음식: 'FOOD',
   교육: 'EDUCATION',
   여가: 'LEISURE',
   생활: 'LIVING',
