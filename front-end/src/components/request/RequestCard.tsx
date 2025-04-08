@@ -30,7 +30,7 @@ export default function RequestCard({ request, isParent }: Props) {
         <p className="text-xs font-thin">{formatDate(createdAt)}</p>
       </div>
       <div>
-        <div className="flex">
+        <div className="flex tracking-tight whitespace-nowrap">
           {isParent && (
             <div className="flex">
               <p className="font-semibold">{childName}&nbsp;</p>
