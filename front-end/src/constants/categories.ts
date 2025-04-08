@@ -1,8 +1,8 @@
-export const FIRST_CATEGORIES = ['교육', '교통', '생활', '식비', '여가'];
+export const FIRST_CATEGORIES = ['교육', '교통', '생활', '음식', '여가'];
 
 export const SECOND_CATEGORIES_MAP: Record<string, string[]> = {
   교통: ['버스', '지하철', '택시', '자전거', '기타'],
-  식비: ['식사', '간식', '음료', '기타'],
+  음식: ['식사', '간식', '음료', '기타'],
   교육: ['교재', '학용품', '준비물', '기타'],
   여가: ['오락', '여행', '문화생활', '기타'],
   생활: ['의류', '선물', '생활용품', '기타'],
@@ -37,7 +37,7 @@ export const ALL_CATEGORIES = [
   },
   {
     id: 2,
-    displayName: '식비',
+    displayName: '음식',
     secondCategories: [
       {
         id: 201,
