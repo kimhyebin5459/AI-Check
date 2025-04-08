@@ -3,21 +3,19 @@ import fetcher from './fetcher';
 
 export const getChatbotDifficulty = async (childId: number): Promise<ChatbotDifficulty> => {
   const response = await fetcher.get({
-    url: `aicheck/chatbot/prompt/${childId}`,
+    url: `chatbot/prompts/${childId}`,
   });
 
   return await response;
 };
 
 export const updateChatbotDifficulty = async ({
-  childId,
   difficulty,
 }: {
-  childId: number;
   difficulty: ChatbotDifficulty;
 }): Promise<ChatbotDifficulty> => {
-  const response = await fetcher.put({
-    url: `aicheck/chatbot/prompt/${childId}`,
+  const response = await fetcher.patch({
+    url: `chatbot/prompts`,
     body: difficulty,
   });
 
@@ -25,7 +23,6 @@ export const updateChatbotDifficulty = async ({
 };
 
 export const copyChatbotDifficulty = async ({
-  targetChildId,
   sourceChildId,
 }: {
   targetChildId: number;
@@ -36,7 +33,6 @@ export const copyChatbotDifficulty = async ({
 
   // 타겟 자녀에게 소스 자녀의 설정 적용
   const result = await updateChatbotDifficulty({
-    childId: Number(targetChildId),
     difficulty: sourceDifficulty,
   });
 

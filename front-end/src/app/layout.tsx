@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
-import { MSWComponent } from '@/app/_components/msw-component';
 import { Suspense } from 'react';
 import Head from 'next/head';
 import Providers from '@/app/_components/providers';
@@ -25,9 +24,7 @@ export default function RootLayout({
       </Head>
       <body className="mx-auto my-0 h-dvh max-w-[480px] min-w-[320px] bg-white px-0 shadow-md">
         <Providers>
-          <MSWComponent>
-            <Suspense>{children}</Suspense>
-          </MSWComponent>
+          <Suspense>{children}</Suspense>
         </Providers>
       </body>
     </html>

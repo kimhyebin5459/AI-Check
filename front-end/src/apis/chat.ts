@@ -9,12 +9,13 @@ export const startChat = async ({ chatType }: StartChatParams) => {
 };
 
 export const sendPersuadeMessage = async ({ message }: SendMessageParams) => {
+  console.log('전송 데이터:', JSON.stringify({ message }));
   const response = await fetcher.post({
     url: 'chatbot/persuade',
     body: { message },
   });
 
-  return await response.json();
+  return await response;
 };
 
 export const sendQuestionMessage = async ({ message }: SendMessageParams) => {
@@ -23,12 +24,11 @@ export const sendQuestionMessage = async ({ message }: SendMessageParams) => {
     body: { message },
   });
 
-  return await response.json();
+  return await response;
 };
 
 export const endChat = async ({ chatType }: EndChatParams) => {
   return await fetcher.delete({
-    url: 'chatbot/end',
-    body: { chatType },
+    url: `chatbot/end?chat-type=${chatType}`,
   });
 };

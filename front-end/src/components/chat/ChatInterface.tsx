@@ -52,14 +52,17 @@ export default function ChatInterface({ onClickClose }: Props) {
 
   // 비활성 타임아웃 체크
   useEffect(() => {
+    console.log('비활성 체크 인터벌 설정');
     const checkInactivityInterval = setInterval(() => {
+      console.log('비활성 체크 실행');
       useChatStore.getState().checkInactivity();
-    }, 60000); // 1분마다 체크
+    }, 60000);
 
     return () => {
+      console.log('비활성 체크 인터벌 제거');
       clearInterval(checkInactivityInterval);
     };
-  }, []);
+  }, []); // 빈 의존성 배열로 한 번만 생성되도록 함
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();

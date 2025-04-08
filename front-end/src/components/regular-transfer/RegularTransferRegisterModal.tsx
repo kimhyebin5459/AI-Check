@@ -6,11 +6,11 @@ import Button from '@/components/common/Button';
 import { formatMoney } from '@/utils/formatMoney';
 import { getNextDate } from '@/utils/getNextDate';
 import { useEffect, useState } from 'react';
-import { account } from '@/mocks/fixtures/account';
 import { formatInterval } from '@/utils/formatInterval';
 import usePostRegularTransferList from '@/hooks/query/usePostRegularTransferList';
 import { IntervalType } from '@/types/regularTransfer';
 import usePatchRegularTransferList from '@/hooks/query/usePatchRegularTransferList';
+import useGetMyAccount from '@/hooks/query/useGetMyAccount';
 
 interface Props {
   childId: number;
@@ -37,7 +37,7 @@ export default function RegularTransferRegisterModal({
   closeModal,
   isNewSchedule,
 }: Props) {
-  const myAccount = account.accountNo;
+  const { data: account, isLoading } = useGetMyAccount();
 
   const { mutate: addRegularTransfer } = usePostRegularTransferList();
   const { mutate: updateRegularTransfer } = usePatchRegularTransferList();
@@ -80,7 +80,7 @@ export default function RegularTransferRegisterModal({
         <div className="border-[0.03rem] border-gray-200"></div>
         <div className="flex justify-between">
           <p>출금 계좌</p>
-          <p className="text-gray-600">{myAccount}</p>
+          <p className="text-gray-600">{isLoading ? '로딩 중...' : account?.accountNo}</p>
         </div>
         <div className="border-[0.03rem] border-gray-200"></div>
         <div className="flex justify-between">
@@ -88,7 +88,9 @@ export default function RegularTransferRegisterModal({
           <p className="text-gray-600">{startDate}</p>
         </div>
       </div>
-      <Button onClick={handleClick}>등록하기</Button>
+      <Button onClick={handleClick} isDisabled={isLoading}>
+        등록하기
+      </Button>
     </Modal>
   );
 }
