@@ -1,25 +1,25 @@
 import fetcher from '@/apis/fetcher';
-import { IncreasePostForm, IncreaseRequest, StatusType, Summary, TransferRequest } from '@/types/request';
+import { IncreasePostForm, IncreaseRequest, RequestPostForm, Summary, TransferRequest } from '@/types/request';
 
 export const getRequestList = async () => {
   const response = await fetcher.get({ url: 'aicheck/allowance' });
   return response as TransferRequest[];
 };
 
-export const patchTransferRequest = async (id: number, status: StatusType) => {
-  return await fetcher.patch({ url: 'aicheck/allowance', body: { id, status } });
+export const patchTransferRequest = async (request: RequestPostForm) => {
+  return await fetcher.patch({ url: 'aicheck/allowance', body: request });
 };
 
 export const getTransferRequest = async (id: number): Promise<TransferRequest> => {
-  return await fetcher.get({ url: `aicheck/allowance/details/${id}` });
+  return await fetcher.get({ url: `aicheck/allowance/detail/${id}` });
 };
 
 export const postIncreaseRequest = async (request: IncreasePostForm) => {
   return await fetcher.post({ url: 'aicheck/allowance/increase', body: request });
 };
 
-export const postIncreaseReply = async (status: StatusType, requestId: number) => {
-  return await fetcher.post({ url: `aicheck/allowance/increase/${requestId}`, body: { status } });
+export const postIncreaseReply = async ({ id, status }: RequestPostForm) => {
+  return await fetcher.post({ url: `aicheck/allowance/increase/${id}`, body: { status } });
 };
 
 export const getIncreaseRequest = async (id: number): Promise<IncreaseRequest> => {
