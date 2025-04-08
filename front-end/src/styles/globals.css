@@ -76,6 +76,9 @@ body {
   --color-orange: #feaa00;
   --color-red: #ff817a;
   --color-green: #4bba4b;
+  --color-sky: #4bcaff;
+  --color-bluegray: #7199ba;
+
   --color-yellowgreen: #99da7d;
 
   --shadow-base: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
