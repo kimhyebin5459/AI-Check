@@ -7,7 +7,7 @@ import useChatStore from '../../stores/useChatStore';
 import { useState } from 'react';
 import CloseModal from '@/components/chat/CloseModal';
 
-export default function ChatPage() {
+export default function Page() {
   const router = useRouter();
   const [isCloseModalOpened, setIsCloseModalOpened] = useState<boolean>(false);
 
@@ -44,7 +44,7 @@ export default function ChatPage() {
             closeCheck();
           }}
         />
-        <main className="scrollbar-hide w-full flex-1 overflow-y-auto">
+        <main className="scrollbar-hide h-full w-full flex-1 overflow-y-auto">
           <ChatInterface onClickClose={closeCheck} />
         </main>
       </div>
