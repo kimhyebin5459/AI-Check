@@ -1,36 +1,39 @@
+import { User } from '@/types/user';
 import { create } from 'zustand';
 
 interface UserStore {
-  userId: number;
-  userName: string;
+  user: User | undefined;
 
   accessToken: string;
-  isParent: boolean;
   hasAccountConnected: boolean;
 
+  setUser: (user: User) => void;
+  getIsParent: () => boolean;
+
   setAccessToken: (accessToken: string) => void;
-  setIsParent: (isParent: boolean) => void;
   setHasAccountConnected: (hasAccountConnected: boolean) => void;
 
   resetUserStore: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  userId: 1,
-  userName: 'child',
+export const useUserStore = create<UserStore>((set, get) => ({
+  user: undefined,
 
   accessToken: 'VALUE',
-  isParent: false,
   hasAccountConnected: false,
 
+  setUser: (user: User) => set({ user }),
+  getIsParent: () => {
+    return get().user?.type === 'PARENT';
+  },
+
   setAccessToken: (accessToken) => set({ accessToken }),
-  setIsParent: (isParent) => set({ isParent }),
   setHasAccountConnected: (hasAccountConnected) => set({ hasAccountConnected }),
 
   resetUserStore: () =>
     set({
       accessToken: 'VALUE',
-      isParent: false,
       hasAccountConnected: false,
+      user: undefined,
     }),
 }));

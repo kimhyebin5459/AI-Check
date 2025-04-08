@@ -11,6 +11,7 @@ import { Aicheck } from '@/public/icons';
 import { postSignIn } from '@/apis/user';
 import { useUserStore } from '@/stores/useUserStore';
 import { authBridge } from '@/apis/authBridge';
+import { getUserInfo } from '@/apis/user';
 
 interface FormData {
   email: string;
@@ -23,9 +24,16 @@ interface FormErrors {
   general?: string;
 }
 
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  isParent: boolean;
+  accountConnected: boolean;
+}
+
 export default function Page() {
   const router = useRouter();
-  const { setAccessToken, setIsParent } = useUserStore();
+  const { setAccessToken, setUser, setHasAccountConnected } = useUserStore();
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -74,11 +82,16 @@ export default function Page() {
     setIsLoading(true);
 
     try {
-      const { accessToken, isParent, accountConnected, refreshToken } = await postSignIn(formData);
+      const response = (await postSignIn(formData)) as LoginResponse;
+      const { accessToken, refreshToken, accountConnected } = response;
 
       authBridge.saveTokens(accessToken, refreshToken);
       setAccessToken(accessToken);
-      setIsParent(isParent);
+
+      const userInfo = await getUserInfo();
+      setUser(userInfo);
+
+      setHasAccountConnected(accountConnected);
 
       router.push(`${!accountConnected ? '/auth/account-link' : '/'}`);
     } catch (error) {

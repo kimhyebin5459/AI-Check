@@ -1,7 +1,12 @@
 import Spinner from '@/components/common/Spinner';
-export default function LoadingComponent() {
+
+interface Props {
+  isInner?: boolean;
+}
+
+export default function LoadingComponent({ isInner = false }: Props) {
   return (
-    <div className="flex min-h-dvh items-center justify-center">
+    <div className={`flex items-center justify-center ${isInner ? 'h-full' : 'min-h-dvh'}`}>
       <Spinner />
     </div>
   );

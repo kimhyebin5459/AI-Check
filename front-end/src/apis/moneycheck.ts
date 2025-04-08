@@ -14,14 +14,10 @@ export const getTransactionHistory = async ({
   endDate,
   type,
 }: TransactionReq): Promise<TransactionGroup[]> => {
-  const baseUrl = childId ? `aicheck/transaction-records/child` : `aicheck/transaction-records`;
+  const baseUrl = childId ? `aicheck/transaction-records/child/${childId}` : `aicheck/transaction-records`;
 
   const response = await fetcher.get({
-    url:
-      `${baseUrl}?` +
-      (childId ? `childId=${childId}&` : ``) +
-      `startDate=${startDate}&endDate=${endDate}` +
-      (type !== 'ALL' ? `&type=${type}` : ``),
+    url: `${baseUrl}?` + `startDate=${startDate}&endDate=${endDate}` + (type !== 'ALL' ? `&type=${type}` : ``),
   });
   const data = response.data;
   return data;

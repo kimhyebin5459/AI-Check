@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 const useGetChildProfileList = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.CHILD_PROFILE_LIST],
-    queryFn: () => getChildProfileList(),
+    queryFn: getChildProfileList,
     staleTime: 5 * 60 * 1000,
   });
 };
