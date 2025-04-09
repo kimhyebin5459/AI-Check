@@ -23,7 +23,7 @@ export default function ChatBubble({ role, content, aiImage = '/images/cuteRobot
             : 'rounded-tl-none border border-gray-200 bg-white'
         }`}
       >
-        <span dangerouslySetInnerHTML={{ __html: content }} />
+        <span className="break-words whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );

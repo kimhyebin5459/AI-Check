@@ -106,31 +106,38 @@ export default function ChatInterface({ onClickClose }: Props) {
             </div>
           </button>
         </div>
-        <form onSubmit={handleSendMessage} className="flex items-center">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="여기에 내용을 입력하세요"
-            className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
-            disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
-          />
-          <button
-            type="submit"
-            className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
-            disabled={isLoading || !message.trim()}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <div className="w-full">
+          <form onSubmit={handleSendMessage} className="flex items-center">
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="여기에 내용을 입력하세요"
+              className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+              disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
+            />
+            <button
+              type="submit"
+              className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
+              disabled={isLoading || !message.trim()}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
-        </form>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
       <ResultModal
         isModalOpen={isResultModalOpened}
