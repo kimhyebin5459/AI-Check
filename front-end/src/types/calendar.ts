@@ -6,6 +6,9 @@ export interface CalendarDataItem {
 }
 
 export interface CalendarResponse {
+  expense: number;
+  income: number;
+  sum: number;
   calendar: CalendarDataItem[];
 }
 

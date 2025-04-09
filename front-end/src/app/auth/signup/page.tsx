@@ -13,6 +13,7 @@ import useDebounce from '@/hooks/useDebounce';
 import { validatePassword } from '@/utils/getPasswordValidation';
 import { PasswordValidation } from '@/types/passwordValidation';
 import PasswordStrength from '@/components/auth/PasswordStrength';
+import NoticePage from '@/components/common/NoticePage';
 
 interface FormData {
   email: string;
@@ -46,6 +47,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [isSignupComplete, setIsSignupComplete] = useState<boolean>(false);
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({
     isValid: false,
     messages: {
@@ -63,7 +65,6 @@ export default function SignupPage() {
   });
   const [showPasswordDetails, setShowPasswordDetails] = useState<boolean>(false);
 
-  // 디바운스된 비밀번호 값
   const debouncedPassword = useDebounce(formData.password, 500);
 
   const isLoggedIn = !!accessToken && accessToken !== 'VALUE';
@@ -74,25 +75,25 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isLoggedIn && !isParent) {
+      console.log('isLoggedin:', isLoggedIn);
+      console.log('isParent:', isParent);
+
       alert('부모 계정만 자녀 계정을 등록할 수 있습니다.');
       router.push('/');
     }
   }, [isLoggedIn, isParent, router]);
 
-  // 디바운스된 비밀번호가 변경될 때마다 유효성 검사 실행
   useEffect(() => {
     if (debouncedPassword) {
       const validation = validatePassword(debouncedPassword);
       setPasswordValidation(validation);
 
-      // 패스워드에 오류가 있으면 에러 메시지 업데이트
       if (!validation.isValid) {
         setErrors((prev) => ({
           ...prev,
           password: '비밀번호가 요구사항을 충족하지 않습니다',
         }));
       } else {
-        // 유효하면 비밀번호 에러 제거
         setErrors((prev) => ({
           ...prev,
           password: undefined,
@@ -101,12 +102,10 @@ export default function SignupPage() {
     }
   }, [debouncedPassword]);
 
-  // 비밀번호 필드에 포커스되면 상세 정보 표시
   const handlePasswordFocus = () => {
     setShowPasswordDetails(true);
   };
 
-  // 비밀번호 필드에서 포커스가 빠져나가면 상세 정보 숨김
   const handlePasswordBlur = () => {
     setShowPasswordDetails(false);
   };
@@ -125,7 +124,6 @@ export default function SignupPage() {
       }));
     }
 
-    // 비밀번호 확인 필드 실시간 유효성 검사
     if (name === 'confirmPassword') {
       if (value !== formData.password) {
         setErrors((prev) => ({
@@ -140,7 +138,6 @@ export default function SignupPage() {
       }
     }
 
-    // 이메일 필드 실시간 유효성 검사
     if (name === 'email') {
       if (!value) {
         setErrors((prev) => ({
@@ -253,15 +250,15 @@ export default function SignupPage() {
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEYS.CHILD_PROFILE_LIST],
         });
-
-        router.push('/');
       } else {
         await postParentSignUp({
           email: formData.email,
           password: formData.password,
         });
-        router.push('/auth/signin');
       }
+
+      // 회원가입 성공 상태로 변경
+      setIsSignupComplete(true);
     } catch (error) {
       console.error('Signup failed:', error);
       setErrors({
@@ -271,6 +268,26 @@ export default function SignupPage() {
       setIsLoading(false);
     }
   };
+
+  const handleNoticeConfirm = () => {
+    if (isLoggedIn) {
+      router.push('/');
+    } else {
+      router.push('/auth/signin');
+    }
+  };
+
+  if (isSignupComplete) {
+    return (
+      <NoticePage
+        title={isLoggedIn ? '자녀 등록 완료!' : '회원 가입 완료!'}
+        message={isLoggedIn ? '자녀 계정으로 로그인하여 계좌를 연동해주세요' : '로그인하여 계좌 연동을 완료하세요'}
+        iconType="success"
+        buttonText="확인"
+        onButtonClick={handleNoticeConfirm}
+      />
+    );
+  }
 
   return (
     <div className="container">

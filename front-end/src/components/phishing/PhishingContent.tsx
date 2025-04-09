@@ -6,7 +6,8 @@ import SemicircleGauge from '@/components/phishing/SemicircleGauge';
 import { PHISHING_ITEM } from '@/constants/phising';
 import { PhishingStats } from '@/types/phishing';
 import { getPhishing } from '@/apis/phishing';
-import Spinner from '../common/Spinner';
+import LoadingComponent from '@/app/_components/loading-component';
+import ErrorComponent from '@/app/_components/error-component';
 
 export default function PhishingContent() {
   const [stats, setStats] = useState<PhishingStats | null>(null);
@@ -30,21 +31,8 @@ export default function PhishingContent() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-grow flex-col items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-grow flex-col items-center justify-center">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingComponent />;
+  if (error) return <ErrorComponent />;
 
   return (
     <>

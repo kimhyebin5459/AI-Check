@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/useUserStore';
 import useGetUserInfo from './query/useGetUserInfo';
@@ -11,6 +11,8 @@ export const useAuth = () => {
   const { accessToken, user, setUser } = useUserStore();
   const getIsParent = useUserStore((state) => state.getIsParent);
   const { data: userInfo, isLoading, error } = useGetUserInfo();
+
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   const isLoggedIn = Boolean(accessToken) && accessToken !== 'VALUE';
 
@@ -32,6 +34,12 @@ export const useAuth = () => {
     authBridge.clearTokens();
     useUserStore.getState().resetUserStore();
     queryClient.clear();
+
+    setIsLoggedOut(true);
+  };
+
+  const completeLogout = () => {
+    setIsLoggedOut(false);
     router.push('/auth/signin');
   };
 
@@ -43,5 +51,7 @@ export const useAuth = () => {
     isParent: getIsParent(),
     requireAuth,
     logout,
+    isLoggedOut,
+    completeLogout,
   };
 };

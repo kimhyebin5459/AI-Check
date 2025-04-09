@@ -12,3 +12,7 @@ export const patchNotification = async (alarmId: number) => {
 export const deleteNotification = async (alarmId: number) => {
   return await fetcher.delete({ url: 'alarm', body: { alarmId } });
 };
+
+export const getAlarmCount = async () => {
+  return await fetcher.get({ url: 'alarm/check' });
+};

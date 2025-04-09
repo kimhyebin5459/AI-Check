@@ -46,9 +46,9 @@ export default function TransactionCard({
 
   return (
     <div className="px-4 py-3 hover:bg-gray-50" onClick={handleCardClick}>
-      <div className="flex items-center">
+      <div className="flex items-start">
         <div className="flex h-16 flex-col">
-          <div className="mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
+          <div className="mt-1 mr-3 mb-auto flex h-6 w-6 items-center justify-center rounded-md">
             {CategoryIcon && <CategoryIcon />}
           </div>
         </div>

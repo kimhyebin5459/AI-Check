@@ -3,16 +3,29 @@
 import ErrorComponent from '@/app/_components/error-component';
 import LoadingComponent from '@/app/_components/loading-component';
 import ProfileImage from '@/components/common/ProfileImage';
+import NoticePage from '@/components/common/NoticePage';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Page() {
   const { data: user, isPending, isError } = useGetUserInfo();
-  const { logout } = useAuth();
+  const { logout, isLoggedOut, completeLogout } = useAuth();
 
   if (isPending) return <LoadingComponent />;
   if (isError) return <ErrorComponent />;
+
+  if (isLoggedOut) {
+    return (
+      <NoticePage
+        title="로그아웃 되었습니다"
+        message="다시 로그인하려면 아래 버튼을 클릭해주세요."
+        iconType="success"
+        buttonText="로그인 페이지로 이동"
+        onButtonClick={completeLogout}
+      />
+    );
+  }
 
   return (
     <>

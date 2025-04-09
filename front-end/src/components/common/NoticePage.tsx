@@ -10,11 +10,19 @@ interface Props {
   title: string;
   message?: string;
   iconType?: IconType;
+  subMessage?: string;
   buttonText: string;
   onButtonClick: () => void;
 }
 
-export default function NoticePage({ title, message, iconType = 'success', buttonText, onButtonClick }: Props) {
+export default function NoticePage({
+  title,
+  message,
+  iconType = 'success',
+  subMessage,
+  buttonText,
+  onButtonClick,
+}: Props) {
   const renderIcon = () => {
     switch (iconType) {
       case 'success':
@@ -44,6 +52,7 @@ export default function NoticePage({ title, message, iconType = 'success', butto
           <h1 className="mb-3 text-center text-xl font-bold">{title}</h1>
 
           {message && <p className="mb-10 text-center text-gray-600">{message}</p>}
+          {subMessage && <p className="mb-10 text-center text-gray-600">{subMessage}</p>}
         </div>
       </main>
       <div className="bottom-btn w-full">

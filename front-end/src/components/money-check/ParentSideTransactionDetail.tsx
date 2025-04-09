@@ -14,6 +14,7 @@ import Spinner from '../common/Spinner';
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
 import { TransactionType, Transaction, UpdateRatingData } from '@/types/transaction';
 import { getDetail, updateRating } from '@/apis/moneycheck';
+import ErrorComponent from '@/app/_components/error-component';
 
 const TRANSACTION_HISTORY_KEY = 'transactionHistory';
 
@@ -102,14 +103,10 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
   }
 
   if (error) {
-    return (
-      <div className="flex flex-grow flex-col items-center justify-center">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-500">{error}</div>
-      </div>
-    );
+    return <ErrorComponent subMessage={error} />;
   }
   if (!transaction) {
-    return <div className="mx-auto max-w-md px-4">거래 정보를 찾을 수 없습니다.</div>;
+    return <ErrorComponent subMessage="거래 내역을 찾을 수 없습니다." />;
   }
 
   return (
@@ -125,11 +122,7 @@ export default function ParentTransactionDetail({ paramsId }: Props) {
           <section className="mt-4">
             <h3 className="mb-1 text-base">대분류</h3>
             <div className="mb-4 flex flex-wrap gap-2">
-              <Tag
-                key={transaction.firstCategoryName}
-                isSelected={true}
-                onClick={() => {}} // 비활성화
-              >
+              <Tag key={transaction.firstCategoryName} isSelected={true} onClick={() => {}}>
                 {transaction.firstCategoryName || getTransactionTypeText(transaction.type)}
               </Tag>
             </div>
