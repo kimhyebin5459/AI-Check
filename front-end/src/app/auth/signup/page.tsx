@@ -7,6 +7,8 @@ import Input from '@/components/common/Input';
 import Header from '@/components/common/Header';
 import { postEmailVerification, postEmailConfirm, postChildSignUp, postParentSignUp } from '@/apis/user';
 import { useUserStore } from '@/stores/useUserStore';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 
 interface FormData {
   email: string;
@@ -27,6 +29,8 @@ export default function SignupPage() {
   const router = useRouter();
   const { accessToken } = useUserStore();
   const getIsParent = useUserStore((state) => state.getIsParent);
+
+  const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -155,16 +159,17 @@ export default function SignupPage() {
           email: formData.email,
           password: formData.password,
         });
+
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.CHILD_PROFILE_LIST],
+        });
+
+        router.push('/');
       } else {
         await postParentSignUp({
           email: formData.email,
           password: formData.password,
         });
-      }
-
-      if (isLoggedIn) {
-        router.push('/');
-      } else {
         router.push('/auth/signin');
       }
     } catch (error) {
