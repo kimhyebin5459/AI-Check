@@ -5,6 +5,7 @@ import { CalendarResponse, CalendarDay as CalendarDayType } from '@/types/calend
 import CalendarDay from './CalendarDay';
 import MonthlySummary from './MonthlySummary';
 import { getCalendar } from '@/apis/moneycheck';
+import Spinner from '../common/Spinner';
 
 interface Props {
   year: number;
@@ -110,7 +111,7 @@ export default function CalendarView({ year, month, onDateSelect, selectedDate }
         </div>
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <p>로딩 중...</p>
+            <Spinner />
           </div>
         ) : error ? (
           <div className="flex h-64 items-center justify-center text-red-500">

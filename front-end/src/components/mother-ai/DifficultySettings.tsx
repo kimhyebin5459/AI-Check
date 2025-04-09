@@ -6,6 +6,7 @@ import CategoryCard from '@/components/mother-ai/CategoryCard';
 import { categoryMapping } from '@/utils/mapDifficulty';
 import { useDifficultyStore } from '@/stores/useDifficultyStore';
 import { DisplayDifficulty } from '@/types/difficulty';
+import ErrorComponent from '@/app/_components/error-component';
 
 export default function DifficultySettings() {
   const {
@@ -31,9 +32,7 @@ export default function DifficultySettings() {
   }
 
   if (!difficultyData) {
-    return (
-      <div className="rounded-lg border border-gray-200 p-4 text-center text-gray-500">설정을 불러올 수 없습니다.</div>
-    );
+    return <ErrorComponent subMessage="설정을 불러올 수 없습니다." />;
   }
 
   const defaultDifficulty: DisplayDifficulty = '중간';

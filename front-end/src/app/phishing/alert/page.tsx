@@ -32,7 +32,7 @@ export default function Page() {
   if (isLoading) {
     return (
       <div className="flex flex-grow flex-col items-center justify-center">
-        <Spinner />
+        <Spinner size="md" />
       </div>
     );
   }

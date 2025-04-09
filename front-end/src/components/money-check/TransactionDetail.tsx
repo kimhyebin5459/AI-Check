@@ -14,6 +14,7 @@ import { Transaction, UpdateTransactionData } from '@/types/transaction';
 import { getDetail, updateTransactionRecord } from '@/apis/moneycheck';
 import { getTransactionDirection } from '@/utils/formatTransaction';
 import Spinner from '../common/Spinner';
+import ErrorComponent from '@/app/_components/error-component';
 
 const TRANSACTION_HISTORY_KEY = 'transactionHistory';
 
@@ -88,7 +89,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
 
   const confirmHandler = async () => {
     if (!transaction || !transaction.recordId) {
-      alert('거래 정보가 없습니다.');
+      return <ErrorComponent subMessage="거래 내역을 찾을 수 없어요." />;
       return;
     }
 
