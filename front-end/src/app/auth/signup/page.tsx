@@ -9,6 +9,10 @@ import { postEmailVerification, postEmailConfirm, postChildSignUp, postParentSig
 import { useUserStore } from '@/stores/useUserStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import useDebounce from '@/hooks/useDebounce';
+import { validatePassword } from '@/utils/getPasswordValidation';
+import { PasswordValidation } from '@/types/passwordValidation';
+import PasswordStrength from '@/components/auth/PasswordStrength';
 
 interface FormData {
   email: string;
@@ -42,6 +46,25 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
   const [isCodeSent, setIsCodeSent] = useState<boolean>(false);
+  const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({
+    isValid: false,
+    messages: {
+      length: '8자 이상이어야 합니다',
+      hasLetter: '알파벳을 포함해야 합니다',
+      hasNumber: '숫자를 포함해야 합니다',
+      hasSpecialChar: '특수문자를 포함해야 합니다',
+    },
+    valid: {
+      length: false,
+      hasLetter: false,
+      hasNumber: false,
+      hasSpecialChar: false,
+    },
+  });
+  const [showPasswordDetails, setShowPasswordDetails] = useState<boolean>(false);
+
+  // 디바운스된 비밀번호 값
+  const debouncedPassword = useDebounce(formData.password, 500);
 
   const isLoggedIn = !!accessToken && accessToken !== 'VALUE';
   const isParent = getIsParent();
@@ -56,6 +79,38 @@ export default function SignupPage() {
     }
   }, [isLoggedIn, isParent, router]);
 
+  // 디바운스된 비밀번호가 변경될 때마다 유효성 검사 실행
+  useEffect(() => {
+    if (debouncedPassword) {
+      const validation = validatePassword(debouncedPassword);
+      setPasswordValidation(validation);
+
+      // 패스워드에 오류가 있으면 에러 메시지 업데이트
+      if (!validation.isValid) {
+        setErrors((prev) => ({
+          ...prev,
+          password: '비밀번호가 요구사항을 충족하지 않습니다',
+        }));
+      } else {
+        // 유효하면 비밀번호 에러 제거
+        setErrors((prev) => ({
+          ...prev,
+          password: undefined,
+        }));
+      }
+    }
+  }, [debouncedPassword]);
+
+  // 비밀번호 필드에 포커스되면 상세 정보 표시
+  const handlePasswordFocus = () => {
+    setShowPasswordDetails(true);
+  };
+
+  // 비밀번호 필드에서 포커스가 빠져나가면 상세 정보 숨김
+  const handlePasswordBlur = () => {
+    setShowPasswordDetails(false);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -68,6 +123,41 @@ export default function SignupPage() {
         ...prev,
         [name]: undefined,
       }));
+    }
+
+    // 비밀번호 확인 필드 실시간 유효성 검사
+    if (name === 'confirmPassword') {
+      if (value !== formData.password) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: '비밀번호가 일치하지 않습니다',
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: undefined,
+        }));
+      }
+    }
+
+    // 이메일 필드 실시간 유효성 검사
+    if (name === 'email') {
+      if (!value) {
+        setErrors((prev) => ({
+          ...prev,
+          email: '이메일을 입력해주세요',
+        }));
+      } else if (!/\S+@\S+\.\S+/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: '유효한 이메일 주소를 입력해주세요',
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          email: undefined,
+        }));
+      }
     }
   };
 
@@ -86,8 +176,8 @@ export default function SignupPage() {
 
     if (!formData.password) {
       newErrors.password = '비밀번호를 입력해주세요';
-    } else if (formData.password.length < 8) {
-      newErrors.password = '비밀번호는 8자 이상이어야 합니다';
+    } else if (!passwordValidation.isValid) {
+      newErrors.password = '비밀번호가 요구사항을 충족하지 않습니다';
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -241,9 +331,13 @@ export default function SignupPage() {
             placeholder="비밀번호"
             value={formData.password}
             onChange={handleChange}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
             error={errors.password}
             required
           />
+
+          {formData.password && <PasswordStrength validation={passwordValidation} showDetails={showPasswordDetails} />}
 
           <Input
             label="비밀번호 확인"
@@ -259,7 +353,7 @@ export default function SignupPage() {
           {errors.submit && <p className="mt-4 text-sm text-red-500">{errors.submit}</p>}
 
           <div className="mt-auto flex pb-5">
-            <Button type="submit" isDisabled={isLoading || !isEmailVerified}>
+            <Button type="submit" isDisabled={isLoading || !isEmailVerified || !passwordValidation.isValid}>
               {isLoading ? '처리 중...' : isLoggedIn ? '자녀 등록하기' : '가입하기'}
             </Button>
           </div>

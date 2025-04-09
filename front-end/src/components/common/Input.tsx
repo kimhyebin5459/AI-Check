@@ -6,6 +6,8 @@ interface InputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   error?: string;
   required?: boolean;
   name?: string;
@@ -20,6 +22,8 @@ export default function Input({
   placeholder,
   value,
   onChange,
+  onFocus,
+  onBlur,
   error,
   required = false,
   name,
@@ -51,12 +55,14 @@ export default function Input({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          onFocus={onFocus} // 추가
+          onBlur={onBlur} // 추가
           onInput={handleInput}
           required={required}
           maxLength={maxLength}
           className={`w-full border px-4 py-3 ${
             error ? 'border-red-500' : 'border-gray-300'
-          } rounded-2xl transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500`}
+          } rounded-2xl transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-yellow-300`}
         />
         {children}
       </div>
