@@ -15,7 +15,7 @@ export default function Footer() {
     const fetchNotificationCount = async () => {
       try {
         const count = await getAlarmCount();
-        setNotificationCount(count);
+        setNotificationCount(count.count);
       } catch (error) {
         console.error('Failed to fetch notification count:', error);
       }
@@ -23,7 +23,7 @@ export default function Footer() {
 
     fetchNotificationCount();
 
-    const intervalId = setInterval(fetchNotificationCount, 10000); // Check every minute
+    const intervalId = setInterval(fetchNotificationCount, 2000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -33,7 +33,7 @@ export default function Footer() {
       <div className="flex w-full justify-between space-x-4 px-10 pt-2.5">
         {FOOTER.map(({ activeIcon, inactiveIcon, label, to }) => {
           const isActive = path === to;
-          const showNotification = label === '알림' || label === 'Notifications'; // Adjust based on your actual label
+          const showNotification = label === '알림';
 
           return (
             <Link key={label} href={to}>
