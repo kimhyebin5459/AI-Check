@@ -19,16 +19,15 @@ export default function ProfileImage({ image, size }: Props) {
   return (
     <div
       className="overflow-hidden rounded-full border-[0.06rem] border-gray-600"
-      style={{ width: sizeToPixels[size], height: sizeToPixels[size] }}
+      style={{ width: sizeToPixels[size], height: sizeToPixels[size], position: 'relative' }}
     >
       <Image
         src={image || defaultImage}
         alt="my profile image"
-        width={sizeToPixels[size]}
-        height={sizeToPixels[size]}
         className="object-cover"
         unoptimized={true}
         priority
+        fill
       />
     </div>
   );

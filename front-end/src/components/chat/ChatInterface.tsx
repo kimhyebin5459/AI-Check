@@ -8,6 +8,7 @@ import ChatChooser from './ChatChooser';
 import ChatBubble from '@/components/chat/ChatBubble';
 import ResultModal from './ResultModal';
 import { X } from 'lucide-react';
+import { LoadingBubble } from './LoadingBubble';
 
 interface Props {
   onClickClose: () => void;
@@ -24,7 +25,7 @@ export default function ChatInterface({ onClickClose }: Props) {
   // 메시지가 추가될 때 스크롤 맨 아래로 이동
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [session?.messages]);
+  }, [session?.messages, isLoading]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -52,24 +53,25 @@ export default function ChatInterface({ onClickClose }: Props) {
 
   // 비활성 타임아웃 체크
   useEffect(() => {
-    console.log('비활성 체크 인터벌 설정');
     const checkInactivityInterval = setInterval(() => {
-      console.log('비활성 체크 실행');
       useChatStore.getState().checkInactivity();
     }, 60000);
 
     return () => {
-      console.log('비활성 체크 인터벌 제거');
       clearInterval(checkInactivityInterval);
     };
-  }, []); // 빈 의존성 배열로 한 번만 생성되도록 함
+  }, []);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
-
-    await sendMessage(message);
+    
+    // 메시지 내용 저장 후 즉시 입력창 비우기
+    const messageToSend = message.trim();
     setMessage('');
+    
+    // 저장된 메시지로 전송 진행
+    await sendMessage(messageToSend);
   };
 
   useEffect(() => {
@@ -93,6 +95,8 @@ export default function ChatInterface({ onClickClose }: Props) {
           <div className="flex flex-col overflow-auto px-4">
             {!!session &&
               session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
+            {/* 로딩 중일 때 표시되는 버블 */}
+            {isLoading && <LoadingBubble />}
             <div ref={messagesEndRef} />
           </div>
         </div>
@@ -106,38 +110,31 @@ export default function ChatInterface({ onClickClose }: Props) {
             </div>
           </button>
         </div>
-        <div className="w-full">
-          <form onSubmit={handleSendMessage} className="flex items-center">
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="여기에 내용을 입력하세요"
-              className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
-              disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
-            />
-            <button
-              type="submit"
-              className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
-              disabled={isLoading || !message.trim()}
+        <form onSubmit={handleSendMessage} className="flex items-center">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="여기에 내용을 입력하세요"
+            className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+            disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
+          />
+          <button
+            type="submit"
+            className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
+            disabled={isLoading || !message.trim()}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
-            </button>
-          </form>
-        </div>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </form>
       </div>
       <ResultModal
         isModalOpen={isResultModalOpened}

@@ -37,14 +37,14 @@ export default function NavButton({ lines, image, caseCnt, color, to }: Props) {
 
   return (
     <div
-      className={clsx(`shadow-base flex h-full w-full flex-col rounded-2xl text-2xl font-bold`, {
+      className={clsx(`shadow-base flex h-full w-full flex-col rounded-2xl text-xl font-bold`, {
         'bg-yellow-100': color === 'yellow-100',
         'bg-yellow-200': color === 'yellow-200',
         'bg-gradation1': color === 'gradation1',
       })}
       onClick={handleClick}
     >
-      <div className="pt-4 pl-4 leading-7">
+      <div className="pt-4 pl-4 pb-3 leading-6.5">
         {lines.map((line) => (
           <p key={line}>{renderLineWithHighlight(line)}</p>
         ))}
