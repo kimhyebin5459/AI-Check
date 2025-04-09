@@ -24,8 +24,6 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   setUser: (user: User) => set({ user }),
   getIsParent: () => {
-    console.log('here:', get().user);
-
     return get().user?.type === 'PARENT';
   },
 
