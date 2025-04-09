@@ -45,8 +45,8 @@ export type TransactionDetailResponse = {
 
 export interface UpdateTransactionData {
   recordId: number;
-  firstCategoryId: number;
-  secondCategoryId?: number;
+  firstCategoryId: number | null;
+  secondCategoryId: number | null;
   description?: string;
 }
 

@@ -23,7 +23,7 @@ export default function Footer() {
 
     fetchNotificationCount();
 
-    const intervalId = setInterval(fetchNotificationCount, 60000); // Check every minute
+    const intervalId = setInterval(fetchNotificationCount, 10000); // Check every minute
 
     return () => clearInterval(intervalId);
   }, []);

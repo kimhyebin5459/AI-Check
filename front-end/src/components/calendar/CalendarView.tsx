@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function CalendarView({ year, month, onDateSelect, selectedDate }: Props) {
-  const [calendarData, setCalendarData] = useState<CalendarResponse>({ calendar: [] });
+  const [calendarData, setCalendarData] = useState<CalendarResponse>({ expense: 0, income: 0, sum: 0, calendar: [] });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,12 +26,12 @@ export default function CalendarView({ year, month, onDateSelect, selectedDate }
 
       try {
         const data = await getCalendar(year, month);
-        setCalendarData(data || { calendar: [] });
+        setCalendarData(data || { expense: 0, income: 0, sum: 0, calendar: [] });
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
         setError(errorMessage);
         console.error('Error fetching calendar data:', errorMessage);
-        setCalendarData({ calendar: [] });
+        setCalendarData({ expense: 0, income: 0, sum: 0, calendar: [] });
       } finally {
         setLoading(false);
       }

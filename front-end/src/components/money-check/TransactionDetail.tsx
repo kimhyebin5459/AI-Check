@@ -36,6 +36,11 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const [memo, setMemo] = useState<string>('');
   const [transactionDirection, setTransactionDirection] = useState<'INCOME' | 'EXPENSE'>('EXPENSE');
 
+  // 원본 데이터 저장용 상태 추가
+  const [originalFirstCategory, setOriginalFirstCategory] = useState<string>('');
+  const [originalSecondCategory, setOriginalSecondCategory] = useState<string>('');
+  const [originalMemo, setOriginalMemo] = useState<string>('');
+
   useEffect(() => {
     const fetchTransactionDetail = async () => {
       if (!recordId) {
@@ -47,9 +52,21 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       try {
         const data = await getDetail(Number(recordId));
         setTransaction(data);
-        setSelectedFirstCategory(data.firstCategoryName || '');
-        setSelectedSecondCategory(data.secondCategoryName || '');
-        setMemo(data.description || '');
+
+        const firstCat = data.firstCategoryName || '';
+        const secondCat = data.secondCategoryName || '';
+        const description = data.description || '';
+
+        // 현재 값과 원본 값 모두 설정
+        setSelectedFirstCategory(firstCat);
+        setOriginalFirstCategory(firstCat);
+
+        setSelectedSecondCategory(secondCat);
+        setOriginalSecondCategory(secondCat);
+
+        setMemo(description);
+        setOriginalMemo(description);
+
         setTransactionDirection(getTransactionDirection(data.type));
       } catch (err) {
         setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
@@ -60,6 +77,15 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
 
     fetchTransactionDetail();
   }, [recordId]);
+
+  // 변경 사항 있는지 확인하는 함수
+  const hasChanges = () => {
+    return (
+      selectedFirstCategory !== originalFirstCategory ||
+      selectedSecondCategory !== originalSecondCategory ||
+      memo !== originalMemo
+    );
+  };
 
   const firstCategoryClickHandler = (category: string) => {
     setSelectedFirstCategory(category);
@@ -90,11 +116,21 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const confirmHandler = async () => {
     if (!transaction || !transaction.recordId) {
       return <ErrorComponent subMessage="거래 내역을 찾을 수 없어요." />;
+    }
+
+    // 변경 사항이 없으면 바로 뒤로 가기
+    if (!hasChanges()) {
+      router.back();
       return;
     }
 
     if (transactionDirection === 'EXPENSE' && !selectedFirstCategory) {
       alert('대분류를 선택해주세요.');
+      return;
+    }
+
+    if (transactionDirection === 'EXPENSE' && !selectedSecondCategory) {
+      alert('소분류를 선택해주세요.');
       return;
     }
 
@@ -104,12 +140,20 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
         ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
         : 0;
 
-    const updatedData: UpdateTransactionData = {
-      recordId: transaction.recordId,
-      firstCategoryId: firstCategoryId,
-      secondCategoryId: secondCategoryId,
-      description: memo || '',
-    };
+    const updatedData: UpdateTransactionData =
+      transactionDirection === 'EXPENSE'
+        ? {
+            recordId: transaction.recordId,
+            firstCategoryId: firstCategoryId,
+            secondCategoryId: secondCategoryId,
+            description: memo || '',
+          }
+        : {
+            recordId: transaction.recordId,
+            firstCategoryId: null,
+            secondCategoryId: null,
+            description: memo || '',
+          };
 
     try {
       setLoading(true);
@@ -117,9 +161,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       await updateTransactionRecord(updatedData);
 
       queryClient.invalidateQueries({ queryKey: [TRANSACTION_HISTORY_KEY] });
-
-      const updatedTransaction = await getDetail(Number(recordId));
-      setTransaction(updatedTransaction);
 
       setLoading(false);
       router.back();
