@@ -75,6 +75,9 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isLoggedIn && !isParent) {
+      console.log('isLoggedin:', isLoggedIn);
+      console.log('isParent:', isParent);
+
       alert('부모 계정만 자녀 계정을 등록할 수 있습니다.');
       router.push('/');
     }
