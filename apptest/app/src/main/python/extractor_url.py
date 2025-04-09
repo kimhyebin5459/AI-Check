@@ -2,11 +2,8 @@
 import re
 import math
 import json
-# import pandas as pd
 import numpy as np
-# import joblib
 from urllib.parse import urlparse
-# from tqdm import tqdm
 
 # 🔑 상수 정의
 SUSPICIOUS_KEYWORDS = [
@@ -173,14 +170,6 @@ def get_feature_names_v6():
         "has_base64", "query_len", "fragment_len",
         "other_domain_len", "is_https", "has_at_symbol", "typosquatting_score"
     ]
-
-# def extract_and_scale(url: str, scaler_path: str):
-#     features = extract_lexical_features_v6(url)
-#     features_np = np.array(features).reshape(1, -1)
-#
-#     scaler = joblib.load(scaler_path)
-#     scaled = scaler.transform(features_np)
-#     return scaled[0].tolist()
 
 def extract_and_scale(url: str, scaler_path: str):
     features = extract_lexical_features_v6(url)

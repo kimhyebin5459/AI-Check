@@ -30,17 +30,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         try {
-            val fileName = "mixed_siu"
+            val fileName = "data/mixed_siu"
             copyAssetToInternalStorage("$fileName.wav")
 
             // ✅ 모델 로드
-            val interpreterDeepVoice = Interpreter(loadModelFile("deepvoice_model.tflite"))
-            val interpreterVoicePhishing = Interpreter(loadModelFile("model2.tflite"))
-            val interpreterSTT = Interpreter(loadModelFile("stt_float36.tflite"))
-            interpreterUrlDetector = Interpreter(loadModelFile("mlp-256-128-64-v6-auc-2-1_epoch_50_lr_0.001_batch_32_none_final_2025-04-09_00-17-44.tflite"))  // ✅ URL 모델
+            val interpreterDeepVoice = Interpreter(loadModelFile("models/deepvoice_model.tflite"))
+            val interpreterVoicePhishing = Interpreter(loadModelFile("models/model2.tflite"))
+            val interpreterSTT = Interpreter(loadModelFile("models/stt_float36.tflite"))
+            interpreterUrlDetector = Interpreter(loadModelFile("models/mlp-256-128-64-v6-auc-2-1_epoch_50_lr_0.001_batch_32_none_final_2025-04-09_00-17-44.tflite"))  // ✅ URL 모델
 
             // ✅ vocab.json
-            val vocabJson = assets.open("vocab.json").bufferedReader().use { it.readText() }
+            val vocabJson = assets.open("helpers/vocab.json").bufferedReader().use { it.readText() }
             wordToIndex = Json.decodeFromString(vocabJson)
 
             // ✅ 탐지기 구성
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
                 try {
-                    val audioFileName = "$userInput.wav"
+                    val audioFileName = "data/$userInput.wav"
                     copyAssetToInternalStorage(audioFileName)
                     val audioPath = "${filesDir.absolutePath}/$audioFileName"
                     val result = deepVoiceDetector.detect(audioPath)
@@ -114,7 +114,7 @@ ${result["segment_probs"]}
 
                 try {
                     val python = Python.getInstance()
-                    val scalerPath = copyAssetToInternalStorage("scaler_params_v6.json")
+                    val scalerPath = copyAssetToInternalStorage("helpers/scaler_params_v6.json")
                     val pyModule = python.getModule("extractor_url")
 
                     val result = pyModule.callAttr("extract_and_scale", url, scalerPath)
@@ -165,6 +165,10 @@ $label
 
     private fun copyAssetToInternalStorage(fileName: String): String {
         val outFile = File(filesDir, fileName)
+
+        // 🔑 필요한 디렉토리 생성
+        outFile.parentFile?.mkdirs()
+
         if (!outFile.exists()) {
             assets.open(fileName).use { input ->
                 outFile.outputStream().use { output ->
@@ -175,7 +179,4 @@ $label
         return outFile.absolutePath
     }
 
-
-    // ✅ 더 이상 사용하지 않음 (ONNX 제거됨)
-    // private fun copyModelToInternalStorage(modelFileName: String): String { ... }
 }
