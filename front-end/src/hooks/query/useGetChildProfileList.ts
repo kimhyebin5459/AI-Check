@@ -6,7 +6,7 @@ const useGetChildProfileList = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.CHILD_PROFILE_LIST],
     queryFn: getChildProfileList,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1 * 20 * 1000,
   });
 };
 

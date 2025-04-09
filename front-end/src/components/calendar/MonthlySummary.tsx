@@ -8,9 +8,13 @@ interface Props {
 }
 
 export default function MonthlySummary({ calendarData }: Props) {
-  const totalExpense = calendarData.calendar.filter((item) => item.sum < 0).reduce((sum, item) => sum + item.sum, 0);
+  console.log('calenda:', calendarData.calendar);
 
-  const totalIncome = calendarData.calendar.filter((item) => item.sum > 0).reduce((sum, item) => sum + item.sum, 0);
+  const totalExpense = calendarData.expense;
+
+  const totalIncome = calendarData.income;
+
+  const total = calendarData.sum;
 
   return (
     <div className="my-4 flex justify-between rounded-lg bg-white p-4 shadow-md">
@@ -24,8 +28,8 @@ export default function MonthlySummary({ calendarData }: Props) {
       </div>
       <div className="text-center">
         <p className="text-sm font-medium text-gray-500">총합</p>
-        <p className={`text-lg font-bold ${totalIncome + totalExpense >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
-          {(totalIncome + totalExpense).toLocaleString()}원
+        <p className={`text-lg font-bold ${total >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
+          {total.toLocaleString()}원
         </p>
       </div>
     </div>

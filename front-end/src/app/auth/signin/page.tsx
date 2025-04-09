@@ -89,6 +89,8 @@ export default function Page() {
       setAccessToken(accessToken);
 
       const userInfo = await getUserInfo();
+      console.log('user Info:', userInfo);
+
       setUser(userInfo);
 
       setHasAccountConnected(accountConnected);
