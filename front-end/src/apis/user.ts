@@ -59,3 +59,7 @@ export const patchUserInfo = async (image: File | null) => {
 export const getUserInfo = async (): Promise<User> => {
   return await fetcher.get({ url: 'aicheck/members/details' });
 };
+
+export const deleteFcm = async () => {
+  return await fetcher.delete({ url: 'alarm/fcm' });
+};
