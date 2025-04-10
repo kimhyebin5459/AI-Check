@@ -1,4 +1,4 @@
-import { ChildProfile, SignInPostForm, SignUpPostForm, User } from '@/types/user';
+import { BankSignUpForm, ChildProfile, SignInPostForm, SignUpPostForm, User } from '@/types/user';
 import fetcher from '@/apis/fetcher';
 import { authBridge } from './authBridge';
 
@@ -11,6 +11,10 @@ export const postSignIn = async ({ email, password }: SignInPostForm) => {
   });
 
   return response;
+};
+
+export const postBankSignUp = async ({ email, name, brith, accountNo }: BankSignUpForm) => {
+  return await fetcher.post({ url: 'bank/signup', body: { email, name, brith, accountNo } });
 };
 
 export const postParentSignUp = async ({ email, password }: SignUpPostForm) => {

@@ -30,3 +30,10 @@ export interface MyAccountInfo {
   name: string;
   no: string;
 }
+
+export interface BankSignUpForm {
+  email: string;
+  name: string;
+  brith: string;
+  accountNo: number;
+}

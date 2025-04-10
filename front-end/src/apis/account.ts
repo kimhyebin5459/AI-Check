@@ -1,6 +1,10 @@
 import fetcher from '@/apis/fetcher';
 import { Account, ChildAccount, Memo } from '@/types/account';
 
+export const postCheckAccount = async (accountNo: number) => {
+  return await fetcher.post({ url: 'bank/check', body: { accountNo } });
+};
+
 export const getMyAccount = async (): Promise<Account> => {
   return await fetcher.get({ url: 'aicheck/accounts/my' });
 };

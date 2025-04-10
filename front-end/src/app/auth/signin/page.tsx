@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import React, { useState } from 'react';
@@ -148,6 +149,19 @@ export default function Page() {
               <div className="mt-4 text-center">
                 <Link href="/auth/signup" className="font-light text-gray-600 underline decoration-1">
                   회원가입
+                </Link>
+              </div>
+
+              <div className="mt-4 flex w-full items-center justify-center text-center">
+                <Link href="/auth/ssafy-bank-signup" className="font-light text-gray-900">
+                  <div className="w-fit rounded-2xl bg-gray-50 p-4">
+                    잠깐! <br />
+                    아직 싸피 뱅크 회원이 아니시라면
+                    <br />
+                    먼저 싸피 뱅크에 가입해주세요! <br />
+                    <br />
+                    <span className="text-lg underline decoration-1">가입하러 가기</span>
+                  </div>
                 </Link>
               </div>
             </div>
