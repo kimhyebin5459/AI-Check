@@ -7,6 +7,7 @@ import { categoryMapping } from '@/utils/mapDifficulty';
 import { useDifficultyStore } from '@/stores/useDifficultyStore';
 import { DisplayDifficulty } from '@/types/difficulty';
 import ErrorComponent from '@/app/_components/error-component';
+import ContentTextArea from './ContentTextArea'; // ContentTextArea 컴포넌트 추가
 
 export default function DifficultySettings() {
   const {
@@ -57,6 +58,9 @@ export default function DifficultySettings() {
           />
         );
       })}
+
+      {/* ContentTextArea 컴포넌트 추가 */}
+      <ContentTextArea />
     </div>
   );
 }

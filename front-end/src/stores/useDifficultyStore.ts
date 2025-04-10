@@ -16,6 +16,7 @@ interface DifficultyState {
   loading: boolean;
   error: string | null;
   childId: string | null;
+  content: string | null; // content 추가
 
   setChildId: (childId: string) => void;
   clearError: () => void;
@@ -26,6 +27,7 @@ interface DifficultyState {
     subCategoryId: number,
     difficulty: DisplayDifficulty
   ) => void;
+  setContent: (content: string) => void; // setContent 함수 추가
   fetchDifficultySettings: () => Promise<void>;
   saveSettings: () => Promise<boolean>;
   copySettingsFromChild: (sourceChildId: string) => Promise<void>;
@@ -44,6 +46,7 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
   loading: false,
   error: null,
   childId: null,
+  content: null, // content 초기값
 
   setChildId: (childId: string) => set({ childId }),
 
@@ -56,6 +59,8 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
         [category]: !state.expandedCategories[category],
       },
     })),
+
+  setContent: (content: string) => set({ content }), // content setter 함수 추가
 
   handleDifficultyChange: (category: string, difficulty: DisplayDifficulty) => {
     const { difficultyData } = get();
@@ -75,6 +80,7 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     const categoryIndex = difficultyData.categoryDifficulties.findIndex((cat) => cat.categoryName === category);
 
     if (categoryIndex === -1) {
+      console.log(`Category "${category}" not found in difficulty data`);
       return;
     }
 
@@ -100,6 +106,7 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     const categoryIndex = difficultyData.categoryDifficulties.findIndex((cat) => cat.categoryName === parentCategory);
 
     if (categoryIndex === -1) {
+      console.error(`Parent category "${parentCategory}" not found`);
       return;
     }
 
@@ -109,6 +116,7 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     );
 
     if (subIndex === -1) {
+      console.error(`SubCategory with ID ${subCategoryId} not found in ${parentCategory}`);
       return;
     }
 
@@ -155,9 +163,11 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
         difficultyData: data,
         categoryDifficulties: difficultyMap,
         expandedCategories: initialExpandedState,
+        content: data.content || '', // content 설정
         loading: false,
       });
     } catch (err) {
+      console.error('Error fetching settings:', err);
       set({
         error: err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.',
         loading: false,
@@ -166,18 +176,25 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
   },
 
   saveSettings: async () => {
-    const { difficultyData } = get();
+    const { difficultyData, content } = get();
+    console.log('setting log:', difficultyData);
 
     if (!difficultyData) return false;
-    if (difficultyData?.content == null) difficultyData.content = '';
+
+    // content 필드 업데이트
+    const updatedDifficultyData = {
+      ...difficultyData,
+      content: content || '',
+    };
 
     try {
       await updateChatbotDifficulty({
-        difficulty: difficultyData,
+        difficulty: updatedDifficultyData,
       });
 
       return true;
     } catch (err) {
+      console.error('Error saving settings:', err);
       set({
         error: err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.',
       });
@@ -216,9 +233,11 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
         difficultyData: result,
         categoryDifficulties: difficultyMap,
         expandedCategories: initialExpandedState,
+        content: result.content || '', // content 설정
         loading: false,
       });
     } catch (err) {
+      console.error('Error copying settings:', err);
       set({
         error: err instanceof Error ? err.message : '소스 자녀의 설정을 불러오는데 실패했습니다.',
         loading: false,
