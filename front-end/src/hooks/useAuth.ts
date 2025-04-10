@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/useUserStore';
 import useGetUserInfo from './query/useGetUserInfo';
 import { authBridge } from '@/apis/authBridge';
 import { useQueryClient } from '@tanstack/react-query';
+import { deleteFcm } from '@/apis/user';
 
 export const useAuth = () => {
   const router = useRouter();
@@ -33,6 +34,7 @@ export const useAuth = () => {
   const logout = () => {
     setIsLoggedOut(true);
 
+    deleteFcm();
     authBridge.clearAuthTokens();
     useUserStore.getState().resetUserStore();
     queryClient.clear();
