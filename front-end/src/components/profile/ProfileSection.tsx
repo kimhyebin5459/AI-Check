@@ -7,6 +7,7 @@ import NoticePage from '@/components/common/NoticePage';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import { Settings } from 'lucide-react';
 
 export default function Page() {
   const { data: user, isPending, isError } = useGetUserInfo();
@@ -33,14 +34,11 @@ export default function Page() {
         <ProfileImage image={user?.image} size="xl" />
         <p className="text-2xl font-bold text-gray-800">{user?.name}</p>
       </div>
-      <div className="w-full space-y-7 rounded-xl bg-white px-6 py-7">
+      <div className="w-full space-y-7 rounded-xl bg-white shadow-base px-6 py-7">
         <div className="flex w-full items-center">
           <p className="min-w-24 text-xl font-semibold text-gray-600">이름</p>
           <div className="flex w-full justify-between">
             <p className="font-light">{user?.name}</p>
-            <Link href={'/profile/edit'} className="-m-2 p-2 font-light text-gray-400">
-              변경
-            </Link>
           </div>
         </div>
         <div className="flex w-full items-center">
@@ -55,8 +53,16 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="w-full justify-start p-3 text-base text-gray-700" onClick={logout}>
-        로그아웃
+      <div className="flex w-full items-center justify-between text-sm">
+        <div className="px-3 py-2 rounded-2xl justify-start p-3 text-gray-700 bg-gray-100 shadow-base" onClick={logout}>
+          로그아웃
+        </div>
+        <div className='px-3 py-2 bg-amber-200 rounded-2xl shadow-base'>
+          <Link href={'/profile/edit'} className="font-light text-gray-900 whitespace-nowrap flex items-center">
+            회원 정보 수정
+            <Settings color="gray" size={20} className='pl-1'/>
+          </Link>
+        </div>
       </div>
     </>
   );

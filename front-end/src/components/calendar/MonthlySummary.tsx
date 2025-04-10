@@ -8,12 +8,8 @@ interface Props {
 }
 
 export default function MonthlySummary({ calendarData }: Props) {
-  console.log('calenda:', calendarData.calendar);
-
   const totalExpense = calendarData.expense;
-
   const totalIncome = calendarData.income;
-
   const total = calendarData.sum;
 
   return (

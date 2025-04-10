@@ -57,7 +57,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
         const secondCat = data.secondCategoryName || '';
         const description = data.description || '';
 
-        // 현재 값과 원본 값 모두 설정
         setSelectedFirstCategory(firstCat);
         setOriginalFirstCategory(firstCat);
 
@@ -118,7 +117,6 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       return <ErrorComponent subMessage="거래 내역을 찾을 수 없어요." />;
     }
 
-    // 변경 사항이 없으면 바로 뒤로 가기
     if (!hasChanges()) {
       router.back();
       return;
