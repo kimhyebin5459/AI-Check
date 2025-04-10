@@ -46,6 +46,7 @@ export default function RequestDetailCard({
     <div className="rounded-modal w-full space-y-5 bg-white p-6">
       <div className="flex flex-col items-center text-xl">
         <RequestDescription text={description} />
+        <div className="h-4"></div>
         <ProfileImage image={image} size="md" />
         <div className="flex flex-col items-center pt-3 text-lg">
           <div className="flex space-x-1">
