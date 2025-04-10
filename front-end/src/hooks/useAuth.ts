@@ -31,11 +31,11 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    authBridge.clearTokens();
+    setIsLoggedOut(true);
+
+    authBridge.clearAuthTokens();
     useUserStore.getState().resetUserStore();
     queryClient.clear();
-
-    setIsLoggedOut(true);
   };
 
   const completeLogout = () => {

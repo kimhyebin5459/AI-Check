@@ -1,7 +1,7 @@
 interface AndroidBridge {
   getAccessToken(): string; // accessToken과 refreshToken이 포함된 JSON 문자열 반환
   saveTokens(accessToken: string, refreshToken: string): void;
-  clearTokens?(): void; // 선택적 메서드 (안드로이드에 존재하지 않을 수 있음)
+  clearAuthTokens?(): void; // 선택적 메서드 (안드로이드에 존재하지 않을 수 있음)
   getFcmToken?(): string; // FCM 토큰을 가져오는 메서드 추가
 }
 
@@ -9,7 +9,7 @@ interface TokenBridge {
   getAccessToken(): string | null;
   getRefreshToken(): string | null;
   saveTokens(accessToken: string, refreshToken: string): void;
-  clearTokens(): void;
+  clearAuthTokens(): void;
   getFcmToken?(): string | null; // FCM 토큰을 가져오는 메서드 추가
 }
 
@@ -81,17 +81,17 @@ class AuthBridge {
     }
   }
 
-  clearTokens(): void {
+  clearAuthTokens(): void {
     if (isAndroidApp) {
       // AndroidBridge에 clearTokens가 존재하는지 확인
-      if (window.AndroidBridge!.clearTokens) {
-        window.AndroidBridge!.clearTokens();
+      if (window.AndroidBridge!.clearAuthTokens) {
+        window.AndroidBridge!.clearAuthTokens();
       } else {
         // 대체 방법: 빈 토큰 저장
         window.AndroidBridge!.saveTokens('', '');
       }
     } else if (isWebWithTokenBridge) {
-      window.TokenBridge!.clearTokens();
+      window.TokenBridge!.clearAuthTokens();
     } else {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
       localStorage.removeItem(REFRESH_TOKEN_KEY);

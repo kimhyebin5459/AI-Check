@@ -42,9 +42,12 @@ export const getChildProfileList = async (): Promise<ChildProfile[]> => {
   return await fetcher.get({ url: 'aicheck/members/children/profiles' });
 };
 
-export const patchUserInfo = async (image: File) => {
+export const patchUserInfo = async (image: File | null) => {
   const formData = new FormData();
-  formData.append('image', image);
+
+  if (image) {
+    formData.append('image', image);
+  }
 
   return await fetcher.patch({ url: 'aicheck/members/details', body: formData, headers: {} });
 };
