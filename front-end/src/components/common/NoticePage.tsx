@@ -44,7 +44,7 @@ export default function NoticePage({
   };
 
   return (
-    <div className="mb-5 flex min-h-dvh items-center justify-center">
+    <div className="container mb-5 flex min-h-dvh items-center justify-center">
       <main className="flex flex-grow flex-col items-center justify-center pb-10">
         <div className="flex w-full max-w-md flex-col items-center">
           <div className="mb-8">{renderIcon()}</div>

@@ -75,9 +75,6 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (isLoggedIn && !isParent) {
-      console.log('isLoggedin:', isLoggedIn);
-      console.log('isParent:', isParent);
-
       alert('부모 계정만 자녀 계정을 등록할 수 있습니다.');
       router.push('/');
     }
@@ -199,7 +196,6 @@ export default function SignupPage() {
       setIsCodeSent(true);
       alert('인증코드가 발송되었습니다.');
     } catch (error) {
-      console.error('Email verification failed:', error);
       setErrors({
         email: '인증 코드 전송에 실패했습니다. 다시 시도해주세요.',
       });
@@ -222,7 +218,6 @@ export default function SignupPage() {
       setIsEmailVerified(true);
       alert('인증되었습니다.');
     } catch (error) {
-      console.error('Code verification failed:', error);
       setErrors({
         authCode: '인증 코드가 올바르지 않습니다.',
       });
@@ -260,7 +255,6 @@ export default function SignupPage() {
       // 회원가입 성공 상태로 변경
       setIsSignupComplete(true);
     } catch (error) {
-      console.error('Signup failed:', error);
       setErrors({
         submit: '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.',
       });

@@ -6,7 +6,7 @@ const useGetMyAccount = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.MY_ACCOUNT],
     queryFn: getMyAccount,
-    staleTime: 5 * 60 * 1000,
+    // staleTime: 5 * 60 * 1000,
   });
 };
 

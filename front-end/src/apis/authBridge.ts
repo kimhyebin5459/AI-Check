@@ -1,7 +1,7 @@
 interface AndroidBridge {
   getAccessToken(): string; // accessToken과 refreshToken이 포함된 JSON 문자열 반환
   saveTokens(accessToken: string, refreshToken: string): void;
-  clearTokens?(): void; // 선택적 메서드 (안드로이드에 존재하지 않을 수 있음)
+  clearAuthTokens?(): void; // 선택적 메서드 (안드로이드에 존재하지 않을 수 있음)
   getFcmToken?(): string; // FCM 토큰을 가져오는 메서드 추가
 }
 
@@ -9,7 +9,7 @@ interface TokenBridge {
   getAccessToken(): string | null;
   getRefreshToken(): string | null;
   saveTokens(accessToken: string, refreshToken: string): void;
-  clearTokens(): void;
+  clearAuthTokens(): void;
   getFcmToken?(): string | null; // FCM 토큰을 가져오는 메서드 추가
 }
 
@@ -42,7 +42,6 @@ class AuthBridge {
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.accessToken || null;
       } catch (e) {
-        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
@@ -60,7 +59,6 @@ class AuthBridge {
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.refreshToken || null;
       } catch (e) {
-        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
@@ -81,7 +79,7 @@ class AuthBridge {
     }
   }
 
-  clearTokens(): void {
+  clearAuthTokens(): void {
     if (isAndroidApp) {
       if (window.AndroidBridge!.clearTokens) {
         window.AndroidBridge!.clearTokens();
@@ -89,7 +87,7 @@ class AuthBridge {
         window.AndroidBridge!.saveTokens('', '');
       }
     } else if (isWebWithTokenBridge) {
-      window.TokenBridge!.clearTokens();
+      window.TokenBridge!.clearAuthTokens();
     } else {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
       localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -106,7 +104,6 @@ class AuthBridge {
         }
         return null;
       } catch (e) {
-        console.error('FCM 토큰 가져오기 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {

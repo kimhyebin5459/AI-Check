@@ -38,8 +38,6 @@ export const getDetail = async (recordId: number): Promise<Transaction> => {
 };
 
 export const updateTransactionRecord = async (updateData: UpdateTransactionData) => {
-  console.log(updateData);
-
   return await fetcher.patch({ url: 'aicheck/transaction-records', body: updateData });
 };
 

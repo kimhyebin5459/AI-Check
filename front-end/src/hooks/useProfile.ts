@@ -30,7 +30,7 @@ const useProfile = (image: string, account: MyAccountInfo) => {
     }
   };
 
-  return { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange };
+  return { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange, setProfileImage };
 };
 
 export default useProfile;

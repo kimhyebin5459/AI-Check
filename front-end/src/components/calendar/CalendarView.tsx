@@ -30,7 +30,6 @@ export default function CalendarView({ year, month, onDateSelect, selectedDate }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
         setError(errorMessage);
-        console.error('Error fetching calendar data:', errorMessage);
         setCalendarData({ expense: 0, income: 0, sum: 0, calendar: [] });
       } finally {
         setLoading(false);

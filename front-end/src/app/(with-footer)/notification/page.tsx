@@ -19,9 +19,7 @@ export default function Page() {
       queryClient.setQueryData(['notifications'], (oldData: Notification[]) =>
         oldData?.map((noti) => (noti.alarmId === alarmId ? { ...noti, isRead: true } : noti))
       );
-    } catch (error) {
-      console.error('알림 읽음 처리 실패:', error);
-    }
+    } catch (_error) {}
   };
 
   return (
