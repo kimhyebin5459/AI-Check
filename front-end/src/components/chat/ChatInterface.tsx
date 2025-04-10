@@ -65,12 +65,11 @@ export default function ChatInterface({ onClickClose }: Props) {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
-    
+
     // 메시지 내용 저장 후 즉시 입력창 비우기
     const messageToSend = message.trim();
     setMessage('');
-    
-    // 저장된 메시지로 전송 진행
+
     await sendMessage(messageToSend);
   };
 
@@ -95,14 +94,12 @@ export default function ChatInterface({ onClickClose }: Props) {
           <div className="flex flex-col overflow-auto px-4">
             {!!session &&
               session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
-            {/* 로딩 중일 때 표시되는 버블 */}
             {isLoading && <LoadingBubble />}
             <div ref={messagesEndRef} />
           </div>
         </div>
       </div>
-
-      <div className="bottom-btn absolute w-full bg-white px-4 pt-2">
+      <div className="fixed bottom-0 left-1/2 w-full max-w-[480px] -translate-x-1/2 transform bg-white px-4 pt-2 pb-10">
         <div className="mt-2 mb-2 flex justify-start">
           <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">
@@ -110,7 +107,7 @@ export default function ChatInterface({ onClickClose }: Props) {
             </div>
           </button>
         </div>
-        <form onSubmit={handleSendMessage} className="flex items-center">
+        <form onSubmit={handleSendMessage} className="flex w-full max-w-full items-center">
           <input
             type="text"
             value={message}
@@ -136,6 +133,7 @@ export default function ChatInterface({ onClickClose }: Props) {
           </button>
         </form>
       </div>
+
       <ResultModal
         isModalOpen={isResultModalOpened}
         onClose={() => setIsResultModalOpened(false)}
