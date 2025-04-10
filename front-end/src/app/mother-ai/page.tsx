@@ -16,19 +16,16 @@ export default function Page() {
   // 채팅 나가기 확인
   const closeCheck = () => {
     if (state !== 'PROCEEDING') {
-      // 이미 종료된 상태면 바로 나가기
       resetState();
       router.replace('/');
       return;
     }
-    // 진행 중이면 확인 모달 표시
     setIsCloseModalOpened(true);
   };
 
-  // 확인 후 나가기 (endChat API 호출 추가)
   const handleConfirmClose = async () => {
     if (session?.isActive && state === 'PROCEEDING') {
-      await endChat(); // 채팅 강제 종료 API 호출
+      await endChat();
     }
     resetState();
     router.replace('/');
