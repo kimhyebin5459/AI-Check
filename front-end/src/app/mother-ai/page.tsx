@@ -32,7 +32,7 @@ export default function Page() {
   };
 
   return (
-    <div className="h-full pb-[139px]">
+    <div className="h-full w-full pb-[5.5rem]">
       <div className="container">
         <Header
           title="부모님께 요청하기"

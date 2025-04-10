@@ -97,7 +97,7 @@ export default function ChatInterface({ onClickClose }: Props) {
   const remainingChars = MAX_MESSAGE_LENGTH - message.length;
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex h-full w-full flex-col">
         <div className="mt-4 text-center text-gray-500">{formatDateToParam(new Date()).replaceAll('-', '/')}</div>
         <div className="bg-white p-2 text-center text-sm text-gray-500">
@@ -114,7 +114,7 @@ export default function ChatInterface({ onClickClose }: Props) {
           </div>
         </div>
       </div>
-      <div className="fixed bottom-0 left-1/2 w-full max-w-[480px] -translate-x-1/2 transform bg-white px-4 pt-2 pb-4">
+      <div className="fixed bottom-0 w-full bg-white px-4 pt-2 pb-4">
         <div className="mt-2 mb-2 flex justify-start">
           <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">
@@ -122,7 +122,7 @@ export default function ChatInterface({ onClickClose }: Props) {
             </div>
           </button>
         </div>
-        <form onSubmit={handleSendMessage} className="flex w-full max-w-full flex-col items-center">
+        <form onSubmit={handleSendMessage} className="flex w-full items-center">
           <div className="flex w-full items-center">
             <input
               type="text"
