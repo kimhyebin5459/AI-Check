@@ -24,16 +24,25 @@ export default function Page() {
   const { mutate: updateAccount } = usePostAccount();
 
   const { image = '', name = '', birth = '', account = { id: 0, name: '', no: '' } } = user || {};
-  const { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange } = useProfile(image, account);
+  const { profileImage, editAccount, setEditAccount, selectedFile, handleImageChange, setProfileImage } = useProfile(
+    image,
+    account
+  );
 
   const { isModalOpen, closeModal, openModal } = useModal();
 
   const handleClick = () => {
     if (selectedFile) {
       updateUserInfo(selectedFile);
+    } else if (profileImage !== image && profileImage === '/images/defaultImage.png') {
+      updateUserInfo(null);
     }
     updateAccount(editAccount.accountId);
     router.push('/profile');
+  };
+
+  const handleResetImage = () => {
+    setProfileImage('/images/defaultImage.png');
   };
 
   if (isPending) return <LoadingComponent />;
@@ -45,14 +54,19 @@ export default function Page() {
         <Header hasBackButton title="내 정보 수정" hasBorder={false} />
         <div className="relative space-y-3 pt-10 text-center">
           <ProfileImage image={profileImage} size="xl" />
-          <label
-            htmlFor="profile-upload"
-            className="absolute -right-1 -bottom-2 cursor-pointer rounded-full border-3 border-white bg-yellow-400 p-1.5"
-          >
-            <Plus size={20} color="white" />
-          </label>
-          <input id="profile-upload" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+          <div className="flex justify-center space-x-2">
+            <label
+              htmlFor="profile-upload"
+              className="absolute -right-3 -bottom-0.5 cursor-pointer rounded-full border-3 border-white bg-yellow-400 p-1.5"
+            >
+              <Plus size={20} color="white" />
+            </label>
+            <input id="profile-upload" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+          </div>
         </div>
+        <button onClick={handleResetImage} className="mt-3 text-sm text-gray-500 underline">
+          기본 이미지 사용
+        </button>
         <div className="w-full space-y-8 px-2 pt-16 text-xl">
           <div className="flex w-full items-center justify-between">
             <p className="text-gray-600">이름</p>

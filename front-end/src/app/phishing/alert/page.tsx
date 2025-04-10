@@ -20,7 +20,6 @@ export default function Page() {
         setAlerts(alertsData);
       } catch (err) {
         setError(err instanceof Error ? err.message : '데이터를 불러오는데 오류가 발생했습니다.');
-        console.error('Error fetching phishing data:', err);
       } finally {
         setIsLoading(false);
       }

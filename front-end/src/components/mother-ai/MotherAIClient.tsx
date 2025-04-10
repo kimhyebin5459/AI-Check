@@ -8,6 +8,7 @@ import useModal from '@/hooks/useModal';
 import { useRouter } from 'next/navigation';
 import NoticePage from '@/components/common/NoticePage';
 import { useDifficultyStore } from '@/stores/useDifficultyStore';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   children?: React.ReactNode;
@@ -21,6 +22,10 @@ export default function MotherAIClient({ children }: Props) {
   const { saveSettings, copySettingsFromChild, error, clearError } = useDifficultyStore();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const path = usePathname();
+
+  // 경로에서 childId 추출
+  const childId = path?.split('/').pop() || '';
 
   const handleConfirm = async () => {
     setIsLoading(true);
@@ -93,8 +98,12 @@ export default function MotherAIClient({ children }: Props) {
       </div>
 
       <SettingsModal isOpen={isSettingsModalOpen} onClose={closeSettingsModal} />
-
-      <ChildSelectModal isOpen={isChildModalOpen} onClose={closeChildModal} onSelect={handleChildSelect} />
+      <ChildSelectModal
+        isOpen={isChildModalOpen}
+        onClose={closeChildModal}
+        onSelect={handleChildSelect}
+        currentChildId={childId}
+      />
     </>
   );
 }

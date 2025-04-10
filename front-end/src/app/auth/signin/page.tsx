@@ -89,15 +89,12 @@ export default function Page() {
       setAccessToken(accessToken);
 
       const userInfo = await getUserInfo();
-      console.log('user Info:', userInfo);
-
       setUser(userInfo);
 
       setHasAccountConnected(accountConnected);
 
       router.push(`${!accountConnected ? '/auth/account-link' : '/'}`);
     } catch (error) {
-      console.error('Login failed:', error);
       setErrors({
         general: '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.',
       });

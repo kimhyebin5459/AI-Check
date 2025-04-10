@@ -47,8 +47,7 @@ export default function CheckPassword({ account, onNext, onPrev }: Props) {
 
           await postAccount(account.accountId);
           onNext();
-        } catch (err) {
-          console.error('Password verification failed:', err);
+        } catch (_err) {
           setError('계좌 비밀번호가 올바르지 않습니다');
           setPassword('');
         } finally {

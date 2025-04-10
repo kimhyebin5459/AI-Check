@@ -75,7 +75,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     const categoryIndex = difficultyData.categoryDifficulties.findIndex((cat) => cat.categoryName === category);
 
     if (categoryIndex === -1) {
-      console.log(`Category "${category}" not found in difficulty data`);
       return;
     }
 
@@ -101,7 +100,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     const categoryIndex = difficultyData.categoryDifficulties.findIndex((cat) => cat.categoryName === parentCategory);
 
     if (categoryIndex === -1) {
-      console.error(`Parent category "${parentCategory}" not found`);
       return;
     }
 
@@ -111,7 +109,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
     );
 
     if (subIndex === -1) {
-      console.error(`SubCategory with ID ${subCategoryId} not found in ${parentCategory}`);
       return;
     }
 
@@ -138,7 +135,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
 
     try {
       const data = await getChatbotDifficulty(Number(childId));
-      console.log('loadedData:', data);
 
       const difficultyMap: Record<string, DisplayDifficulty> = {};
       const initialExpandedState: Record<string, boolean> = {};
@@ -162,7 +158,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
         loading: false,
       });
     } catch (err) {
-      console.error('Error fetching settings:', err);
       set({
         error: err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.',
         loading: false,
@@ -172,7 +167,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
 
   saveSettings: async () => {
     const { difficultyData } = get();
-    console.log('setting log:', difficultyData);
 
     if (!difficultyData) return false;
     if (difficultyData?.content == null) difficultyData.content = '';
@@ -184,7 +178,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
 
       return true;
     } catch (err) {
-      console.error('Error saving settings:', err);
       set({
         error: err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.',
       });
@@ -226,7 +219,6 @@ export const useDifficultyStore = create<DifficultyState>((set, get) => ({
         loading: false,
       });
     } catch (err) {
-      console.error('Error copying settings:', err);
       set({
         error: err instanceof Error ? err.message : '소스 자녀의 설정을 불러오는데 실패했습니다.',
         loading: false,

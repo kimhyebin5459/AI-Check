@@ -16,9 +16,7 @@ export default function Footer() {
       try {
         const count = await getAlarmCount();
         setNotificationCount(count.count);
-      } catch (error) {
-        console.error('Failed to fetch notification count:', error);
-      }
+      } catch (error) {}
     };
 
     fetchNotificationCount();
