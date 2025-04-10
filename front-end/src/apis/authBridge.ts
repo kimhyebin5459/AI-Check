@@ -81,8 +81,8 @@ class AuthBridge {
 
   clearAuthTokens(): void {
     if (isAndroidApp) {
-      if (window.AndroidBridge!.clearTokens) {
-        window.AndroidBridge!.clearTokens();
+      if (window.AndroidBridge!.clearAuthTokens) {
+        window.AndroidBridge!.clearAuthTokens();
       } else {
         window.AndroidBridge!.saveTokens('', '');
       }
