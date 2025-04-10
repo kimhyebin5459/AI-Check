@@ -66,7 +66,6 @@ const useChatStore = create<ChatStore>()(
 
           set({ session: newSession, isLoading: false });
         } catch (error) {
-          console.error('채팅 시작 오류:', error);
           set({
             error: error instanceof Error ? error.message : '채팅을 시작하는데 실패했습니다.',
             isLoading: false,
@@ -78,13 +77,11 @@ const useChatStore = create<ChatStore>()(
       sendMessage: async (message: string) => {
         const { session } = get();
         if (!session) {
-          console.error('세션이 없음');
           set({ error: '활성화된 채팅 세션이 없습니다.' });
           return;
         }
 
         if (!session.isActive) {
-          console.error('세션이 비활성 상태임');
           set({ error: '채팅 세션이 이미 종료되었습니다.' });
           return;
         }
@@ -117,10 +114,6 @@ const useChatStore = create<ChatStore>()(
           } else {
             response = await sendQuestionMessage({ message });
           }
-
-          // API 호출 후
-          console.log('API 응답:', response);
-          console.log('채팅로그길이:', session?.messages.length);
 
           // 특정 메시지 확인하여 자동 종료 처리
           const shouldTerminate = response.message.includes('대화를 종료하였습니다. 새로 시작하시겠습니까?');
@@ -162,7 +155,6 @@ const useChatStore = create<ChatStore>()(
                 : state.state,
           }));
         } catch (error) {
-          console.error('메시지 전송 오류:', error);
           set({
             error: error instanceof Error ? error.message : '메시지를 전송하는데 실패했습니다.',
             isLoading: false,
@@ -183,12 +175,8 @@ const useChatStore = create<ChatStore>()(
 
           // 이미 종료되지 않았고 세션이 활성 상태일 때만 API 호출
           if (state !== 'FINISHED' && session.isActive) {
-            console.log('endChat API 호출, chatType:', session.chatType);
             await endChat({ chatType: session.chatType });
-          } else {
-            console.log('endChat API 호출 생략, 상태:', state, '세션 활성 상태:', session.isActive);
           }
-
           // 세션 상태 업데이트
           set((state) => ({
             session: state.session ? { ...state.session, isActive: false } : null,
@@ -197,7 +185,6 @@ const useChatStore = create<ChatStore>()(
             terminationType: state.terminationType || 'NORMAL',
           }));
         } catch (error) {
-          console.error('채팅 종료 오류:', error);
           set({
             error: error instanceof Error ? error.message : '채팅을 종료하는데 실패했습니다.',
             isLoading: false,

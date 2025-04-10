@@ -80,7 +80,6 @@ export default function MoneyCheckClient({ params }: Props) {
           balance: response.balance || 0,
         });
       } catch (err) {
-        console.error('Error fetching child data:', err);
         setError(err instanceof Error ? err.message : '데이터를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);

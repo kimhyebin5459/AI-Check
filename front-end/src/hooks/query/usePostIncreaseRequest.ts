@@ -20,7 +20,6 @@ const usePostIncreaseRequest = () => {
     onError: (_error) => {
       const errorMessage = '용돈이 필요하면 부모님께 요청하기를 이용해 보세요';
       setError(errorMessage);
-      console.log('에러지롱:', errorMessage);
     },
   });
 

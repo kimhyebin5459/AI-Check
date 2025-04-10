@@ -9,7 +9,6 @@ export const startChat = async ({ chatType }: StartChatParams) => {
 };
 
 export const sendPersuadeMessage = async ({ message }: SendMessageParams) => {
-  console.log('전송 데이터:', JSON.stringify({ message }));
   const response = await fetcher.post({
     url: 'chatbot/persuade',
     body: { message },

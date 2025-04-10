@@ -42,7 +42,6 @@ class AuthBridge {
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.accessToken || null;
       } catch (e) {
-        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
@@ -60,7 +59,6 @@ class AuthBridge {
         const tokenData = JSON.parse(window.AndroidBridge!.getAccessToken());
         return tokenData.refreshToken || null;
       } catch (e) {
-        console.error('토큰 데이터 파싱 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
@@ -108,11 +106,9 @@ class AuthBridge {
           // 안드로이드에서 콜백 메커니즘이 필요함
           resolve(true);
         } catch (e) {
-          console.error('생체 인증 오류:', e);
           resolve(false);
         }
       } else {
-        console.warn('생체 인증을 사용할 수 없음');
         resolve(false);
       }
     });
@@ -128,7 +124,6 @@ class AuthBridge {
         }
         return null;
       } catch (e) {
-        console.error('FCM 토큰 가져오기 오류:', e);
         return null;
       }
     } else if (isWebWithTokenBridge) {
