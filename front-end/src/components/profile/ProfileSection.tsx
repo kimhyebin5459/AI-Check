@@ -26,9 +26,7 @@ export default function Page() {
         onButtonClick={completeLogout}
       />
     );
-  }
-
-  if (isError) return <ErrorComponent />;
+  } else if (isError) return <ErrorComponent />;
 
   return (
     <>
