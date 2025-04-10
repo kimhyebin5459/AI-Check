@@ -14,6 +14,9 @@ interface Props {
   onClickClose: () => void;
 }
 
+// 입력창 최대 글자 수 제한
+const MAX_MESSAGE_LENGTH = 200;
+
 export default function ChatInterface({ onClickClose }: Props) {
   const router = useRouter();
   const { session, isLoading, state, sendMessage, updateLastActivity, resetState } = useChatStore();
@@ -62,6 +65,15 @@ export default function ChatInterface({ onClickClose }: Props) {
     };
   }, []);
 
+  // 입력 메시지 변경 핸들러 (글자 수 제한 적용)
+  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    // 최대 길이 제한
+    if (inputValue.length <= MAX_MESSAGE_LENGTH) {
+      setMessage(inputValue);
+    }
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -81,6 +93,9 @@ export default function ChatInterface({ onClickClose }: Props) {
     onClickClose();
   };
 
+  // 남은 글자 수 계산
+  const remainingChars = MAX_MESSAGE_LENGTH - message.length;
+
   return (
     <div>
       <div className="flex h-full w-full flex-col">
@@ -99,7 +114,7 @@ export default function ChatInterface({ onClickClose }: Props) {
           </div>
         </div>
       </div>
-      <div className="fixed bottom-0 left-1/2 w-full max-w-[480px] -translate-x-1/2 transform bg-white px-4 pt-2 pb-10">
+      <div className="fixed bottom-0 left-1/2 w-full max-w-[480px] -translate-x-1/2 transform bg-white px-4 pt-2 pb-4">
         <div className="mt-2 mb-2 flex justify-start">
           <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
             <div className="flex items-center justify-center">
@@ -107,30 +122,41 @@ export default function ChatInterface({ onClickClose }: Props) {
             </div>
           </button>
         </div>
-        <form onSubmit={handleSendMessage} className="flex w-full max-w-full items-center">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="여기에 내용을 입력하세요"
-            className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
-            disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
-          />
-          <button
-            type="submit"
-            className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
-            disabled={isLoading || !message.trim()}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <form onSubmit={handleSendMessage} className="flex w-full max-w-full flex-col items-center">
+          <div className="flex w-full items-center">
+            <input
+              type="text"
+              value={message}
+              onChange={handleMessageChange}
+              placeholder="여기에 내용을 입력하세요"
+              className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+              disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
+              maxLength={MAX_MESSAGE_LENGTH}
+            />
+            <button
+              type="submit"
+              className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
+              disabled={isLoading || !message.trim()}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="mt-1 w-full text-right text-xs text-gray-500">
+            {remainingChars}/{MAX_MESSAGE_LENGTH}자
+          </div>
         </form>
       </div>
 
