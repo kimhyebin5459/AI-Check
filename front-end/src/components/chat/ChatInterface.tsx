@@ -125,13 +125,13 @@ export default function ChatInterface({ onClickClose }: Props) {
           </div>
           <div className="">
             <form onSubmit={handleSendMessage} className="flex">
-              <div className="flex flex-1">
+              <div className="w-full">
                 <input
                   type="text"
                   value={message}
                   onChange={handleMessageChange}
                   placeholder="여기에 내용을 입력하세요"
-                  className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+                  className="w-full rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
                   disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
                   maxLength={MAX_MESSAGE_LENGTH}
                 />
