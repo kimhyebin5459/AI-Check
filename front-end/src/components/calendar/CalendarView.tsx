@@ -99,7 +99,7 @@ export default function CalendarView({ year, month, onDateSelect, selectedDate }
       {!loading && !error && <MonthlySummary calendarData={calendarData} />}
 
       <div className="rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
-        <div className="grid h-12 grid-cols-7 gap-1 rounded-t-lg bg-yellow-300">
+        <div className="grid h-12 grid-cols-7 gap-1 rounded-t-lg bg-yellow-200">
           {weekDays.map((day, index) => (
             <div
               key={`weekday-${index}`}

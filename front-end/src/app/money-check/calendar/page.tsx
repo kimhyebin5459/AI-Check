@@ -72,7 +72,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="h-full pb-[5.5rem]">
+    <div className="bg-gradation2 h-full pb-[5.5rem]">
       <div className="container">
         <Header title="월별 소비 확인" hasBackButton onBackClick={() => router.replace('/money-check')} />
         <main className="scrollbar-hide w-full overflow-y-auto p-5">
@@ -80,7 +80,7 @@ export default function CalendarPage() {
             <button onClick={goToPreviousMonth} className="p-2">
               <Image alt="이전 월" src={Arrow} className="w-6" />
             </button>
-            <button onClick={toggleMonthSelector} className="rounded-lg bg-gray-100 px-4 py-2 text-lg font-medium">
+            <button onClick={toggleMonthSelector} className="rounded-lg bg-yellow-200 px-4 py-2 text-lg font-medium">
               {year}년 {month}월
             </button>
             <button onClick={goToNextMonth} className="p-2">

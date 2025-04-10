@@ -11,7 +11,7 @@ export const FOOTER = [
   {
     activeIcon: ActiveBoard,
     inactiveIcon: InactiveBoard,
-    label: '가계부',
+    label: '기록장',
     to: '/money-check',
   },
   {

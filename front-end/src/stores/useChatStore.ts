@@ -8,6 +8,7 @@ interface ChatStore {
   isLoading: boolean;
   error: string | null;
   state: State;
+  terminationType: 'NORMAL' | 'FORCED' | null;
 
   startChat: (chatType: ChatType) => Promise<void>;
   sendMessage: (message: string) => Promise<void>;
@@ -33,11 +34,12 @@ const useChatStore = create<ChatStore>()(
       isLoading: false,
       error: null,
       state: 'BEFORE',
+      terminationType: null, // 초기값은 null
 
       // 채팅 시작
       startChat: async (chatType: ChatType) => {
         try {
-          set({ isLoading: true, error: null, state: 'PROCEEDING' });
+          set({ isLoading: true, error: null, state: 'PROCEEDING', terminationType: null });
 
           await startChat({ chatType });
 
@@ -120,12 +122,8 @@ const useChatStore = create<ChatStore>()(
           console.log('API 응답:', response);
           console.log('채팅로그길이:', session?.messages.length);
 
-          console.log('chatType:', session.chatType);
-          if (session.chatType === 'PERSUADE') {
-            console.log('isPersuaded:', (response as PersuadeResponse).isPersuaded);
-          } else {
-            console.log('judge:', (response as QuestionResponse).judge);
-          }
+          // 특정 메시지 확인하여 자동 종료 처리
+          const shouldTerminate = response.message.includes('대화를 종료하였습니다. 새로 시작하시겠습니까?');
 
           // 응답 메시지 추가
           const aiMessage: ChatMessage = {
@@ -142,18 +140,24 @@ const useChatStore = create<ChatStore>()(
                   ...state.session,
                   messages: [...state.session.messages, aiMessage],
                   lastActivity: Date.now(),
-                  // 설득이 성공했거나 질문에 대한 최종 답변이 나왔으면 자동으로 비활성화
+                  // 설득이 성공했거나 질문에 대한 최종 답변이 나왔거나 특정 메시지가 왔으면 자동으로 비활성화
                   isActive:
                     session.chatType === 'PERSUADE'
-                      ? !(response as PersuadeResponse).isPersuaded
-                      : (response as QuestionResponse).judge === 'JUDGING',
+                      ? !(response as PersuadeResponse).isPersuaded && !shouldTerminate
+                      : (response as QuestionResponse).judge === 'JUDGING' && !shouldTerminate,
                 }
               : null,
             isLoading: false,
-            // 설득이 성공했거나 최종 답변이 나왔으면 state를 'FINISHED'로 변경
+            terminationType: shouldTerminate
+              ? 'FORCED'
+              : (session.chatType === 'PERSUADE' && (response as PersuadeResponse).isPersuaded) ||
+                  (session.chatType === 'QUESTION' && (response as QuestionResponse).judge !== 'JUDGING')
+                ? 'NORMAL'
+                : state.terminationType, // 설득이 성공했거나 최종 답변이 나왔거나 특정 메시지가 왔으면 state를 'FINISHED'로 변경
             state:
               (session.chatType === 'PERSUADE' && (response as PersuadeResponse).isPersuaded) ||
-              (session.chatType === 'QUESTION' && (response as QuestionResponse).judge !== 'JUDGING')
+              (session.chatType === 'QUESTION' && (response as QuestionResponse).judge !== 'JUDGING') ||
+              shouldTerminate
                 ? 'FINISHED'
                 : state.state,
           }));
@@ -190,6 +194,7 @@ const useChatStore = create<ChatStore>()(
             session: state.session ? { ...state.session, isActive: false } : null,
             isLoading: false,
             state: 'FINISHED',
+            terminationType: state.terminationType || 'NORMAL',
           }));
         } catch (error) {
           console.error('채팅 종료 오류:', error);
@@ -202,7 +207,7 @@ const useChatStore = create<ChatStore>()(
 
       // 상태 초기화
       resetState: () => {
-        set({ session: null, isLoading: false, error: null, state: 'BEFORE' });
+        set({ session: null, isLoading: false, error: null, state: 'BEFORE', terminationType: null });
       },
 
       // 마지막 활동 시간 업데이트

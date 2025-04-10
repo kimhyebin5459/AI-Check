@@ -102,7 +102,7 @@ export default function Page() {
             </div>
 
             {/* 유저상태 관리 방법 정해지면 컴포넌트 분리 수정 */}
-            <div className="my-4 rounded-xl bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+            <div className="my-4 rounded-xl bg-white shadow-base">
               <div className="rounded-t-lg bg-yellow-200 p-2.5">
                 <div className="flex items-center">
                   <ProfileImage image={user?.image} size="md" />

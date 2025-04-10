@@ -74,7 +74,7 @@ export default function TransactionHistory({
   }
 
   return (
-    <div className="rounded-lg bg-white shadow-[0_0_20px_rgba(0,0,0,0.25)]">
+    <div className="rounded-lg bg-white shadow-base">
       {showFilterHeader && (
         <div className="flex items-center justify-end border-b border-gray-400 px-4 py-3">
           <div className="cursor-pointer" onClick={onFilterClick}>

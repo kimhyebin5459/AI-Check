@@ -12,7 +12,19 @@ interface Props {
 }
 
 export default function ResultModal({ isModalOpen, onClose, onGoToRequest }: Props) {
-  const { session } = useChatStore();
+  const { session, terminationType } = useChatStore();
+
+  //강제 종료 시
+  if (terminationType === 'FORCED') {
+    return (
+      <Modal isOpen={isModalOpen} onClose={onClose} title="대화가 종료되었습니다">
+        <p>대화가 종료되었습니다. 새로운 대화를 시작해보세요.</p>
+        <div className="flex w-full gap-2 space-y-6">
+          <Button onClick={onClose}>닫기</Button>
+        </div>
+      </Modal>
+    );
+  }
 
   let title, content;
 
