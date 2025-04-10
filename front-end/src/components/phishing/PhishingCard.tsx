@@ -13,7 +13,7 @@ interface Props {
 
 export default function PhishingCard({ displayName, type, url, phoneNumber, score, createdAt }: Props) {
   const formattedDate = formatDate(createdAt);
-  const scorePercentage = Math.round(score * 10);
+  const scorePercentage = Math.round(score * 100);
 
   return (
     <div className="mb-3 cursor-pointer rounded-lg bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
