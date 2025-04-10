@@ -97,77 +97,83 @@ export default function ChatInterface({ onClickClose }: Props) {
   const remainingChars = MAX_MESSAGE_LENGTH - message.length;
 
   return (
-    <div className="w-full">
-      <div className="flex h-full w-full flex-col">
-        <div className="mt-4 text-center text-gray-500">{formatDateToParam(new Date()).replaceAll('-', '/')}</div>
-        <div className="bg-white p-2 text-center text-sm text-gray-500">
-          <p>5분 동안 활동이 없으면 대화가 자동으로 종료됩니다.</p>
-        </div>
-        <ChatChooser />
+    <>
+      <div className="w-full">
+        <div className="flex h-full w-full flex-col">
+          <div className="mt-4 text-center text-gray-500">{formatDateToParam(new Date()).replaceAll('-', '/')}</div>
+          <div className="bg-white p-2 text-center text-sm text-gray-500">
+            <p>5분 동안 활동이 없으면 대화가 자동으로 종료됩니다.</p>
+          </div>
+          <ChatChooser />
 
-        <div>
-          <div className="flex flex-col overflow-auto px-4">
-            {!!session &&
-              session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
-            {isLoading && <LoadingBubble />}
-            <div ref={messagesEndRef} />
+          <div>
+            <div className="flex flex-col overflow-auto px-4">
+              {!!session &&
+                session.messages.map((msg) => <ChatBubble key={msg.id} role={msg.role} content={msg.content} />)}
+              {isLoading && <LoadingBubble />}
+              <div ref={messagesEndRef} />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="fixed bottom-0 w-full bg-white px-4 pt-2 pb-4">
-        <div className="mt-2 mb-2 flex justify-start">
-          <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
-            <div className="flex items-center justify-center">
-              <span>대화 종료하기 </span> <X size={20} />
-            </div>
-          </button>
-        </div>
-        <form onSubmit={handleSendMessage} className="flex w-full items-center">
-          <div className="flex w-full items-center">
-            <input
-              type="text"
-              value={message}
-              onChange={handleMessageChange}
-              placeholder="여기에 내용을 입력하세요"
-              className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
-              disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
-              maxLength={MAX_MESSAGE_LENGTH}
-            />
-            <button
-              type="submit"
-              className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
-              disabled={isLoading || !message.trim()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
+        <div className="bottom-btn w-full bg-white px-4 pt-2 pb-4">
+          <div className="mt-2 mb-2 flex justify-start">
+            <button onClick={handleCloseButton} className="rounded-full bg-yellow-300 px-3 py-1.5 text-sm text-white">
+              <div className="flex items-center justify-center">
+                <span>대화 종료하기 </span> <X size={20} />
+              </div>
             </button>
+          </div>
+          <div className="">
+            <form onSubmit={handleSendMessage} className="flex">
+              <div className="flex flex-1">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={handleMessageChange}
+                  placeholder="여기에 내용을 입력하세요"
+                  className="flex-1 rounded-full border border-yellow-100 bg-yellow-50 px-4 py-3 focus:ring-2 focus:ring-yellow-300 focus:outline-none"
+                  disabled={isLoading || state === 'FINISHED' || state === 'BEFORE'}
+                  maxLength={MAX_MESSAGE_LENGTH}
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  className="bg-skyblue-200 disabled:bg-skyblue-100 ml-2 rounded-full p-3 text-white"
+                  disabled={isLoading || !message.trim()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
           </div>
           <div className="mt-1 w-full text-right text-xs text-gray-500">
             {remainingChars}/{MAX_MESSAGE_LENGTH}자
           </div>
-        </form>
-      </div>
+        </div>
 
-      <ResultModal
-        isModalOpen={isResultModalOpened}
-        onClose={() => setIsResultModalOpened(false)}
-        onGoToRequest={() => {
-          router.push('/request');
-          resetState();
-        }}
-      ></ResultModal>
-    </div>
+        <ResultModal
+          isModalOpen={isResultModalOpened}
+          onClose={() => setIsResultModalOpened(false)}
+          onGoToRequest={() => {
+            router.push('/request');
+            resetState();
+          }}
+        ></ResultModal>
+      </div>
+    </>
   );
 }

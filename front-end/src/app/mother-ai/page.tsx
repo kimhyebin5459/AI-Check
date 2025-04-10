@@ -41,7 +41,7 @@ export default function Page() {
             closeCheck();
           }}
         />
-        <main className="scrollbar-hide h-full w-full flex-1 overflow-y-auto">
+        <main className="scrollbar-hide h-full w-full overflow-y-auto">
           <ChatInterface onClickClose={closeCheck} />
         </main>
       </div>
