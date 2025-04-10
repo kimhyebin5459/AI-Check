@@ -38,25 +38,40 @@ export default function CalendarPage() {
   const handleMonthSelect = (selectedYear: number, selectedMonth: number) => {
     setYear(selectedYear);
     setMonth(selectedMonth);
+    setSelectedDate(new Date(selectedYear, selectedMonth - 1, 1));
     setIsMonthSelectorOpen(false);
   };
 
   const goToPreviousMonth = () => {
+    let newYear = year;
+    let newMonth = month;
+
     if (month === 1) {
-      setYear(year - 1);
-      setMonth(12);
+      newYear = year - 1;
+      newMonth = 12;
     } else {
-      setMonth(month - 1);
+      newMonth = month - 1;
     }
+
+    setYear(newYear);
+    setMonth(newMonth);
+    setSelectedDate(new Date(newYear, newMonth - 1, 1));
   };
 
   const goToNextMonth = () => {
+    let newYear = year;
+    let newMonth = month;
+
     if (month === 12) {
-      setYear(year + 1);
-      setMonth(1);
+      newYear = year + 1;
+      newMonth = 1;
     } else {
-      setMonth(month + 1);
+      newMonth = month + 1;
     }
+
+    setYear(newYear);
+    setMonth(newMonth);
+    setSelectedDate(new Date(newYear, newMonth - 1, 1));
   };
 
   const getStartOfDay = (date: Date): Date => {
