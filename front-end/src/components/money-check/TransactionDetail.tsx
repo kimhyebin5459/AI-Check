@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -10,7 +10,15 @@ import Button from '@/components/common/Button';
 
 import { ALL_CATEGORIES } from '@/constants/categories';
 import { getRatingText, getRatingEmoji, getTransactionTypeText } from '@/utils/formatTransaction';
-import { Transaction, UpdateTransactionData } from '@/types/transaction';
+import { Transaction } from '@/types/transaction';
+
+// UpdateTransactionData 타입 정의 (null 값도 허용)
+interface UpdateTransactionData {
+  recordId: number;
+  firstCategoryId: number | null;
+  secondCategoryId: number | null;
+  description: string;
+}
 import { getDetail, updateTransactionRecord } from '@/apis/moneycheck';
 import { getTransactionDirection } from '@/utils/formatTransaction';
 import Spinner from '../common/Spinner';
@@ -26,6 +34,8 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const router = useRouter();
   const queryClient = useQueryClient();
   const recordId = paramsId;
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
 
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,6 +50,68 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
   const [originalFirstCategory, setOriginalFirstCategory] = useState<string>('');
   const [originalSecondCategory, setOriginalSecondCategory] = useState<string>('');
   const [originalMemo, setOriginalMemo] = useState<string>('');
+
+  // 키보드 열림/닫힘 감지 및 처리
+  useEffect(() => {
+    // SSR 환경에서는 실행하지 않음
+    if (typeof window === 'undefined') return;
+
+    // visualViewport API가 지원되지 않는 경우 처리하지 않음
+    if (!window.visualViewport) return;
+
+    const viewportHandler = () => {
+      try {
+        // 뷰포트 높이가 창 높이보다 작아지면 키보드가 열렸다고 판단
+        const windowHeight = window.innerHeight;
+        const viewportHeight = window.visualViewport?.height || windowHeight;
+        const keyboardVisible = windowHeight > viewportHeight;
+
+        if (keyboardVisible) {
+          // 키보드가 보이는 경우 키보드 높이만큼 bottom 여백 설정
+          const heightDiff = windowHeight - viewportHeight;
+          setKeyboardHeight(heightDiff);
+
+          // 입력 필드가 가려지지 않도록 스크롤 조정
+          if (document.activeElement instanceof HTMLInputElement && contentRef.current) {
+            const activeInput = document.activeElement;
+            const inputRect = activeInput.getBoundingClientRect();
+
+            // 입력 필드가 키보드에 가려지는지 확인
+            if (inputRect.bottom > viewportHeight) {
+              // 입력 필드가 화면 중앙에 오도록 스크롤
+              const scrollOffset = inputRect.top - viewportHeight / 2;
+              contentRef.current.scrollTop += scrollOffset;
+            }
+          }
+        } else {
+          // 키보드가 숨겨진 경우
+          setKeyboardHeight(0);
+        }
+      } catch (error) {
+        // 에러 발생 시 콘솔에 기록하고 계속 진행
+        console.error('Viewport handler error:', error);
+        setKeyboardHeight(0);
+      }
+    };
+
+    // 이벤트 핸들러 생성 및 등록
+    const vv = window.visualViewport;
+    if (vv) {
+      vv.addEventListener('resize', viewportHandler);
+      vv.addEventListener('scroll', viewportHandler);
+
+      // 초기 상태 설정
+      viewportHandler();
+    }
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      if (vv) {
+        vv.removeEventListener('resize', viewportHandler);
+        vv.removeEventListener('scroll', viewportHandler);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchTransactionDetail = async () => {
@@ -114,7 +186,8 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
 
   const confirmHandler = async () => {
     if (!transaction || !transaction.recordId) {
-      return <ErrorComponent subMessage="거래 내역을 찾을 수 없어요." />;
+      alert('거래 내역을 찾을 수 없습니다.');
+      return;
     }
 
     if (!hasChanges()) {
@@ -132,26 +205,27 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
       return;
     }
 
-    const firstCategoryId = transactionDirection === 'EXPENSE' ? getFirstCategoryId(selectedFirstCategory) : 0;
-    const secondCategoryId =
-      transactionDirection === 'EXPENSE' && selectedSecondCategory
+    // firstCategoryId와 secondCategoryId를 계산
+    let firstCategoryId: number | null = 0;
+    let secondCategoryId: number | null = 0;
+
+    if (transactionDirection === 'EXPENSE') {
+      firstCategoryId = getFirstCategoryId(selectedFirstCategory);
+      secondCategoryId = selectedSecondCategory
         ? getSecondCategoryId(selectedFirstCategory, selectedSecondCategory)
         : 0;
+    } else {
+      firstCategoryId = null;
+      secondCategoryId = null;
+    }
 
-    const updatedData: UpdateTransactionData =
-      transactionDirection === 'EXPENSE'
-        ? {
-            recordId: transaction.recordId,
-            firstCategoryId: firstCategoryId,
-            secondCategoryId: secondCategoryId,
-            description: memo || '',
-          }
-        : {
-            recordId: transaction.recordId,
-            firstCategoryId: null,
-            secondCategoryId: null,
-            description: memo || '',
-          };
+    // UpdateTransactionData 객체 생성
+    const updatedData: UpdateTransactionData = {
+      recordId: transaction.recordId,
+      firstCategoryId: firstCategoryId,
+      secondCategoryId: secondCategoryId,
+      description: memo || '',
+    };
 
     try {
       setLoading(true);
@@ -193,7 +267,11 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
     <div className="h-full">
       <div className="container">
         <Header title="거래 상세" hasBackButton></Header>
-        <div className="w-full overflow-y-auto px-5 pt-5">
+        <div
+          ref={contentRef}
+          className="w-full overflow-y-auto px-5 pt-5"
+          style={{ paddingBottom: `${keyboardHeight}px` }}
+        >
           <section>
             <h2 className="text-xl font-semibold">{transaction.displayName}</h2>
             <p className="mt-1 border-b border-gray-200 pb-4 text-sm text-gray-500">{transaction.createdAt}</p>
@@ -218,7 +296,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
                       key={category.id}
                       isSelected={selectedFirstCategory === category.displayName}
                       onClick={() => firstCategoryClickHandler(category.displayName)}
-                      isFullWidth={false} // isFullWidth를 false로 설정
+                      isFullWidth={false}
                     >
                       {category.displayName}
                     </Tag>
@@ -235,7 +313,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
                           key={category.id}
                           isSelected={selectedSecondCategory === category.displayName}
                           onClick={() => secondCategoryClickHandler(category.displayName)}
-                          isFullWidth={false} // isFullWidth를 false로 설정
+                          isFullWidth={false}
                         >
                           {category.displayName}
                         </Tag>
@@ -280,9 +358,19 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
               </div>
             )}
           </section>
+
+          {/* 키보드가 열렸을 때 하단 버튼이 보이도록 추가 공간 확보 */}
+          <div style={{ height: keyboardHeight > 0 ? 65 : 0 }}></div>
         </div>
       </div>
-      <div className="bottom-btn">
+      <div
+        className="bottom-btn"
+        style={{
+          bottom: keyboardHeight > 0 ? `${keyboardHeight + 10}px` : '10px',
+          zIndex: 100,
+          transition: 'bottom 0.3s ease-out',
+        }}
+      >
         <Button size="md" onClick={confirmHandler}>
           확인
         </Button>
