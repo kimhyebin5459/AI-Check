@@ -89,9 +89,9 @@ export default function MoneyCheckClient({ params }: Props) {
     fetchChildData();
   }, [childId]);
 
-  const handleProfileClick = () => {
-    router.push(`/profile/${childId}`);
-  };
+  // const handleProfileClick = () => {
+  //   router.push(`/profile/${childId}`);
+  // };
 
   const handleChartClick = () => {
     router.push(`/report/${childId}`);
@@ -145,13 +145,13 @@ export default function MoneyCheckClient({ params }: Props) {
           <main className="scrollbar-hide w-full overflow-y-auto p-5">
             <div>
               <div className="flex w-full items-center justify-between">
-                <div className="flex cursor-pointer items-center text-2xl">
-                  <div className="underline decoration-1 underline-offset-4" onClick={handleProfileClick}>
-                    <span className="font-bold">{childProfile.name}</span>
-                    &nbsp;
-                    <span className="font-light">님</span>
+                <div className="flex items-center gap-2">
+                  <ProfileImage image={childProfile.image} size="sm" />
+                  <div className="flex items-center space-x-1">
+                    <p className="text-2xl font-bold">{childProfile.name} </p>
+                    <p className="text-2xl font-medium">님</p>
+                    <div className="size-7 rotate-180">{/* <Image src={Arrow} alt="arrow icon"></Image> */}</div>
                   </div>
-                  <span className="ml-1">&gt;</span>
                 </div>
                 <div className="flex space-x-2">
                   <Image src={ChartButton} alt="분석보기" onClick={handleChartClick} className="cursor-pointer" />
