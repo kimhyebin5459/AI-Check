@@ -74,11 +74,19 @@ export default function Page() {
         />
       </div>
 
-      {/* 키보드가 열려있지 않을 때만 버튼 표시 */}
-      {amount > 0 && description && !isInputFocused && (
-        <div className="bottom-btn">
-          <Button onClick={handleClick}>보내기</Button>
-        </div>
+      {/* 키보드가 열려있을 때 inline 버튼, 닫혀있을 때 fixed 버튼 */}
+      {amount > 0 && description && (
+        <>
+          {isInputFocused ? (
+            <div className="mt-8 mb-4 w-full">
+              <Button onClick={handleClick}>보내기</Button>
+            </div>
+          ) : (
+            <div className="bottom-btn">
+              <Button onClick={handleClick}>보내기</Button>
+            </div>
+          )}
+        </>
       )}
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} title="인상 요청 실패 😢">
