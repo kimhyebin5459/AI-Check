@@ -30,8 +30,8 @@ export default function Choose({ onNext, setAccounts, cachedAccounts = [] }: Pro
         const accountsData = await getMyAccountList();
         setLocalAccounts(accountsData);
         setAccounts(accountsData);
-      } catch (_err) {
-        setError('계좌 목록을 불러오는데 실패했습니다');
+      } catch (err) {
+        setError('계좌 목록을 불러오는데 실패했습니다' + err);
       } finally {
         setIsLoading(false);
       }

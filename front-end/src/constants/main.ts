@@ -24,7 +24,7 @@ export const COMMON_ITEM = [
     image: '/images/devil.png',
     color: 'gradation1',
     to: '/phishing',
-    caseCnt: 0,
+    // caseCnt: 0,
   },
   {
     lines: ['송금하기'],

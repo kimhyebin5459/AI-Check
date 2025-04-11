@@ -9,8 +9,11 @@ import Link from 'next/link';
 import { CHILD_ITEM, COMMON_ITEM, PARENT_ITEM } from '@/constants/main';
 import { UserType } from '@/types/user';
 import useGetUserInfo from '@/hooks/query/useGetUserInfo';
+import { getPhishing } from '@/apis/phishing';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import AccountCard from '@/components/main/AccountCard';
+import Spinner from '@/components/common/Spinner';
 
 const UserListSection = dynamic(() => import('@/components/main/UserListSection'), {
   ssr: false,
@@ -19,8 +22,30 @@ const UserListSection = dynamic(() => import('@/components/main/UserListSection'
 export default function Home() {
   const { data: user } = useGetUserInfo();
   const role: UserType = user?.type || 'PARENT';
+  const [phishingCount, setPhishingCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchPhishingData = async () => {
+      try {
+        const statsData = await getPhishing();
+        setPhishingCount(statsData?.familyCount || 0);
+      } catch (err) {
+        console.error('피싱 데이터를 가져오는데 실패했습니다:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPhishingData();
+  }, []);
 
   const homeItems = [role === 'PARENT' ? PARENT_ITEM : CHILD_ITEM, ...COMMON_ITEM];
+  if (loading) {
+    <div className="flex flex-grow flex-col items-center justify-center">
+      <Spinner />
+    </div>;
+  }
 
   return (
     <div className="container space-y-5 px-5 pb-7">
@@ -52,7 +77,7 @@ export default function Home() {
         <NavButton {...homeItems[1]} />
       </div>
       <div className="flex h-full w-full space-x-5">
-        <NavButton {...homeItems[2]} />
+        <NavButton {...homeItems[2]} caseCnt={phishingCount} />
         <NavButton {...homeItems[3]} />
       </div>
     </div>
