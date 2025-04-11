@@ -9,12 +9,13 @@ import usePostIncreaseRequest from '@/hooks/query/usePostIncreaseRequest';
 import useInput from '@/hooks/useInput';
 import useModal from '@/hooks/useModal';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const searchParams = useSearchParams();
 
   const { isModalOpen, openModal, closeModal } = useModal(); // 모달 상태 관리
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const { value: amount, onChange: onChangeAmount } = useInput<number>(0);
   const { value: description, onChange: onChangeDescription } = useInput<string>('');
@@ -39,6 +40,14 @@ export default function Page() {
     clearError(); // 에러 상태 초기화
   };
 
+  const handleFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputFocused(false);
+  };
+
   return (
     <div className="container px-5 pb-20">
       <Header hasBackButton hasBorder={false} title="용돈 인상 요청 보내기" />
@@ -51,6 +60,8 @@ export default function Page() {
           onChange={onChangeAmount}
           maxLength={12}
           placeholder="얼마를 인상할까요?"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
         <Input
           label="요청 사유"
@@ -58,10 +69,13 @@ export default function Page() {
           value={description}
           onChange={onChangeDescription}
           maxLength={15}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
       </div>
 
-      {amount > 0 && description && (
+      {/* 키보드가 열려있지 않을 때만 버튼 표시 */}
+      {amount > 0 && description && !isInputFocused && (
         <div className="bottom-btn">
           <Button onClick={handleClick}>보내기</Button>
         </div>
