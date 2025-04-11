@@ -22,7 +22,7 @@ export default function RootLayout({
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
-      <body className="mx-auto my-0 h-dvh max-w-[480px] min-w-[320px] bg-white px-0 shadow-md">
+      <body className="mx-auto my-0 h-dvh max-w-[480px] min-w-[320px] bg-white px-0">
         <Providers>
           <Suspense>{children}</Suspense>
         </Providers>
