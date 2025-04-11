@@ -9,13 +9,12 @@ import usePostIncreaseRequest from '@/hooks/query/usePostIncreaseRequest';
 import useInput from '@/hooks/useInput';
 import useModal from '@/hooks/useModal';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Page() {
   const searchParams = useSearchParams();
 
   const { isModalOpen, openModal, closeModal } = useModal(); // 모달 상태 관리
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const { value: amount, onChange: onChangeAmount } = useInput<number>(0);
   const { value: description, onChange: onChangeDescription } = useInput<string>('');
@@ -40,14 +39,6 @@ export default function Page() {
     clearError(); // 에러 상태 초기화
   };
 
-  const handleFocus = () => {
-    setIsInputFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsInputFocused(false);
-  };
-
   return (
     <div className="container px-5 pb-20">
       <Header hasBackButton hasBorder={false} title="용돈 인상 요청 보내기" />
@@ -67,26 +58,10 @@ export default function Page() {
           value={description}
           onChange={onChangeDescription}
           maxLength={15}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
         />
-
-        {amount > 0 && description && !isInputFocused && (
-          <div className="mt-8 w-full">
-            <Button onClick={handleClick}>보내기</Button>
-          </div>
-        )}
       </div>
 
-      {/* 키보드 올라와 있을 때는 fixed 버튼 대신 컨텐츠 내에 버튼 표시 */}
-      {amount > 0 && description && isInputFocused && (
-        <div className="mt-4 w-full px-5">
-          <Button onClick={handleClick}>보내기</Button>
-        </div>
-      )}
-
-      {/* 키보드가 내려갔을 때만 fixed 버튼 표시 */}
-      {amount > 0 && description && !isInputFocused && (
+      {amount > 0 && description && (
         <div className="bottom-btn">
           <Button onClick={handleClick}>보내기</Button>
         </div>

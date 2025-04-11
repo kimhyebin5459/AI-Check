@@ -218,13 +218,13 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
                       key={category.id}
                       isSelected={selectedFirstCategory === category.displayName}
                       onClick={() => firstCategoryClickHandler(category.displayName)}
+                      isFullWidth={false} // isFullWidth를 false로 설정
                     >
                       {category.displayName}
                     </Tag>
                   ))}
                 </div>
               </section>
-
               <section className="mt-2">
                 <h3 className="mb-1 text-base">소분류</h3>
                 <div className="mb-4 flex flex-wrap gap-2">
@@ -235,6 +235,7 @@ export default function TransactionDetail({ paramsId, isParent }: Props & { isPa
                           key={category.id}
                           isSelected={selectedSecondCategory === category.displayName}
                           onClick={() => secondCategoryClickHandler(category.displayName)}
+                          isFullWidth={false} // isFullWidth를 false로 설정
                         >
                           {category.displayName}
                         </Tag>
